@@ -1,0 +1,28 @@
+{
+	"isSomethingMissing": false,
+	"stringArr": [
+		"Tekstas",
+		"Text",
+		"TXT"
+	],
+	"sk": 2147483647,
+	"strings": [
+		"str",
+		"sdfdsf",
+		"asdsad"
+	],
+	"langsMap": {
+		"lt": "Lietuvių",
+		"en": "English"
+	},
+	"persons": {
+		"324324": {
+			"name": "vardsas",
+			"age": 4
+		},
+		"dfgdg": {
+			"name": "Petras",
+			"age": 90
+		}
+	}
+}
