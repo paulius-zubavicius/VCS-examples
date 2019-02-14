@@ -39,11 +39,7 @@ public class KaimynesRaidesNesutampa extends ColorPatternController {
             }
         }
 
-        return count == eilute.getEilute().size() - 1 && rightLength(eilute);
-    }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
+        return count == eilute.getEilute().size() - 1;
     }
 
 }

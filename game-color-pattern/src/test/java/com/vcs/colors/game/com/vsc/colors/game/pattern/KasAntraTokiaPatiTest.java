@@ -51,14 +51,5 @@ public class KasAntraTokiaPatiTest {
 
 
 	}
-	
-	@Test
-	public void kasAntraTokiaPatiFail2() {
-
-		assertFalse(patt.isPatternMathed(new ColoredLine(new ColoredItem[0])));
-		
-
-
-	}
 
 }

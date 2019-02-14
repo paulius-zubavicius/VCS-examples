@@ -26,11 +26,7 @@ public class LyginisKiekis extends ColorPatternController {
 
     @Override
     public boolean isPatternMathed(ColoredLine eilute) {
-        return eilute.getEilute().size() % 2 == 0 && rightLength(eilute);
+        return eilute.getEilute().size() % 2 == 0;
 
-    }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
     }
 }

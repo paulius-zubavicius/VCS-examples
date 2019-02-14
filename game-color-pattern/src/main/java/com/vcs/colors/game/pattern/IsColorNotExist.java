@@ -17,7 +17,7 @@ public abstract class IsColorNotExist implements ColorPattern {
 
 	@Override
 	public boolean isPatternMathed(ColoredLine line) {
-		return line.isNotUsing(color) && line.getEilute().size()>=1 && line.getEilute().size()<=6;
+		return line.isNotUsing(color);
 	}
 
 	@Override

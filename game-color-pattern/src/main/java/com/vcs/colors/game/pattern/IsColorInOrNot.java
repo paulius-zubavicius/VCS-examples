@@ -28,16 +28,11 @@ public abstract class IsColorInOrNot extends ColorPatternController {
 
 	@Override
 	public boolean isPatternMathed(ColoredLine line) {
-
-		if (line.getEilute().size() >= 1 && line.getEilute().size() <= 6) {
-			if (isColorIn) {
-				return line.isUsing(color);
-			} else {
-				return line.isNotUsing(color);
-			}
+		if (isColorIn) {
+			return line.isUsing(color);
+		} else {
+			return line.isNotUsing(color);
 		}
-		
-		return false;
 
 	}
 

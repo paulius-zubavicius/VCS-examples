@@ -8,69 +8,77 @@ import com.vcs.colors.game.pattern.line.ColoredLine;
 
 public abstract class ColorPatternController implements ColorPattern {
 
-	private List<ColoredLine> valid = new ArrayList<>();
-	private List<ColoredLine> notValid = new ArrayList<>();
+    private List<ColoredLine> valid = new ArrayList<>();
+    private List<ColoredLine> notValid = new ArrayList<>();
+    private static final int MIN_LINE_VALUE = 1;
+    private static final int MAX_LINE_VALUE = 6;
 
-	@Override
-	public boolean isValid(ColoredLine line) {
 
-		// It is not legal to enter valid from examples :)
-		if (isItInList(line, valid)) {
-			return false;
-		}
+    @Override
+    public boolean isValid(ColoredLine line) {
 
-		// If it's ok...
-		if (isPatternMathed(line)) {
-			return true;
-		}
+        // It is not legal to enter valid from examples :)
+        if (isItInList(line, valid)) {
+            return false;
+        }
 
-		// If it's not... append "missed" list
-		if (!isItInList(line, notValid)) {
-			appendList(line);
-		}
+        //If it isn't the right size
+        if (line.getEilute().size() < MIN_LINE_VALUE || line.getEilute().size() > MAX_LINE_VALUE) {
+            return false;
+        }
 
-		return false;
-	}
+        // If it's ok...
+        if (isPatternMathed(line)) {
+            return true;
+        }
 
-	@Override
-	public List<ColoredLine> getValidExample() {
-		return valid;
-	}
+        // If it's not... append "missed" list
+        if (!isItInList(line, notValid)) {
+            appendList(line);
+        }
 
-	@Override
-	public List<ColoredLine> getNotValidExample() {
-		return notValid;
-	}
+        return false;
+    }
 
-	protected void addValid(ColoredItem... coloredLines) {
-		valid.add(new ColoredLine(coloredLines));
-	}
+    @Override
+    public List<ColoredLine> getValidExample() {
+        return valid;
+    }
 
-	protected void addNotValid(ColoredItem... coloredLines) {
-		notValid.add(new ColoredLine(coloredLines));
-	}
+    @Override
+    public List<ColoredLine> getNotValidExample() {
+        return notValid;
+    }
 
-	protected void addValid(List<ColoredLine> allLines) {
-		valid.addAll(allLines);
-	}
+    protected void addValid(ColoredItem... coloredLines) {
+        valid.add(new ColoredLine(coloredLines));
+    }
 
-	protected void addNotValid(List<ColoredLine> allLines) {
-		notValid.addAll(allLines);
-	}
+    protected void addNotValid(ColoredItem... coloredLines) {
+        notValid.add(new ColoredLine(coloredLines));
+    }
 
-	private void appendList(ColoredLine line) {
-		notValid.remove(notValid.size() - 1);
-		notValid.add(0, line);
-	}
+    protected void addValid(List<ColoredLine> allLines) {
+        valid.addAll(allLines);
+    }
 
-	private boolean isItInList(ColoredLine line, List<ColoredLine> list) {
-		for (ColoredLine exLine : list) {
-			if (exLine.isItTheSame(line)) {
-				return true;
-			}
-		}
+    protected void addNotValid(List<ColoredLine> allLines) {
+        notValid.addAll(allLines);
+    }
 
-		return false;
-	}
+    private void appendList(ColoredLine line) {
+        notValid.remove(notValid.size() - 1);
+        notValid.add(0, line);
+    }
+
+    private boolean isItInList(ColoredLine line, List<ColoredLine> list) {
+        for (ColoredLine exLine : list) {
+            if (exLine.isItTheSame(line)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }

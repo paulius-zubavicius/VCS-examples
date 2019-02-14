@@ -32,11 +32,7 @@ public class PirmaArbaAntraSpalvaSutampaSuPaskutine extends ColorPatternControll
     @Override
     public boolean isPatternMathed(ColoredLine eilute) {
 
-        return rightLength(eilute) && firstOrSecondMatchLast(eilute);
-    }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
+        return firstOrSecondMatchLast(eilute);
     }
 
 

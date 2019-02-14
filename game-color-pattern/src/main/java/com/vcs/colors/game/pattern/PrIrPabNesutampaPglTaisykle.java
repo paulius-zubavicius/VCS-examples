@@ -27,7 +27,7 @@ public class PrIrPabNesutampaPglTaisykle extends ColorPatternController {
     @Override
     public boolean isPatternMathed(ColoredLine eilute) {
 
-        return rightLength(eilute) && (redGreen(eilute) || greenBlue(eilute) || blueYellow(eilute) || yellowRed(eilute));
+        return redGreen(eilute) || greenBlue(eilute) || blueYellow(eilute) || yellowRed(eilute);
 
     }
 
@@ -50,9 +50,4 @@ public class PrIrPabNesutampaPglTaisykle extends ColorPatternController {
         return (eilute.getEilute().get(0).equals(ColoredItem.YELLOW))
                 && (eilute.getEilute().get(eilute.getEilute().size() - 1)).equals(ColoredItem.RED);
     }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
-    }
-
 }

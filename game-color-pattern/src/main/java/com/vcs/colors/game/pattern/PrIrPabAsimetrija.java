@@ -32,10 +32,6 @@ public class PrIrPabAsimetrija extends ColorPatternController {
     @Override
     public boolean isPatternMathed(ColoredLine eilute) {
 
-        return rightLength(eilute) && eilute.getEilute().get(0) != (eilute.getEilute().get(eilute.getEilute().size() - 1));
-    }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
+        return eilute.getEilute().get(0) != (eilute.getEilute().get(eilute.getEilute().size() - 1));
     }
 }

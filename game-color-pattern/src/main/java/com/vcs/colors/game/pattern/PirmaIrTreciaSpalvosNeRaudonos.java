@@ -31,25 +31,8 @@ public class PirmaIrTreciaSpalvosNeRaudonos extends ColorPatternController {
     @Override
     public boolean isPatternMathed(ColoredLine eilute) {
 
-        return rightLength(eilute) && !(eilute.getEilute().get(0).equals(RED));
+        return !(eilute.getEilute().get(0).equals(RED));
 
-
-       /* if (rightLength(eilute)) {
-            return false;
-        } else if ((eilute.getEilute().size() <= 1) && (!(eilute.getEilute().get(0).equals(ColoredItem.RED)))) {
-            return true;
-        } else if (eilute.getEilute().size() <= 1) {
-            return false;
-        } else if (!(eilute.getEilute().get(0).equals(ColoredItem.RED))
-                && !(eilute.getEilute().get(2).equals(ColoredItem.RED))) {
-            return true;
-        }
-        return false;
-    }*/
-    }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
     }
 
     public boolean ifShort(ColoredLine eilute) {

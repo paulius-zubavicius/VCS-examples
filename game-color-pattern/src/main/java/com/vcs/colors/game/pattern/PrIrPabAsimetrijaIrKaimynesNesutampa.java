@@ -41,13 +41,8 @@ public class PrIrPabAsimetrijaIrKaimynesNesutampa extends ColorPatternController
         }
 
 
-        return rightLength(eilute) &&
-                (count == eilute.getEilute().size() - 1)
-                && (rightLength(eilute) && eilute.getEilute().get(0) != (eilute.getEilute().get(eilute.getEilute().size() - 1)));
-    }
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
+        return (count == eilute.getEilute().size() - 1)
+                && (eilute.getEilute().get(0) != (eilute.getEilute().get(eilute.getEilute().size() - 1)));
     }
 
 }

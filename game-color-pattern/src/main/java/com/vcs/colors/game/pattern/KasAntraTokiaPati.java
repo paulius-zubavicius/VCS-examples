@@ -32,14 +32,8 @@ public class KasAntraTokiaPati extends ColorPatternController {
     @Override
     public boolean isPatternMathed(ColoredLine eilute) {
 
-        return rightLength(eilute) && (everySecondColor(eilute) || methodForFive(eilute) || methodForFour(eilute));
+        return (everySecondColor(eilute) || methodForFive(eilute) || methodForFour(eilute));
 
-    }
-
-
-
-    public boolean rightLength(ColoredLine eilute) {
-        return eilute.getEilute().size() >= 1 && eilute.getEilute().size() <= 6;
     }
 
     public boolean everySecondColor(ColoredLine eilute) {
