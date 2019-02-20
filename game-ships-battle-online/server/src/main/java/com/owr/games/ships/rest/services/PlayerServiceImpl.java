@@ -1,19 +1,19 @@
 package com.owr.games.ships.rest.services;
 
-import com.owr.games.ships.db.entities.PlayerEntity;
+import com.owr.games.ships.rest.db.entities.PlayerEntity;
 import com.owr.games.ships.rest.entities.PlayerRestEntity;
-import com.owr.games.ships.rest.entities.ShipGameRestEntity;
 import com.owr.games.ships.rest.resource.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
 @Service
-public class PlayerServiceImpl implements PlayersService {
+public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     private PlayerRepository repo;
@@ -37,15 +37,12 @@ public class PlayerServiceImpl implements PlayersService {
     }
 
     @Override
-    public Iterable<PlayerRestEntity> listAll() {
-
-        Iterable<PlayerEntity> allEntities = repo.findAll();
-
-        List<PlayerRestEntity> result = new ArrayList<>();
-        for (PlayerEntity entity : allEntities) {
-            result.add(new PlayerRestEntity(entity.getName()));
-        }
-
-        return result;
+    public List<String> listNames() {
+        return repo.listNames();
     }
+    @Override
+    public Map<String, Long> calcGameStats() {
+        return repo.collectStatistics();
+    }
+
 }

@@ -1,14 +1,12 @@
 
-package com.owr.games.ships.db.entities;
+package com.owr.games.ships.rest.db.entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-@Entity(name = "player")
+@Entity(name = "Player")
+@Table( name="player", uniqueConstraints = @UniqueConstraint(columnNames={"token"}))
 public class PlayerEntity {
 
     @Id

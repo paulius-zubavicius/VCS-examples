@@ -1,16 +1,13 @@
-package com.owr.games.ships.db.entities;
+package com.owr.games.ships.rest.db.entities;
 
 import com.owr.games.ships.model.GameStatus;
-import com.owr.games.ships.model.GameStatusPlayer;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@Entity(name = "game")
+@Entity(name = "Game")
 public class GameEntity {
 
     @Id
@@ -23,13 +20,21 @@ public class GameEntity {
     @Size(min = 100, max = 100)
     private String map2;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player1")
     private PlayerEntity player1;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player2")
     private PlayerEntity player2;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playerTurn")
     private PlayerEntity playerTurn;
 
-    @NotBlank
-    private GameStatus state;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private GameStatus status;
 
     public Long getId() {
         return id;
@@ -79,11 +84,11 @@ public class GameEntity {
         this.playerTurn = playerTurn;
     }
 
-    public GameStatus getState() {
-        return state;
+    public GameStatus getStatus() {
+        return status;
     }
 
-    public void setState(GameStatus state) {
-        this.state = state;
+    public void setStatus(GameStatus status) {
+        this.status = status;
     }
 }

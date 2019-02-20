@@ -8,6 +8,8 @@ public class ShipGamePlayerRestEntity {
 
     private boolean playerTurn;
 
+    public ShipGamePlayerRestEntity() {
+    }
 
     public ShipGamePlayerRestEntity(String map, String name, boolean playerTurn) {
         this.map = map;

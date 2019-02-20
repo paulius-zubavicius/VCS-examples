@@ -25,7 +25,7 @@ public class ValidatorCountTest {
         List<ValidationFailItem> rez = v.validate(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.ShipsCount, rez.get(0).getType());
-        Assert.assertEquals("1 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam());
+        Assert.assertEquals("1 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam()[0]);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class ValidatorCountTest {
         List<ValidationFailItem> rez = v.validate(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.ShipsCount, rez.get(0).getType());
-        Assert.assertEquals("4 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam());
+        Assert.assertEquals("4 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam()[0]);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ValidatorCountTest {
         List<ValidationFailItem> rez = v.validate(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.ShipsCount, rez.get(0).getType());
-        Assert.assertEquals("6 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam());
+        Assert.assertEquals("6 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam()[0]);
     }
 
 }

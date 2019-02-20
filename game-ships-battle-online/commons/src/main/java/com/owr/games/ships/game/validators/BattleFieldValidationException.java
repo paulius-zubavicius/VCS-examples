@@ -5,14 +5,20 @@
  */
 package com.owr.games.ships.game.validators;
 
+import java.util.List;
+
 /**
- *
  * @author owr
  */
 public class BattleFieldValidationException extends RuntimeException {
 
-    public BattleFieldValidationException(String msg) {
-        super(msg);
+    private List<ValidationFailItem> errors;
 
+    public BattleFieldValidationException(List<ValidationFailItem> errors) {
+        this.errors = errors;
+    }
+
+    public List<ValidationFailItem> getErrors() {
+        return errors;
     }
 }

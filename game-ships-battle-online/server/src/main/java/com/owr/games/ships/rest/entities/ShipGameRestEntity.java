@@ -1,7 +1,6 @@
 package com.owr.games.ships.rest.entities;
 
 import com.owr.games.ships.model.GameStatus;
-import com.owr.games.ships.model.GameStatusPlayer;
 
 public class ShipGameRestEntity {
 
@@ -13,7 +12,13 @@ public class ShipGameRestEntity {
     private GameStatus status;
 
     public ShipGameRestEntity() {
+    }
 
+    public ShipGameRestEntity(Long gameId) {
+        this.gameId = gameId;
+        status = GameStatus.WAITING_2ND_PLAYER;
+        player1 = new ShipGamePlayerRestEntity(null, null, false);
+        player1 = new ShipGamePlayerRestEntity(null, null, false);
     }
 
     public ShipGameRestEntity(Long gameId, GameStatus status, ShipGamePlayerRestEntity player1, ShipGamePlayerRestEntity player2) {

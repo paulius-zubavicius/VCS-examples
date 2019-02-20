@@ -3,9 +3,9 @@ package com.owr.games.ships.game.validators;
 public class ValidationFailItem {
 
     private ShipValidationErrCode type;
-    private String param;
+    private String[] param;
 
-    public ValidationFailItem(ShipValidationErrCode type, String param) {
+    public ValidationFailItem(ShipValidationErrCode type, String... param) {
         this.type = type;
         this.param = param;
     }
@@ -22,12 +22,9 @@ public class ValidationFailItem {
         this.type = type;
     }
 
-    public String getParam() {
+    public String[] getParam() {
         return param;
     }
 
-    public void setParam(String param) {
-        this.param = param;
-    }
 
 }

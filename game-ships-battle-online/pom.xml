@@ -26,8 +26,8 @@
 
     <modules>
 
-        <module>server</module>
-        <module>commons</module>
+        <!--<module>server</module>-->
+        <!--<module>commons</module>-->
         <module>client-swing</module>
         <module>client-bot</module>
 

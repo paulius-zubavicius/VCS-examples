@@ -1,25 +1,32 @@
 package com.owr.games.ships.rest.resource;
 
-import com.owr.games.ships.db.entities.GameEntity;
-import com.owr.games.ships.db.entities.PlayerEntity;
+import com.owr.games.ships.rest.db.entities.PlayerEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import java.util.List;
+import java.util.Map;
 
 public interface PlayerRepository extends CrudRepository<PlayerEntity, Long> {
 
+    PlayerEntity findByToken(String token);
+
+    @Query("SELECT p.name FROM Player p")
+    List<String> listNames();
 
 
 
-    /*List<Book> findByAuthorContainingIgnoreCaseAndNameContainingIgnoreCase(String author, String name);
+    // Most Win
+    //Most Lost
+    // Most done
 
-	List<Book> findByAuthorContainingIgnoreCaseOrNameContainingIgnoreCase(String author, String name);
+    //Most created
+    // Most joined
+
+    @Query("SELECT p.name, count(1) AS win FROM Game g, Player p WHERE g.player1 = p AND g.status = 'WAITING_2ND_PLAYER' GROUP BY p.name ")
+    Map<String, Long> collectStatistics();
 
 
-	// Performance killer SQL :)
-
-	@Query("SELECT b FROM Book b WHERE (b.count > 0 OR :available = TRUE)"
-			+ " AND (UPPER(b.name) LIKE UPPER(CONCAT('%',:searchtext,'%'))"
-			+ " OR UPPER(b.author) LIKE UPPER(CONCAT('%',:searchtext,'%'))"
-			+ " OR UPPER(b.codeISBN) LIKE UPPER(CONCAT('%',:searchtext,'%')))")
-    List<Book> fetchBooks(@Param("searchtext") String searchtext, @Param("available") boolean onlyAvailable);*/
+    // win / lost; (played at all)
 
 }

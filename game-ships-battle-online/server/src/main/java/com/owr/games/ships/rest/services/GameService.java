@@ -2,23 +2,30 @@ package com.owr.games.ships.rest.services;
 
 
 import com.owr.games.ships.model.Point;
-import com.owr.games.ships.rest.entities.PlayerShipsRestEntity;
+import com.owr.games.ships.rest.entities.JoinIntoGameRestEntity;
 import com.owr.games.ships.rest.entities.ServiceResponseEntity;
 import com.owr.games.ships.rest.entities.ShipGameRestEntity;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public interface GameService {
 
-    ServiceResponseEntity<ShipGameRestEntity> createGame(String token, PlayerShipsRestEntity shipsPositions);
+    ServiceResponseEntity<ShipGameRestEntity> createGame(Locale locale, String token, JoinIntoGameRestEntity shipsPositions);
 
-    ServiceResponseEntity<ShipGameRestEntity> joinGame(long gameId, String token, PlayerShipsRestEntity shipsPositions);
+    ServiceResponseEntity<ShipGameRestEntity> joinGame(Locale locale, String token, long gameId, JoinIntoGameRestEntity shipsPositions);
 
-    List<ShipGameRestEntity> waitingTurnByToken(String token);
+    ServiceResponseEntity<ShipGameRestEntity> playerTurn(Locale locale, String token, long gameId, Point hitTarget);
 
-    ServiceResponseEntity<ShipGameRestEntity> playerTurn(long gameId, String token, Point hitTarget);
+//    ServiceResponseEntity<ShipGameRestEntity> viewMyGame(Locale locale, String token, long gameId);
 
-    ServiceResponseEntity<ShipGameRestEntity> findById(long gameId);
 
-    List<ShipGameRestEntity> findAll();
+    List<ShipGameRestEntity> waitingForMyTurn(Locale locale, String token);
+
+    List<ShipGameRestEntity> waitingForJoiner(Locale locale, String token);
+
+    List<ShipGameRestEntity> waitingForOthersTurn(Locale locale, String token);
+
+    Map<String, Long> calcGameStats();
 }

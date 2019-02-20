@@ -12,9 +12,22 @@ public class ServiceResponseEntity<T> {
     public ServiceResponseEntity() {
     }
 
+    public ServiceResponseEntity(ErrorMsgRestEntity err) {
+        this.errors.add(err);
+    }
+
+    public ServiceResponseEntity(T response) {
+        this.response = response;
+    }
+
     public ServiceResponseEntity(T response, List<ErrorMsgRestEntity> errors) {
         this.response = response;
         this.errors.addAll(errors);
+    }
+
+
+    public boolean isAnyErrors() {
+        return !errors.isEmpty();
     }
 
     public T getResponse() {

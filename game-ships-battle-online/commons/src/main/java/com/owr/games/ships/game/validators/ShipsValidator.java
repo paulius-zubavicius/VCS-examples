@@ -10,6 +10,10 @@ public class ShipsValidator {
 
     public static final int SHIPS_COUNT = 5;
 
+    public List<ValidationFailItem> validate(List<Ship> ships) {
+        return validate( ships.toArray(new Ship[0]));
+    }
+
     public List<ValidationFailItem> validate(Ship... ships) {
 
         List<ValidationFailItem> fails = new ArrayList<>();
@@ -40,6 +44,18 @@ public class ShipsValidator {
         sizesHook(ships, fails);
 
         return fails;
+
+    }
+
+    public List<ValidationFailItem> validatePoint(Point p) {
+
+        List<ValidationFailItem> result = new ArrayList<>();
+
+        if (p.getX() < 0 ||p.getY() < 0 || p.getX() >= BattleField.MAP_SIZE || p.getY() >= BattleField.MAP_SIZE) {
+            result.add(new ValidationFailItem(ShipValidationErrCode.CoordinateOutOfBounds, p.toString()));
+        }
+
+        return result;
 
     }
 
@@ -76,15 +92,11 @@ public class ShipsValidator {
         }
     }
 
+
+
     private void coordBoundsHook(Ship ship, List<ValidationFailItem> fails) {
-
-        if (ship.getP1().getX() < 0 || ship.getP1().getY() < 0 || ship.getP1().getX() >= BattleField.MAP_SIZE || ship.getP1().getY() >= BattleField.MAP_SIZE) {
-            fails.add(new ValidationFailItem(ShipValidationErrCode.CoordinateOutOfBounds, ship.getP1().toString()));
-        }
-
-        if (ship.getP2().getX() < 0 || ship.getP2().getY() < 0 || ship.getP2().getX() >= BattleField.MAP_SIZE || ship.getP2().getY() >= BattleField.MAP_SIZE) {
-            fails.add(new ValidationFailItem(ShipValidationErrCode.CoordinateOutOfBounds, ship.getP1().toString()));
-        }
+        fails.addAll( validatePoint(ship.getP1()));
+        fails.addAll( validatePoint(ship.getP2()));
     }
 
     private void diagonallyHook(Ship ship, List<ValidationFailItem> fails) {
@@ -140,6 +152,7 @@ public class ShipsValidator {
             for (int j = i; j < ships.length; j++) {
 
                 if (!duplicates.contains(generateKey(ships[i], ships[j]))) {
+                    duplicates.add(generateKey(ships[i], ships[j]));
                     if (ships[i] != ships[j] && crossingLeastOnePoint(ships[i], ships[j])) {
                         fails.add(new ValidationFailItem(ShipValidationErrCode.Crossing, "" + ships[i] + " X " + ships[j]));
                     }
@@ -181,7 +194,6 @@ public class ShipsValidator {
         int y2 = Math.max(ship.getP1().getY(), ship.getP2().getY());
 
         if (x1 >= p.getX() && p.getX() <= x2) {
-
 
             if (y1 >= p.getY() && p.getY() <= y2) {
                 return false;

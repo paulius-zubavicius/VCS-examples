@@ -1,4 +1,4 @@
-package com.owr.games.ships.app;
+package com.owr.games.ships.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
