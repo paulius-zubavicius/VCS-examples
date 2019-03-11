@@ -5,202 +5,221 @@ import com.owr.games.ships.model.Point;
 import com.owr.games.ships.model.Ship;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class ShipsValidator {
 
-    public static final int SHIPS_COUNT = 5;
+	public static final int SHIPS_COUNT = 5;
 
-    public List<ValidationFailItem> validate(List<Ship> ships) {
-        return validate( ships.toArray(new Ship[0]));
-    }
+	public void validate(List<Ship> ships) {
+		fireException(() ->  validateSafe(ships));
+	}
 
-    public List<ValidationFailItem> validate(Ship... ships) {
+	public void validate(Ship... ships) {
+		fireException(() -> validateSafe(ships));
+	}
 
-        List<ValidationFailItem> fails = new ArrayList<>();
+	public void validatePoint(Point p) {
+		fireException(() -> validatePointSafe(p));
+	}
 
-        nullHook(ships, fails);
 
-        if (!fails.isEmpty()) {
-            return fails;
-        }
+	public List<ValidationFailItem> validateSafe(List<Ship> ships) {
+		return validateSafe(ships.toArray(new Ship[0]));
+	}
 
-        countHook(ships, fails);
+	public List<ValidationFailItem> validateSafe(Ship... ships) {
 
-        if (!fails.isEmpty()) {
-            return fails;
-        }
+		List<ValidationFailItem> fails = new ArrayList<>();
 
-        for (Ship ship : ships) {
-            coordBoundsHook(ship, fails);
-            diagonallyHook(ship, fails);
-        }
+		nullHook(ships, fails);
 
-        if (!fails.isEmpty()) {
-            return fails;
-        }
+		if (!fails.isEmpty()) {
+			return fails;
+		}
 
-        crossingHook(ships, fails);
+		countHook(ships, fails);
 
-        sizesHook(ships, fails);
+		if (!fails.isEmpty()) {
+			return fails;
+		}
 
-        return fails;
+		for (Ship ship : ships) {
+			coordBoundsHook(ship, fails);
+			diagonallyHook(ship, fails);
+		}
 
-    }
+		if (!fails.isEmpty()) {
+			return fails;
+		}
 
-    public List<ValidationFailItem> validatePoint(Point p) {
+		crossingHook(ships, fails);
 
-        List<ValidationFailItem> result = new ArrayList<>();
+		sizesHook(ships, fails);
 
-        if (p.getX() < 0 ||p.getY() < 0 || p.getX() >= BattleField.MAP_SIZE || p.getY() >= BattleField.MAP_SIZE) {
-            result.add(new ValidationFailItem(ShipValidationErrCode.CoordinateOutOfBounds, p.toString()));
-        }
+		return fails;
 
-        return result;
+	}
 
-    }
+	public List<ValidationFailItem> validatePointSafe(Point p) {
 
-    private void nullHook(Ship[] ships, List<ValidationFailItem> fails) {
-        if (ships == null || ships.length < 1) {
+		List<ValidationFailItem> result = new ArrayList<>();
+
+		if (p.getX() < 0 || p.getY() < 0 || p.getX() >= BattleField.MAP_SIZE || p.getY() >= BattleField.MAP_SIZE) {
+			result.add(new ValidationFailItem(ShipValidationErrCode.CoordinateOutOfBounds, p.toString()));
+		}
+
+		return result;
+
+	}
+
+	private void nullHook(Ship[] ships, List<ValidationFailItem> fails) {
+		if (ships == null || ships.length < 1) {
 //            throw new BattleFieldValidationException("no ships");
-            fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue));
-            return;
-        }
+			fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue));
+			return;
+		}
 
-        for (Ship ship : ships) {
-            if (ship == null) {
+		for (Ship ship : ships) {
+			if (ship == null) {
 //                throw new BattleFieldValidationException("empty ship");
-                fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue));
-                return;
-            }
+				fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue));
+				return;
+			}
 
-            if (ship.getP1() == null) {
-                fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue, "1"));
-                //throw new BattleFieldValidationException("empty point 1 of ship");
-            }
+			if (ship.getP1() == null) {
+				fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue, "1"));
+				// throw new BattleFieldValidationException("empty point 1 of ship");
+			}
 
-            if (ship.getP2() == null) {
-                fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue, "2"));
+			if (ship.getP2() == null) {
+				fails.add(new ValidationFailItem(ShipValidationErrCode.NullValue, "2"));
 //                throw new BattleFieldValidationException("empty point 2 of ship");
-            }
-        }
-    }
+			}
+		}
+	}
 
-    private void countHook(Ship[] ships, List<ValidationFailItem> fails) {
-        if (ships.length != SHIPS_COUNT) {
+	private void countHook(Ship[] ships, List<ValidationFailItem> fails) {
+		if (ships.length != SHIPS_COUNT) {
 //            throw new BattleFieldValidationException("ships count must be " + SHIPS_COUNT);
-            fails.add(new ValidationFailItem(ShipValidationErrCode.ShipsCount, "" + ships.length + " != " + SHIPS_COUNT));
-        }
-    }
+			fails.add(
+					new ValidationFailItem(ShipValidationErrCode.ShipsCount, "" + ships.length + " != " + SHIPS_COUNT));
+		}
+	}
 
+	private void coordBoundsHook(Ship ship, List<ValidationFailItem> fails) {
+		fails.addAll(validatePointSafe(ship.getP1()));
+		fails.addAll(validatePointSafe(ship.getP2()));
+	}
 
+	private void diagonallyHook(Ship ship, List<ValidationFailItem> fails) {
 
-    private void coordBoundsHook(Ship ship, List<ValidationFailItem> fails) {
-        fails.addAll( validatePoint(ship.getP1()));
-        fails.addAll( validatePoint(ship.getP2()));
-    }
+		if (ship.getP1().getX() != ship.getP2().getX() && ship.getP1().getY() != ship.getP2().getY()) {
+			fails.add(new ValidationFailItem(ShipValidationErrCode.DiagonallyPosition, ship.toString()));
+		}
 
-    private void diagonallyHook(Ship ship, List<ValidationFailItem> fails) {
+	}
 
-        if (ship.getP1().getX() != ship.getP2().getX() && ship.getP1().getY() != ship.getP2().getY()) {
-            fails.add(new ValidationFailItem(ShipValidationErrCode.DiagonallyPosition, ship.toString()));
-        }
+	private void sizesHook(Ship[] ships, List<ValidationFailItem> fails) {
 
-    }
+		Map<Integer, Integer> shipSizes = new HashMap<>();
 
-    private void sizesHook(Ship[] ships, List<ValidationFailItem> fails) {
+		for (Ship ship : ships) {
+			int size = calcShipSize(ship);
+			if (!shipSizes.containsKey(size)) {
+				shipSizes.put(size, 0);
+			}
 
+			shipSizes.put(size, shipSizes.get(size) + 1);
+		}
 
-        Map<Integer, Integer> shipSizes = new HashMap<>();
+		for (int size = 1; size <= SHIPS_COUNT; size++) {
 
-        for (Ship ship : ships) {
-            int size = calcShipSize(ship);
-            if (!shipSizes.containsKey(size)) {
-                shipSizes.put(size, 0);
-            }
+			Integer count = shipSizes.remove(size);
+			if (count == null) {
+				fails.add(new ValidationFailItem(ShipValidationErrCode.ShipSizeMissing, "Missing ship size: " + size));
+			} else if (count > 1) {
+				fails.add(new ValidationFailItem(ShipValidationErrCode.ShipSizeDuplicate,
+						"More than one ship size: " + size));
+			}
 
-            shipSizes.put(size, shipSizes.get(size) + 1);
-        }
+		}
 
+		for (Integer size : shipSizes.keySet()) {
+			fails.add(new ValidationFailItem(ShipValidationErrCode.ShipSizeToBig, "Ship size to big " + size));
+		}
 
-        for (int size = 1; size <= SHIPS_COUNT; size++) {
+	}
 
-            Integer count = shipSizes.remove(size);
-            if (count == null) {
-                fails.add(new ValidationFailItem(ShipValidationErrCode.ShipSizeMissing, "Missing ship size: " + size));
-            } else if (count > 1) {
-                fails.add(new ValidationFailItem(ShipValidationErrCode.ShipSizeDuplicate, "More than one ship size: " + size));
-            }
+	private int calcShipSize(Ship ship) {
+		return Math.max(Math.abs(ship.getP1().getX() - ship.getP2().getX()),
+				Math.abs(ship.getP1().getY() - ship.getP2().getY())) + 1;
+	}
 
-        }
+	private void crossingHook(Ship[] ships, List<ValidationFailItem> fails) {
 
-        for (Integer size : shipSizes.keySet()) {
-            fails.add(new ValidationFailItem(ShipValidationErrCode.ShipSizeToBig, "Ship size to big " + size));
-        }
+		List<String> duplicates = new ArrayList<>();
 
-    }
+		for (int i = 0; i < ships.length; i++) {
+			for (int j = i; j < ships.length; j++) {
 
-    private int calcShipSize(Ship ship) {
-        return Math.max(Math.abs(ship.getP1().getX() - ship.getP2().getX()), Math.abs(ship.getP1().getY() - ship.getP2().getY())) + 1;
-    }
+				if (!duplicates.contains(generateKey(ships[i], ships[j]))) {
+					duplicates.add(generateKey(ships[i], ships[j]));
+					if (ships[i] != ships[j] && crossingLeastOnePoint(ships[i], ships[j])) {
+						fails.add(new ValidationFailItem(ShipValidationErrCode.Crossing,
+								"" + ships[i] + " X " + ships[j]));
+					}
+				}
+			}
+		}
+	}
 
-    private void crossingHook(Ship[] ships, List<ValidationFailItem> fails) {
+	private String generateKey(Ship ship1, Ship ship2) {
 
+		if (ship1.hashCode() > ship2.hashCode()) {
+			return "" + ship1.hashCode() + "_" + ship2.hashCode();
+		}
 
-        List<String> duplicates = new ArrayList<>();
+		return "" + ship2.hashCode() + "_" + ship1.hashCode();
 
-        for (int i = 0; i < ships.length; i++) {
-            for (int j = i; j < ships.length; j++) {
+	}
 
-                if (!duplicates.contains(generateKey(ships[i], ships[j]))) {
-                    duplicates.add(generateKey(ships[i], ships[j]));
-                    if (ships[i] != ships[j] && crossingLeastOnePoint(ships[i], ships[j])) {
-                        fails.add(new ValidationFailItem(ShipValidationErrCode.Crossing, "" + ships[i] + " X " + ships[j]));
-                    }
-                }
-            }
-        }
-    }
+	private boolean crossingLeastOnePoint(Ship ship1, Ship ship2) {
 
-    private String generateKey(Ship ship1, Ship ship2) {
+		List<Point> points1 = ship1.convertToPoints();
+		List<Point> points2 = ship2.convertToPoints();
 
-        if (ship1.hashCode() > ship2.hashCode()) {
-            return "" + ship1.hashCode() + "_" + ship2.hashCode();
-        }
+		for (Point p : points1) {
+			if (points2.contains(p)) {
+				return true;
+			}
+		}
 
-        return "" + ship2.hashCode() + "_" + ship1.hashCode();
+		return false;
+	}
+	
+	private void fireException(Supplier<List<ValidationFailItem>> s) {
+		List<ValidationFailItem> res = s.get();
+		if (!res.isEmpty()) {
+			throw new BattleFieldValidationException(res);
+		}
+	}
 
-    }
-
-    private boolean crossingLeastOnePoint(Ship ship1, Ship ship2) {
-
-        List<Point> points1 = ship1.convertToPoints();
-        List<Point> points2 = ship2.convertToPoints();
-
-        for (Point p : points1) {
-            if (points2.contains(p)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-
-    private boolean checkOnePoint(Ship ship, Point p) {
-        int x1 = Math.min(ship.getP1().getX(), ship.getP2().getX());
-        int x2 = Math.max(ship.getP1().getX(), ship.getP2().getX());
-
-        int y1 = Math.min(ship.getP1().getY(), ship.getP2().getY());
-        int y2 = Math.max(ship.getP1().getY(), ship.getP2().getY());
-
-        if (x1 >= p.getX() && p.getX() <= x2) {
-
-            if (y1 >= p.getY() && p.getY() <= y2) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+//    private boolean checkOnePoint(Ship ship, Point p) {
+//        int x1 = Math.min(ship.getP1().getX(), ship.getP2().getX());
+//        int x2 = Math.max(ship.getP1().getX(), ship.getP2().getX());
+//
+//        int y1 = Math.min(ship.getP1().getY(), ship.getP2().getY());
+//        int y2 = Math.max(ship.getP1().getY(), ship.getP2().getY());
+//
+//        if (x1 >= p.getX() && p.getX() <= x2) {
+//
+//            if (y1 >= p.getY() && p.getY() <= y2) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
 
 }

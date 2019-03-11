@@ -22,7 +22,7 @@ public class ValidatorCountTest {
     public void hook1Test() {
         Ship[] ships = {new Ship(new Point(1, 1), new Point(1, 1))};
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.ShipsCount, rez.get(0).getType());
         Assert.assertEquals("1 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam()[0]);
@@ -33,7 +33,7 @@ public class ValidatorCountTest {
         Ship sh = new Ship(new Point(1, 1), new Point(1, 1));
         Ship[] ships = {sh, sh, sh, sh};
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.ShipsCount, rez.get(0).getType());
         Assert.assertEquals("4 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam()[0]);
@@ -44,7 +44,7 @@ public class ValidatorCountTest {
         Ship sh = new Ship(new Point(1, 1), new Point(1, 1));
         Ship[] ships = {sh, sh, sh, sh, sh, sh};
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.ShipsCount, rez.get(0).getType());
         Assert.assertEquals("6 != " + ShipsValidator.SHIPS_COUNT, rez.get(0).getParam()[0]);

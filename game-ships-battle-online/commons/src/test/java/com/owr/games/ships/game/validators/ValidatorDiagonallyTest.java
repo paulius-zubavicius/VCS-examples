@@ -1,14 +1,13 @@
 package com.owr.games.ships.game.validators;
 
-import com.owr.games.ships.game.BattleField;
-import com.owr.games.ships.model.Point;
-import com.owr.games.ships.model.Ship;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
+import com.owr.games.ships.model.Point;
+import com.owr.games.ships.model.Ship;
 
 public class ValidatorDiagonallyTest {
 
@@ -31,7 +30,7 @@ public class ValidatorDiagonallyTest {
                 new Ship(new Point(4, 4), new Point(5, 9)) // Diagonally
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.DiagonallyPosition, rez.get(0).getType());
     }
@@ -46,7 +45,7 @@ public class ValidatorDiagonallyTest {
                 new Ship(new Point(4, 4), new Point(5, 9)) // Diagonally
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(5, rez.size());
 
         for (ValidationFailItem item : rez) {

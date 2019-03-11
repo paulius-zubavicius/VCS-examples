@@ -1,17 +1,19 @@
 package com.owr.games.ships.rest.services;
 
-import com.owr.games.ships.game.BattleField;
-import com.owr.games.ships.game.validators.BattleFieldValidationException;
-import com.owr.games.ships.game.validators.ValidationFailItem;
-import com.owr.games.ships.model.BattleFieldSerialized;
-import com.owr.games.ships.model.Point;
-import com.owr.games.ships.model.Ship;
-import com.owr.games.ships.rest.entities.ErrorMsgRestEntity;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Locale;
+import com.owr.games.ships.game.BattleField;
+import com.owr.games.ships.game.validators.BattleFieldValidationException;
+import com.owr.games.ships.game.validators.ValidationFailItem;
+import com.owr.games.ships.model.Point;
+import com.owr.games.ships.model.Ship;
+import com.owr.games.ships.rest.entities.ErrorMsgRestEntity;
+import com.owr.games.ships.rest.exceptions.GameServiceException;
 
 @Service
 public class GameLogicServiceImpl implements GameLogicService {
@@ -20,31 +22,32 @@ public class GameLogicServiceImpl implements GameLogicService {
     private ResourceService resService;
 
     @Override
-    public BattleFieldSerialized createMapStr(List<ErrorMsgRestEntity> errors, Locale locale, List<Ship> ships) {
+    public BattleField createMapStr( Locale locale, List<Ship> ships) {
         try {
-            return new BattleField(ships).serializeBattleField();
+            return new BattleField(ships);
         } catch (BattleFieldValidationException e) {
+        	List<ErrorMsgRestEntity> errors = new ArrayList<>();
             convertErrorMsg(e, errors, locale);
-            return null;
+            throw new GameServiceException(errors);
         }
     }
 
     @Override
-    public BattleFieldSerialized createMapStr(List<ErrorMsgRestEntity> errors, Locale locale, String map, Point hitPoint) {
-
+    public  BattleField createMapStr( Locale locale, String map, Point hitPoint) {
         try {
             BattleField bf = new BattleField(map);
             bf.hitTo(hitPoint);
-            return bf.serializeBattleField();
+            return bf;
         } catch (BattleFieldValidationException e) {
+        	List<ErrorMsgRestEntity> errors = new ArrayList<>();
             convertErrorMsg(e, errors, locale);
-            return null;
+            throw new GameServiceException(errors);
         }
     }
 
     @Override
-    public boolean isEnemyLost(String enemyField) {
-        return new BattleField(enemyField).isLost();
+    public boolean isEnemyLost(BattleField enemyField) {
+        return enemyField.isLost();
     }
 
     private void convertErrorMsg(BattleFieldValidationException e, List<ErrorMsgRestEntity> errors, Locale locale) {

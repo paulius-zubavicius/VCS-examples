@@ -28,7 +28,7 @@ public class ValidatorShipSizesTest {
                 new Ship(new Point(4, 0), new Point(4, 4)) //5
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(2, rez.size());
 
         int shipSizeMissing = 0;
@@ -57,7 +57,7 @@ public class ValidatorShipSizesTest {
                 new Ship(new Point(4, 0), new Point(4, 4)) //5
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(2, rez.size());
 
 

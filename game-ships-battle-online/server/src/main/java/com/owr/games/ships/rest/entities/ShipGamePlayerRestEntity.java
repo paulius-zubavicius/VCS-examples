@@ -1,8 +1,12 @@
 package com.owr.games.ships.rest.entities;
 
+import java.util.List;
+
+import com.owr.games.ships.model.BattleFieldPoint;
+
 public class ShipGamePlayerRestEntity {
 
-    private String map;
+    private List<BattleFieldPoint> map;
 
     private String name;
 
@@ -11,17 +15,17 @@ public class ShipGamePlayerRestEntity {
     public ShipGamePlayerRestEntity() {
     }
 
-    public ShipGamePlayerRestEntity(String map, String name, boolean playerTurn) {
+    public ShipGamePlayerRestEntity(List<BattleFieldPoint> map, String name, boolean playerTurn) {
         this.map = map;
         this.name = name;
         this.playerTurn = playerTurn;
     }
 
-    public String getMap() {
+    public List<BattleFieldPoint> getMap() {
         return map;
     }
 
-    public void setMap(String map) {
+    public void setMap(List<BattleFieldPoint> map) {
         this.map = map;
     }
 

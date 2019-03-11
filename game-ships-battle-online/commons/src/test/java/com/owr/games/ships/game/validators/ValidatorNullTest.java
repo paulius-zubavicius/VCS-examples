@@ -19,7 +19,7 @@ public class ValidatorNullTest {
 
     @Test
     public void hook1Test() {
-        List<ValidationFailItem> rez = v.validate();
+        List<ValidationFailItem> rez = v.validateSafe();
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.NullValue, rez.get(0).getType());
     }
@@ -28,7 +28,7 @@ public class ValidatorNullTest {
     public void hook2Test() {
         Ship[] ships = null;
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.NullValue, rez.get(0).getType());
     }
@@ -37,7 +37,7 @@ public class ValidatorNullTest {
     public void hook3Test() {
         Ship[] ships = {};
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.NullValue, rez.get(0).getType());
     }
@@ -46,7 +46,7 @@ public class ValidatorNullTest {
     public void hook4Test() {
         Ship[] ships = {new Ship(new Point(1, 1), new Point(1, 1)), null};
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.NullValue, rez.get(0).getType());
     }
@@ -55,7 +55,7 @@ public class ValidatorNullTest {
     public void hook5Test() {
         Ship[] ships = {new Ship(new Point(1, 1), null)};
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.NullValue, rez.get(0).getType());
     }

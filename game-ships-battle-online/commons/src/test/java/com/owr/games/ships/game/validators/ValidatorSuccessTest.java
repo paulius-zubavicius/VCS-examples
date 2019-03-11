@@ -1,13 +1,13 @@
 package com.owr.games.ships.game.validators;
 
-import com.owr.games.ships.model.Point;
-import com.owr.games.ships.model.Ship;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
+import com.owr.games.ships.model.Point;
+import com.owr.games.ships.model.Ship;
 
 public class ValidatorSuccessTest {
 
@@ -30,7 +30,7 @@ public class ValidatorSuccessTest {
                 new Ship(new Point(4, 0), new Point(4, 4))
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(0, rez.size());
 
     }

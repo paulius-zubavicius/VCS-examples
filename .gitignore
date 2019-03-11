@@ -22,16 +22,16 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-/.metadata/
-*/.settings/
-*/.settings/
-*/target/
+**/.metadata/
+**/.settings/
 **/target/
-*/.idea/
-*/.project
-*/.classpath
-*.iml
-*/bin/
+**/.idea/
+**/.project
+**/.classpath
+**/*.iml
+**/bin/
+
+
 /RemoteSystemsTempFiles/
 /.recommenders/
 

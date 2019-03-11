@@ -1,19 +1,18 @@
 package com.owr.games.ships.rest.services;
 
-import com.owr.games.ships.model.BattleFieldSerialized;
-import com.owr.games.ships.model.Point;
-import com.owr.games.ships.model.Ship;
-import com.owr.games.ships.rest.entities.ErrorMsgRestEntity;
-
 import java.util.List;
 import java.util.Locale;
 
+import com.owr.games.ships.game.BattleField;
+import com.owr.games.ships.model.Point;
+import com.owr.games.ships.model.Ship;
+
 public interface GameLogicService {
 
-    BattleFieldSerialized createMapStr(List<ErrorMsgRestEntity> errors, Locale locale, List<Ship> ships);
+	BattleField createMapStr(Locale locale, List<Ship> ships);
 
-    BattleFieldSerialized createMapStr(List<ErrorMsgRestEntity> errors, Locale locale, String map, Point hitPoint);
+	BattleField createMapStr(Locale locale, String map, Point hitPoint);
 
-    boolean isEnemyLost(String enemyField);
+    boolean isEnemyLost(BattleField enemyField);
 
 }

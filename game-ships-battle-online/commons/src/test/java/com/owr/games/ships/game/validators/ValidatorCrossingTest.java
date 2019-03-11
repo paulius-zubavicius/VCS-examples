@@ -1,13 +1,13 @@
 package com.owr.games.ships.game.validators;
 
-import com.owr.games.ships.model.Point;
-import com.owr.games.ships.model.Ship;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.List;
+import com.owr.games.ships.model.Point;
+import com.owr.games.ships.model.Ship;
 
 public class ValidatorCrossingTest {
 
@@ -30,7 +30,7 @@ public class ValidatorCrossingTest {
                 new Ship(new Point(3, 0), new Point(3, 4)) // Crossing X
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(1, rez.size());
         Assert.assertEquals(ShipValidationErrCode.Crossing, rez.get(0).getType());
     }
@@ -45,7 +45,7 @@ public class ValidatorCrossingTest {
                 new Ship(new Point(0, 0), new Point(0, 4)) // Crossing
         };
 
-        List<ValidationFailItem> rez = v.validate(ships);
+        List<ValidationFailItem> rez = v.validateSafe(ships);
         Assert.assertEquals(10, rez.size());
         Assert.assertEquals(ShipValidationErrCode.Crossing, rez.get(0).getType());
     }
