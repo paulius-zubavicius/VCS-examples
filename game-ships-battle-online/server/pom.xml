@@ -12,10 +12,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>ships-battle-server</artifactId>
 	<packaging>jar</packaging>
-	<!-- <groupId>com.owr.games</groupId> <version>0.8-SNAPSHOT</version> -->
-
-	<!-- <parent> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
-		<version>2.0.4.RELEASE</version> <relativePath /> </parent> -->
 
 	<dependencyManagement>
 		<dependencies>
@@ -31,7 +27,6 @@
 
 
 	<dependencies>
-
 		<dependency>
 			<groupId>com.owr.games</groupId>
 			<artifactId>ships-battle-common</artifactId>
