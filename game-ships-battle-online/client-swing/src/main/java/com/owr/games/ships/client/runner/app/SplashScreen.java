@@ -37,7 +37,7 @@ public class SplashScreen extends Preloader {
 		Image image = new Image(getClass().getClassLoader().getResourceAsStream("logo.jpg"));
 		ImageView imgView = new ImageView(image);
 
-		root.setBackground(new Background(new BackgroundFill(Color.ORANGE, null, null)));
+		root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 
 		Text title = new Text("Ships battle");
 		title.setFont(new Font(40));
@@ -56,7 +56,7 @@ public class SplashScreen extends Preloader {
 		root.getChildren().addAll(imgView, title, version);
 
 		Scene scene = new Scene(root, image.getWidth(), image.getHeight());
-		// scene.setFill(Color.TRANSPARENT);
+		//scene.setFill(Color.TRANSPARENT);
 
 		return scene;
 	}
