@@ -1,7 +1,7 @@
-package com.vcs.colors.game.gui;
+package com.vcs.colors.game.app;
 
 import com.vcs.colors.game.Game;
-
+import com.vcs.colors.game.gui.GameWindowActions;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -11,15 +11,20 @@ import javafx.stage.WindowEvent;
 
 public class GameApplication extends Application {
 
-	private Game createGame() {
-		return new Game();
+
+	/**
+	 * To run: mvn clean javafx:run
+	 * */
+
+	public static void main(String[] args) {
+		launch();
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
 		// Game controller
-		Game game = createGame();
+		Game game =  new Game();
 
 		// Creates main window pane
 		Pane mainWinPane = new Pane();
