@@ -1,13 +1,8 @@
 package com.vcs.fx.canvas.snake.game;
 
-import java.io.File;
-import java.util.Random;
-
-import com.vcs.fx.canvas.snake.Snake;
 import com.vcs.fx.canvas.snake.model.Dir;
 import com.vcs.fx.canvas.snake.model.SnPoint;
 import com.vcs.fx.canvas.snake.utils.SpriteLoader;
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -20,258 +15,260 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.util.Random;
+
 public class SnakeGame extends Application {
 
-	private static final int SIZE_W = 15;
-	private static final int SIZE_H = 15;
+    private static final int SIZE_W = 15;
+    private static final int SIZE_H = 15;
 
-	private static final double PIXELS = 50;
+    private static final double PIXELS = 50;
 
-	private static final double W_PIXELS = SIZE_W * PIXELS;
-	private static final double H_PIXELS = SIZE_H * PIXELS;
-	private static final long NANOS_DIVEDER = 1000000000L;
+    private static final double W_PIXELS = SIZE_W * PIXELS;
+    private static final double H_PIXELS = SIZE_H * PIXELS;
+    private static final long NANOS_DIVIDER = 1000000000L;
 
-	private long lastTick = 0;
-	private Dir playerInput = null;
-	private boolean gameRunning = true;
-	private Image[] snakeSprite;
-	private double obsticleX = W_PIXELS;
-	private double obsticleY = 0;
-	private int obsticleImgIndex = 0;
-	private Random rnd = new Random();
-	private boolean obsticlesEnable = true;
+    private long lastTick = 0;
+    private Dir playerInput = null;
+    private boolean gameRunning = true;
+    private Image[] snakeSprite;
+    private double obstacleX = W_PIXELS;
+    private double obstacleY = 0;
+    private int obstacleImfIndex = 0;
+    private Random rnd = new Random();
+    private boolean obstaclesEnable = true;
 
-	private Snake snake = new Snake(SIZE_W, SIZE_H);
+    private Snake snake = new Snake(SIZE_W, SIZE_H);
 
-	/***
-	 * 
-	 * 
-	 * - Obuoliai - Pailgejimas ir pagreitejimas
-	 * 
-	 * - Snd fx - fonine muzika
-	 */
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
+    /**
+     * To run: mvn clean javafx:run
+     */
 
-		/**
-		 * Load snake sprite
-		 */
-		snakeSprite = SpriteLoader.loadSprite("data/snake-graphics.png", 5, 4);
+    public static void main(String[] args) {
+        launch();
+    }
 
-		/**
-		 * Layers
-		 */
-		Canvas canvasSnake = new Canvas(W_PIXELS, H_PIXELS);
-		Canvas canvasBg = new Canvas(W_PIXELS, H_PIXELS);
-		Canvas canvasObs = new Canvas(W_PIXELS, H_PIXELS);
-		canvasObs.setOpacity(0.9);
 
-		GraphicsContext gcSnake = canvasSnake.getGraphicsContext2D();
-		GraphicsContext gcBg = canvasBg.getGraphicsContext2D();
-		GraphicsContext gcObs = canvasObs.getGraphicsContext2D();
+    @Override
+    public void start(Stage primaryStage) throws Exception {
 
-		Image[] obsticles = new Image[] { new Image(new File("data/leaf.png").toURI().toString()),
-				new Image(new File("data/leaf2.png").toURI().toString()),
-				new Image(new File("data/cloud.png").toURI().toString()),
-				new Image(new File("data/cloud2.png").toURI().toString()),
-				new Image(new File("data/face.png").toURI().toString()),
-				new Image(new File("data/poop.png").toURI().toString()),
-				new Image(new File("data/skull.png").toURI().toString()),
-				new Image(new File("data/spongebob.png").toURI().toString()),
-				new Image(new File("data/spongebob.png").toURI().toString()) };
+        /**
+         * Load snake sprite
+         */
+        snakeSprite = SpriteLoader.loadSprite("data/snake-graphics.png", 5, 4);
 
-		gcBg.drawImage(new Image(new File("data/grass.jpeg").toURI().toString()), 0, 0, W_PIXELS, H_PIXELS);
-		//
-		// gcBg.drawImage(new
-		// Image("https://g2.dcdn.lt/images/pix/iskander-sparnuotosios-raketos-paleidimas-72087510.jpg"),
-		// 0, 0, W_PIXELS, H_PIXELS);
-		Pane root = new Pane(canvasBg, canvasSnake, canvasObs);
+        /**
+         * Layers
+         */
+        Canvas canvasSnake = new Canvas(W_PIXELS, H_PIXELS);
+        Canvas canvasBg = new Canvas(W_PIXELS, H_PIXELS);
+        Canvas canvasObs = new Canvas(W_PIXELS, H_PIXELS);
+        canvasObs.setOpacity(0.9);
 
-		Scene scene = new Scene(root);
-		primaryStage.resizableProperty().setValue(Boolean.FALSE);
-		// primaryStage.initStyle(StageStyle.UNDECORATED);
-		primaryStage.setTitle("Esc - quit; R - reset; O - on/off obsticles;");
-		primaryStage.setMinWidth(W_PIXELS);
-		primaryStage.setMinHeight(H_PIXELS);
-		// primaryStage.setFullScreen(true);
+        GraphicsContext gcSnake = canvasSnake.getGraphicsContext2D();
+        GraphicsContext gcBg = canvasBg.getGraphicsContext2D();
+        GraphicsContext gcObs = canvasObs.getGraphicsContext2D();
 
-		primaryStage.setScene(scene);
-		primaryStage.show();
+        Image[] obsticles = new Image[]{new Image(new File("data/leaf.png").toURI().toString()),
+                new Image(new File("data/leaf2.png").toURI().toString()),
+                new Image(new File("data/cloud.png").toURI().toString()),
+                new Image(new File("data/cloud2.png").toURI().toString()),
+                new Image(new File("data/face.png").toURI().toString()),
+                new Image(new File("data/poop.png").toURI().toString()),
+                new Image(new File("data/skull.png").toURI().toString()),
+                new Image(new File("data/spongebob.png").toURI().toString()),
+                new Image(new File("data/spongebob.png").toURI().toString())};
 
-		long startTime = System.currentTimeMillis();
+        gcBg.drawImage(new Image(new File("data/grass.jpeg").toURI().toString()), 0, 0, W_PIXELS, H_PIXELS);
 
-		gcSnake.setLineWidth(1.0);
-		gcSnake.setStroke(Color.YELLOW);
-		gcSnake.setFont(Font.font(16));
+        Pane root = new Pane(canvasBg, canvasSnake, canvasObs);
 
-		gcObs.setLineWidth(1.0);
-		gcObs.setStroke(Color.YELLOW);
-		gcObs.setFont(Font.font(16));
+        Scene scene = new Scene(root);
+        primaryStage.resizableProperty().setValue(Boolean.FALSE);
+        // primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setTitle("Esc - quit; R - reset; O - on/off obstacles;");
+        primaryStage.setMinWidth(W_PIXELS);
+        primaryStage.setMinHeight(H_PIXELS);
+        // primaryStage.setFullScreen(true);
 
-		(new AnimationTimer() {
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-			@Override
-			public void handle(long currentTimeNanos) {
+        long startTime = System.currentTimeMillis();
 
-				if (gameRunning) {
-					long tick = (currentTimeNanos - startTime) / (NANOS_DIVEDER - snake.getLevelSpeed() * 100L);
+        gcSnake.setLineWidth(1.0);
+        gcSnake.setStroke(Color.YELLOW);
+        gcSnake.setFont(Font.font(16));
 
-					if (lastTick != tick) {
+        gcObs.setLineWidth(1.0);
+        gcObs.setStroke(Color.YELLOW);
+        gcObs.setFont(Font.font(16));
 
-						if (!snake.move(playerInput)) {
-							gameRunning = false;
-							return;
-						}
+        (new AnimationTimer() {
 
-						playerInput = null;
-						lastTick = tick;
-					}
+            @Override
+            public void handle(long currentTimeNanos) {
 
-					/**
-					 * Clear
-					 */
-					gcSnake.clearRect(0, 0, W_PIXELS, H_PIXELS);
+                if (gameRunning) {
+                    long tick = (currentTimeNanos - startTime) / (NANOS_DIVIDER - snake.getLevelSpeed() * 100L);
 
-					/**
-					 * Snake
-					 */
-					gcSnake.drawImage(snakeSprite[15], PIXELS * snake.getApple().getX(),
-							PIXELS * snake.getApple().getY(), PIXELS, PIXELS);
+                    if (lastTick != tick) {
 
-					drawSnakePoint(snake.getSnPoints().get(0), gcSnake, false, true);
-					for (int i = 1; i < snake.getSnPoints().size() - 1; i++) {
-						drawSnakePoint(snake.getSnPoints().get(i), gcSnake, false, false);
-					}
-					drawSnakePoint(snake.getSnPoints().get(snake.getSnPoints().size() - 1), gcSnake, true, false);
+                        if (!snake.move(playerInput)) {
+                            gameRunning = false;
+                            return;
+                        }
 
-					/**
-					 * Info
-					 */
-					gcSnake.strokeText("Level: " + snake.getLevel(), 10, 20);
+                        playerInput = null;
+                        lastTick = tick;
+                    }
 
-					/**
-					 * Obst
-					 */
-					if (obsticlesEnable) {
-						obsticleX += 3;
-						if (obsticleX > W_PIXELS) {
+                    /**
+                     * Clear
+                     */
+                    gcSnake.clearRect(0, 0, W_PIXELS, H_PIXELS);
 
-							obsticleImgIndex = rnd.nextInt(obsticles.length);
+                    /**
+                     * Snake
+                     */
+                    gcSnake.drawImage(snakeSprite[15], PIXELS * snake.getApple().getX(),
+                            PIXELS * snake.getApple().getY(), PIXELS, PIXELS);
 
-							obsticleX = -obsticles[obsticleImgIndex].getWidth();
-							obsticleY = rnd.nextInt((int) H_PIXELS);
-						}
+                    drawSnakePoint(snake.getSnPoints().get(0), gcSnake, false, true);
+                    for (int i = 1; i < snake.getSnPoints().size() - 1; i++) {
+                        drawSnakePoint(snake.getSnPoints().get(i), gcSnake, false, false);
+                    }
+                    drawSnakePoint(snake.getSnPoints().get(snake.getSnPoints().size() - 1), gcSnake, true, false);
 
-						gcObs.clearRect(obsticleX, obsticleY, obsticles[obsticleImgIndex].getWidth(),
-								obsticles[obsticleImgIndex].getHeight());
-						gcObs.drawImage(obsticles[obsticleImgIndex], obsticleX, obsticleY);
-					} else {
-						gcObs.clearRect(0, 0, W_PIXELS, H_PIXELS);
-					}
+                    /**
+                     * Info
+                     */
+                    gcSnake.strokeText("Level: " + snake.getLevel(), 10, 20);
 
-				} else {
-					gcObs.setFont(Font.font(24));
-					gcObs.strokeText("This is it... press R to reset", W_PIXELS / 2 - 150, H_PIXELS / 2);
-				}
+                    /**
+                     * Obst
+                     */
+                    if (obstaclesEnable) {
+                        obstacleX += 3;
+                        if (obstacleX > W_PIXELS) {
 
-			}
-		}).start();
+                            obstacleImfIndex = rnd.nextInt(obsticles.length);
 
-		scene.setOnKeyPressed((evt) -> {
+                            obstacleX = -obsticles[obstacleImfIndex].getWidth();
+                            obstacleY = rnd.nextInt((int) H_PIXELS);
+                        }
 
-			if (KeyCode.LEFT.equals(evt.getCode())) {
-				playerInput = Dir.LEFT;
-			}
+                        gcObs.clearRect(obstacleX, obstacleY, obsticles[obstacleImfIndex].getWidth(),
+                                obsticles[obstacleImfIndex].getHeight());
+                        gcObs.drawImage(obsticles[obstacleImfIndex], obstacleX, obstacleY);
+                    } else {
+                        gcObs.clearRect(0, 0, W_PIXELS, H_PIXELS);
+                    }
 
-			if (KeyCode.RIGHT.equals(evt.getCode())) {
-				playerInput = Dir.RIGHT;
-			}
+                } else {
+                    gcObs.setFont(Font.font(24));
+                    gcObs.strokeText("This is it... press R to reset", W_PIXELS / 2 - 150, H_PIXELS / 2);
+                }
 
-			if (KeyCode.UP.equals(evt.getCode())) {
-				playerInput = Dir.UP;
-			}
+            }
+        }).start();
 
-			if (KeyCode.DOWN.equals(evt.getCode())) {
-				playerInput = Dir.DOWN;
-			}
+        scene.setOnKeyPressed((evt) -> {
 
-			if (KeyCode.R.equals(evt.getCode())) {
-				snake.reset();
-				lastTick = 0;
-				playerInput = null;
-				gameRunning = true;
-			}
+            if (KeyCode.LEFT.equals(evt.getCode())) {
+                playerInput = Dir.LEFT;
+            }
 
-			if (KeyCode.O.equals(evt.getCode())) {
-				obsticlesEnable = !obsticlesEnable;
-			}
+            if (KeyCode.RIGHT.equals(evt.getCode())) {
+                playerInput = Dir.RIGHT;
+            }
 
-			if (KeyCode.ESCAPE.equals(evt.getCode())) {
-				System.exit(0);
-			}
+            if (KeyCode.UP.equals(evt.getCode())) {
+                playerInput = Dir.UP;
+            }
 
-		});
+            if (KeyCode.DOWN.equals(evt.getCode())) {
+                playerInput = Dir.DOWN;
+            }
 
-	}
+            if (KeyCode.R.equals(evt.getCode())) {
+                snake.reset();
+                lastTick = 0;
+                playerInput = null;
+                gameRunning = true;
+            }
 
-	private void drawSnakePoint(SnPoint snPoint, GraphicsContext gc, boolean head, boolean tail) {
-		int spIndex = 15;
+            if (KeyCode.O.equals(evt.getCode())) {
+                obstaclesEnable = !obstaclesEnable;
+            }
 
-		if (tail) {
-			switch (snPoint.getDirection()) {
-			case DOWN:
-				spIndex = 19;
-				break;
-			case UP:
-				spIndex = 13;
-				break;
-			case LEFT:
-				spIndex = 18;
-				break;
-			case RIGHT:
-				spIndex = 14;
-				break;
-			}
-		} else if (head) {
-			switch (snPoint.getDirection()) {
-			case DOWN:
-				spIndex = 9;
-				break;
-			case UP:
-				spIndex = 3;
-				break;
-			case LEFT:
-				spIndex = 8;
-				break;
-			case RIGHT:
-				spIndex = 4;
-				break;
-			}
-		} else {
-			switch (snPoint.getOrientation()) {
-			case LEFT_RIGHT:
-				spIndex = 1;
-				break;
-			case UP_DOWN:
-				spIndex = 7;
-				break;
-			case DOWN_LEFT:
-				spIndex = 2;
-				break;
-			case DOWN_RIGHT:
-				spIndex = 0;
-				break;
-			case UP_LEFT:
-				spIndex = 12;
-				break;
-			case UP_RIGHT:
-				spIndex = 5;
-				break;
-			}
-		}
+            if (KeyCode.ESCAPE.equals(evt.getCode())) {
+                System.exit(0);
+            }
 
-		gc.drawImage(snakeSprite[spIndex], PIXELS * snPoint.getX(), PIXELS * snPoint.getY(), PIXELS, PIXELS);
-	}
+        });
+
+    }
+
+    private void drawSnakePoint(SnPoint snPoint, GraphicsContext gc, boolean head, boolean tail) {
+        int spIndex = 15;
+
+        if (tail) {
+            switch (snPoint.getDirection()) {
+                case DOWN:
+                    spIndex = 19;
+                    break;
+                case UP:
+                    spIndex = 13;
+                    break;
+                case LEFT:
+                    spIndex = 18;
+                    break;
+                case RIGHT:
+                    spIndex = 14;
+                    break;
+            }
+        } else if (head) {
+            switch (snPoint.getDirection()) {
+                case DOWN:
+                    spIndex = 9;
+                    break;
+                case UP:
+                    spIndex = 3;
+                    break;
+                case LEFT:
+                    spIndex = 8;
+                    break;
+                case RIGHT:
+                    spIndex = 4;
+                    break;
+            }
+        } else {
+            switch (snPoint.getOrientation()) {
+                case LEFT_RIGHT:
+                    spIndex = 1;
+                    break;
+                case UP_DOWN:
+                    spIndex = 7;
+                    break;
+                case DOWN_LEFT:
+                    spIndex = 2;
+                    break;
+                case DOWN_RIGHT:
+                    spIndex = 0;
+                    break;
+                case UP_LEFT:
+                    spIndex = 12;
+                    break;
+                case UP_RIGHT:
+                    spIndex = 5;
+                    break;
+            }
+        }
+
+        gc.drawImage(snakeSprite[spIndex], PIXELS * snPoint.getX(), PIXELS * snPoint.getY(), PIXELS, PIXELS);
+    }
 
 }
