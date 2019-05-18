@@ -7,8 +7,6 @@ import com.vcs.ex.jfx.game.layers.l1_gun.GunsLayer;
 import com.vcs.ex.jfx.game.layers.l2_obs.ObstaclesLayer;
 import com.vcs.ex.jfx.game.layers.l3_target.TargetsLayer;
 import com.vcs.ex.jfx.game.layers.l4_bg.BgLayer;
-import com.vcs.ex.jfx.game.music.MusicPlayer;
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,88 +14,111 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class Game extends Application {
 
-	private ResolutionMode resMode = ResolutionMode.RES_800x600;
+    private ResolutionMode resMode = ResolutionMode.RES_800x600;
 
-	@Override
-	public void start(Stage primaryStage) {
+    /**
+     * To run: mvn clean javafx:run
+     */
 
-		final long startNanoTime = System.nanoTime();
+    public static void main(String[] args) {
+        launch();
+    }
 
-		/**
-		 * Back ground music
-		 */
-		MusicPlayer mp = new MusicPlayer();
-		mp.playNext();
+    @Override
+    public void start(Stage primaryStage) {
 
-		/**
-		 * Layers and game objects
-		 */
-		GunsBackPackHandler backPackHandler = new GunsBackPackHandler();
-		LayersHandler layers = new LayersHandler();
+        final long startNanoTime = System.nanoTime();
 
-		layers.registerLayer(new BgLayer());
-		layers.registerLayer(new TargetsLayer());
-		layers.registerLayer(new ObstaclesLayer());
-		layers.registerLayer(new GunsLayer(backPackHandler));
+        /**
+         * Back ground music
+         */
+//		MusicPlayer mp = new MusicPlayer();
+//		mp.playNext();
 
-		Pane root = layers.createLayeredCanvasPane(resMode, startNanoTime);
 
-		/**
-		 * Main window
-		 */
-		Scene scene = new Scene(root);
-		// primaryStage.setAlwaysOnTop(true);
-		// primaryStage.setOpacity(0.5);
-		// primaryStage.resizableProperty().setValue(Boolean.FALSE);
-		// primaryStage.initStyle(StageStyle.UNDECORATED);
-		primaryStage.setMinWidth(resMode.getW());
-		primaryStage.setMinHeight(resMode.getH());
-		// primaryStage.setFullScreen(true);
+        Media sound = new Media(new File("media/music/doom.wav").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
 
-		primaryStage.setScene(scene);
-		primaryStage.show();
+        /**
+         * Layers and game objects
+         */
+        GunsBackPackHandler backPackHandler = new GunsBackPackHandler();
+        LayersHandler layers = new LayersHandler();
 
-		/**
-		 * Event handlers / inputs
-		 */
+        layers.registerLayer(new BgLayer());
+        layers.registerLayer(new TargetsLayer());
+        layers.registerLayer(new ObstaclesLayer());
+        layers.registerLayer(new GunsLayer(backPackHandler));
 
-		scene.setOnMousePressed((evt) -> {
-			if (MouseButton.PRIMARY.equals(evt.getButton())) {
-				backPackHandler.getGun().shoot(true, evt.getX(), evt.getY(), layers);
-			}
-		});
+        Pane root = layers.createLayeredCanvasPane(resMode, startNanoTime);
 
-		scene.setOnMouseReleased((evt) -> {
-			if (MouseButton.PRIMARY.equals(evt.getButton())) {
-				backPackHandler.getGun().shoot(false, evt.getX(), evt.getY(), layers);
-			}
-		});
+        /**
+         * Main window
+         */
+        Scene scene = new Scene(root);
+        // primaryStage.setAlwaysOnTop(true);
+        // primaryStage.setOpacity(0.5);
+        // primaryStage.resizableProperty().setValue(Boolean.FALSE);
+        // primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setMinWidth(resMode.getW());
+        primaryStage.setMinHeight(resMode.getH());
+        // primaryStage.setFullScreen(true);
 
-		scene.setOnScroll((evt) -> backPackHandler.changeGun(evt.getTextDeltaY() > 0));
-		scene.setOnZoom((evt) -> backPackHandler.changeGun(evt.getZoomFactor() > 0));
-		scene.addEventFilter(MouseEvent.DRAG_DETECTED, (evt) -> scene.startFullDrag());
-		scene.setOnMouseDragOver((evt) -> backPackHandler.getGun().shoot(true, evt.getX(), evt.getY(), layers));
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
-		scene.setOnKeyPressed((evt) -> {
-			if (KeyCode.ESCAPE.equals(evt.getCode())) {
-				System.exit(0);
-			}
+        /**
+         * Event handlers / inputs
+         */
+        scene.addEventFilter(MouseEvent.DRAG_DETECTED, (evt) -> scene.startFullDrag());
 
-		});
+        scene.setOnMousePressed((evt) -> {
+            if (MouseButton.PRIMARY.equals(evt.getButton())) {
+                backPackHandler.getGun().shoot(true, evt.getX(), evt.getY(), layers);
+            } else {
+                backPackHandler.changeGun(true);
+            }
+        });
 
-		/**
-		 * Game cycle
-		 */
+        scene.setOnMouseReleased((evt) -> {
+            if (MouseButton.PRIMARY.equals(evt.getButton())) {
+                backPackHandler.getGun().shoot(false, evt.getX(), evt.getY(), layers);
+            }
+        });
 
-		new AnimationTimer() {
-			public void handle(long currentNanoTime) {
-				layers.updateTimer(currentNanoTime);
-			}
-		}.start();
-	}
+        scene.setOnMouseDragOver((evt) -> {
+            if (MouseButton.PRIMARY.equals(evt.getButton())) {
+                backPackHandler.getGun().shoot(true, evt.getX(), evt.getY(), layers);
+            }
+        });
+
+//        scene.setOnScroll((evt) -> backPackHandler.changeGun(evt.getTextDeltaY() > 0));
+
+
+        scene.setOnKeyPressed((evt) -> {
+            if (KeyCode.ESCAPE.equals(evt.getCode())) {
+                System.exit(0);
+            }
+        });
+
+        /**
+         * Game cycle
+         */
+
+        new AnimationTimer() {
+            public void handle(long currentNanoTime) {
+                layers.updateTimer(currentNanoTime);
+            }
+        }.start();
+    }
 
 }

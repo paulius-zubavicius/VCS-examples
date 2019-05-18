@@ -16,7 +16,7 @@ public class ObstaclesLayer implements GraphicalLayer {
 
 	private static final double WIND_SPEED = 0.1;
 	private static final double SEC = 1000000000.0;
-	private static final long FX_SPEED = 6000000L;
+	private static final long FX_SPEED = 3000000L;
 
 	private Image cloud;
 	private GraphicsContext gc;
