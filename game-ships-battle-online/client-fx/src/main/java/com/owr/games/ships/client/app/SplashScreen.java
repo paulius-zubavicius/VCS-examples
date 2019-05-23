@@ -1,4 +1,4 @@
-package com.owr.games.ships.client.runner.app;
+package com.owr.games.ships.client.app;
 
 import javafx.application.Platform;
 import javafx.application.Preloader;

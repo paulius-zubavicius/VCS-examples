@@ -1,4 +1,4 @@
-package com.owr.games.ships.client.runner.app;
+package com.owr.games.ships.client.panels;
 
 import org.springframework.stereotype.Component;
 

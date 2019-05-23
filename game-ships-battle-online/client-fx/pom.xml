@@ -9,7 +9,7 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>ships-battle-client-swing</artifactId>
+	<artifactId>ships-battle-client-fx</artifactId>
 
 
 	<dependencies>
@@ -37,7 +37,34 @@
 			<version>${spring.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>12.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-media</artifactId>
+			<version>12.0.1</version>
+		</dependency>
+
 	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.2</version>
+				<configuration>
+					<mainClass>com.owr.games.ships.client.app.App</mainClass>
+<!--					<launcher>com.owr.games.ships.client.app.SplashScreen</launcher>-->
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 
 </project>

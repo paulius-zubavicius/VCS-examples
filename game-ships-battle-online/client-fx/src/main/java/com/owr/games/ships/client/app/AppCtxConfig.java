@@ -1,10 +1,10 @@
-package com.owr.games.ships.client.runner.app;
+package com.owr.games.ships.client.app;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan({ "com.owr.games.ships.client.*" })
+//@ComponentScan({ "com.owr.games.ships.client.*" })
 public class AppCtxConfig {
 
 }
