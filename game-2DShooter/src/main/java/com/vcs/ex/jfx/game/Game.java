@@ -17,6 +17,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.File;
 
@@ -40,14 +42,12 @@ public class Game extends Application {
         /**
          * Back ground music
          */
-//		MusicPlayer mp = new MusicPlayer();
-//		mp.playNext();
-
 
         Media sound = new Media(new File("media/music/doom.wav").toURI().toString());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
         mediaPlayer.play();
-
+        
         /**
          * Layers and game objects
          */
@@ -68,7 +68,7 @@ public class Game extends Application {
         // primaryStage.setAlwaysOnTop(true);
         // primaryStage.setOpacity(0.5);
         // primaryStage.resizableProperty().setValue(Boolean.FALSE);
-        // primaryStage.initStyle(StageStyle.UNDECORATED);
+         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setMinWidth(resMode.getW());
         primaryStage.setMinHeight(resMode.getH());
         // primaryStage.setFullScreen(true);
@@ -100,9 +100,6 @@ public class Game extends Application {
                 backPackHandler.getGun().shoot(true, evt.getX(), evt.getY(), layers);
             }
         });
-
-//        scene.setOnScroll((evt) -> backPackHandler.changeGun(evt.getTextDeltaY() > 0));
-
 
         scene.setOnKeyPressed((evt) -> {
             if (KeyCode.ESCAPE.equals(evt.getCode())) {
