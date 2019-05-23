@@ -6,13 +6,13 @@ import com.vcs.fx.game.model.Rectangle;
 
 public abstract class SpaceShip implements ISpaceShip {
 
-    private Allies alies = Allies.ENEMY;
+    private Allies alias = Allies.ENEMY;
     protected Rectangle pos;
     private Point canonPos;
 
-    public SpaceShip(Rectangle pos, Allies alies) {
+    public SpaceShip(Rectangle pos, Allies alias) {
         this.pos = pos;
-        this.alies = alies;
+        this.alias = alias;
     }
 
     public Rectangle getPosition() {
@@ -21,13 +21,13 @@ public abstract class SpaceShip implements ISpaceShip {
 
     @Override
     public Allies getAlies() {
-        return alies;
+        return alias;
     }
 
     @Override
     public Point getCanonPosition() {
 
-        if (Allies.ALIES.equals(alies)) {
+        if (Allies.ALIAS.equals(alias)) {
             canonPos.setY(pos.getPos1().getY());
         } else {
             canonPos.setY(pos.getPos2().getY());

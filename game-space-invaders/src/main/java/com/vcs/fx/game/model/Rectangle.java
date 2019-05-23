@@ -30,12 +30,12 @@ public class Rectangle {
 		return p.getX() >= pos1.getX() && p.getX() <= pos2.getX() && p.getY() >= pos1.getY() && p.getY() <= pos2.getY();
 	}
 
-	public void increaseX(int offset) {
+	public void increaseX(double offset) {
 		pos1.increaseX(offset);
 		pos2.increaseX(offset);
 	}
 
-	public void increaseY(int offset) {
+	public void increaseY(double offset) {
 		pos1.increaseY(offset);
 		pos2.increaseY(offset);
 	}

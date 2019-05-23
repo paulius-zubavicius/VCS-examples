@@ -44,7 +44,7 @@ public class ShipsLayer implements ILayer {
         Point pos = new Point(res.getW() / 2 - SHIP_SIZE / 2, res.getH() - SHIP_SIZE);
 
         Rectangle playerMoveBounds = new Rectangle(new Point(0, res.getH() / 2), res.getH() / 2, res.getW());
-        player = new PlayerSpaceShip(new Rectangle(pos, SHIP_SIZE, SHIP_SIZE), Allies.ALIES, playerMoveBounds);
+        player = new PlayerSpaceShip(new Rectangle(pos, SHIP_SIZE, SHIP_SIZE), Allies.ALIAS, playerMoveBounds);
 
         ships = new ArrayList<>();
 

@@ -11,7 +11,7 @@ public class EnemySpaceShip extends SpaceShip {
 	private int shipType;
 	private int moveMultiplier;
 	private long was;
-	private int originalX;
+	private double originalX;
 
 	public EnemySpaceShip(Rectangle pos, Allies alies, int shipType, int moveMultiplier) {
 		super(pos, alies);
@@ -26,7 +26,7 @@ public class EnemySpaceShip extends SpaceShip {
 	public void doPhisics(long now) {
 
 		if (now - was > UPDATE) {
-			pos.getPos1().setX(originalX + ((int) (moveMultiplier * Math.sin(now / SWAG_SPEED))));
+			pos.getPos1().setX(originalX +  (moveMultiplier * Math.sin(now / SWAG_SPEED)));
 			pos.getPos2().setX(pos.getPos1().getX() + pos.getWeight());
 			was = now;
 		}
