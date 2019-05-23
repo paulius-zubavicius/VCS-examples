@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.util.Random;
@@ -87,7 +88,7 @@ public class SnakeGame extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.resizableProperty().setValue(Boolean.FALSE);
-        // primaryStage.initStyle(StageStyle.UNDECORATED);
+         primaryStage.initStyle(StageStyle.UTILITY);
         primaryStage.setTitle("Esc - quit; R - reset; O - on/off obstacles;");
         primaryStage.setMinWidth(W_PIXELS);
         primaryStage.setMinHeight(H_PIXELS);
