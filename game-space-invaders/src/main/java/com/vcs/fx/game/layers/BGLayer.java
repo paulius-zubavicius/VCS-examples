@@ -7,7 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class BGLayer implements ILayer {
+public class BGLayer implements IGCLayer {
 
 	private static final String BG_RESOURCE = "img/bg.jpeg";
 

@@ -5,6 +5,7 @@ import com.vcs.fx.game.layers.ShipsLayer;
 import com.vcs.fx.game.layers.ShootsLayer;
 import com.vcs.fx.game.model.MoveDirection;
 import com.vcs.fx.game.model.Resolutions;
+import com.vcs.fx.game.simulation.Simulation;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -21,13 +22,14 @@ import java.io.File;
 
 public class Game extends Application {
 
-    private Resolutions res = Resolutions.RES_400_600;
+    private Resolutions res = Resolutions.RES_600_900;
     private MoveDirection playerDirection = MoveDirection.NONE;
     private boolean playerShooting = false;
     private boolean keyDown = false;
     private boolean keyUp = false;
     private boolean keyLeft = false;
     private boolean keyRight = false;
+    private boolean keyShoot = false;
 
 
     /**
@@ -57,13 +59,17 @@ public class Game extends Application {
         mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
         mediaPlayer.play();
 
-        BGLayer gb = new BGLayer();
-        ShipsLayer shipsLayer = new ShipsLayer();
 
+        Simulation sim = new Simulation();
+        sim.init(res);
+
+        BGLayer gb = new BGLayer();
         gb.init(res);
+
+        ShipsLayer shipsLayer = new ShipsLayer(sim);
         shipsLayer.init(res);
 
-        ShootsLayer shootsLayer = new ShootsLayer();
+        ShootsLayer shootsLayer = new ShootsLayer(sim);
         shootsLayer.init(res);
 
         Pane root = new Pane(gb.getCanvas(), shipsLayer.getCanvas(), shootsLayer.getCanvas());
@@ -79,7 +85,8 @@ public class Game extends Application {
             }
 
             if (KeyCode.SPACE.equals(evt.getCode())) {
-                playerShooting = false;
+                keyShoot = false;
+                //playerShooting = false;
             }
 
         });
@@ -90,7 +97,8 @@ public class Game extends Application {
                 playerDirection = detectDirection(evt, true);
             }
 
-            if (KeyCode.SPACE.equals(evt.getCode())) {
+            if (!keyShoot && KeyCode.SPACE.equals(evt.getCode())) {
+                keyShoot = true;
                 playerShooting = true;
             }
 
@@ -108,12 +116,20 @@ public class Game extends Application {
 
             @Override
             public void handle(long now) {
-                gb.updateTime(now);
+
                 if (playerShooting) {
-                    shootsLayer.shooting(shipsLayer.getPlayerShip());
+                    playerShooting = false;
+                    sim.playerShooting();
                 }
-                shipsLayer.pressedTheButton(playerDirection, now);
+                sim.pressedTheButton(playerDirection, now);
+
+                sim.updateTime(now);
+
+                gb.updateTime(now);
+                shootsLayer.updateTime(now);
                 shipsLayer.updateTime(now);
+
+
             }
         }.start();
 

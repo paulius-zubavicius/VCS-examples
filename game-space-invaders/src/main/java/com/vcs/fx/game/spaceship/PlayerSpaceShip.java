@@ -1,6 +1,6 @@
 package com.vcs.fx.game.spaceship;
 
-import com.vcs.fx.game.model.Allies;
+import com.vcs.fx.game.model.Team;
 import com.vcs.fx.game.model.MoveDirection;
 import com.vcs.fx.game.model.Rectangle;
 
@@ -18,7 +18,7 @@ public class PlayerSpaceShip extends SpaceShip {
 	private final Rectangle moveBounds;
 	private MoveDirection direction;
 
-	public PlayerSpaceShip(Rectangle rect, Allies alies, Rectangle moveBounds) {
+	public PlayerSpaceShip(Rectangle rect, Team alies, Rectangle moveBounds) {
 		super(rect, alies);
 		this.moveBounds = moveBounds;
 

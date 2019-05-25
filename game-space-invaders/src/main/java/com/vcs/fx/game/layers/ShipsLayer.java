@@ -1,11 +1,14 @@
 package com.vcs.fx.game.layers;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vcs.fx.game.loaders.EnemiesLoader;
+import com.vcs.fx.game.simulation.ISimulation;
 import com.vcs.fx.game.spaceship.EnemySpaceShip;
 import com.vcs.fx.game.spaceship.PlayerSpaceShip;
-import com.vcs.fx.game.model.Allies;
+import com.vcs.fx.game.model.Team;
 import com.vcs.fx.game.model.MoveDirection;
 import com.vcs.fx.game.model.Point;
 import com.vcs.fx.game.model.Rectangle;
@@ -17,10 +20,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class ShipsLayer implements ILayer {
+public class ShipsLayer implements IGCLayer {
+
 
     private static final String PLAYER_SHIP = "img/player.png";
-    private static final int SHIP_SIZE = 50;
+
     private static final String ENEMY_SHIP = "img/enemies.png";
     private Canvas canvas;
     private GraphicsContext gc;
@@ -33,6 +37,11 @@ public class ShipsLayer implements ILayer {
 
     private List<EnemySpaceShip> ships;
 
+    public ShipsLayer(ISimulation simulation) {
+        this.ships = simulation.getEnemies();
+        this.player = simulation.getPlayer();
+    }
+
     @Override
     public void init(Resolutions res) {
 
@@ -41,64 +50,29 @@ public class ShipsLayer implements ILayer {
         playerShipImg = ResourceUtil.loadImg(PLAYER_SHIP);
         enemyShipImg = ResourceUtil.loadSpriteArr(ENEMY_SHIP, 8, 3);
 
-        Point pos = new Point(res.getW() / 2 - SHIP_SIZE / 2, res.getH() - SHIP_SIZE);
-
-        Rectangle playerMoveBounds = new Rectangle(new Point(0, res.getH() / 2), res.getH() / 2, res.getW());
-        player = new PlayerSpaceShip(new Rectangle(pos, SHIP_SIZE, SHIP_SIZE), Allies.ALIAS, playerMoveBounds);
-
-        ships = new ArrayList<>();
-
-        EnemiesLoader enemies = new EnemiesLoader();
-        ships.addAll(enemies.load(res));
-
         canvas = new Canvas(res.getW(), res.getH());
         gc = canvas.getGraphicsContext2D();
 
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
+//        gc.setFill(Color.GREEN);
+//        gc.setStroke(Color.BLUE);
+//        gc.setLineWidth(5);
+
+//        wasLastShot = Instant.now().toEpochMilli();
     }
 
     @Override
     public void updateTime(long now) {
 
-        Point p = null;
-        int w = 0;
-        int h = 0;
-
         gc.clearRect(0, 0, res.getW(), res.getH());
 
-        for (EnemySpaceShip ship : ships) {
+        ships.forEach(ship -> drawShip(ship.getPosition().getPos1(), ship.getPosition().getHeight(), ship.getPosition().getWeight(), enemyShipImg[ship.getShipType()]));
 
-            p = ship.getPosition().getPos1();
-            h = ship.getPosition().getHeight();
-            w = ship.getPosition().getWeight();
-
-            ship.doPhisics(now);
-
-            drawShip(p, h, w, enemyShipImg[ship.getShipType()]);
-
-        }
-
-        drawShip(player.getPosition().getPos1(), player.getPosition().getHeight(), player.getPosition().getWeight(),
-                playerShipImg);
+        drawShip(player.getPosition().getPos1(), player.getPosition().getHeight(), player.getPosition().getWeight(), playerShipImg);
 
     }
 
     private void drawShip(Point p, int h, int w, Image img) {
-        // gc.clearRect(p.getX(), p.getY(), w, h);
         gc.drawImage(img, p.getX(), p.getY(), w, h);
-    }
-
-    public void pressedTheButton(MoveDirection direction, long now) {
-
-        player.move(direction);
-        player.doPhisics(now);
-
-    }
-
-    public PlayerSpaceShip getPlayerShip() {
-        return player;
     }
 
     @Override

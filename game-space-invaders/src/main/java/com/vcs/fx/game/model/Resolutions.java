@@ -2,7 +2,9 @@ package com.vcs.fx.game.model;
 
 public enum Resolutions {
 
-	RES_400_600(400, 600);
+	RES_400_600(400, 600),
+
+	RES_600_900(600, 900);
 
 	private int w;
 	private int h;

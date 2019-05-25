@@ -1,6 +1,6 @@
 package com.vcs.fx.game.model;
 
-public enum Allies {
+public enum Team {
 
 	ALIAS,
 

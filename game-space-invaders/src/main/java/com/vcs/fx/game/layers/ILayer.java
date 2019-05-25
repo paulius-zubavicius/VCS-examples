@@ -10,7 +10,7 @@ public interface ILayer {
 	
 	void updateTime(long now);
 
-	Canvas getCanvas();
+
 	
 
 }
