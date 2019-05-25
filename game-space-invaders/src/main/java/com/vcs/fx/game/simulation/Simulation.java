@@ -12,6 +12,12 @@ import java.util.Random;
 
 public class Simulation implements ISimulation {
 
+    //FIXME - separate game events and handling
+    //FIXME - data loading
+    //FIXME - levels (with continuing enemies)
+    //FIXME - efects; snd; power packs ;
+
+
 
     private static final long EN_SHOOT_FREQUENCY = 500L;
     private static final String PLAYER_SHIP = "img/player1.png";
