@@ -8,12 +8,19 @@ public class Shoot {
 	private double energy;
 	private Point position;
 	private double speed;
+//	private EnergyType type;
 
 
+//	public Shoot(Team team, Point position, double speed, double energy) {
+//		this.team = team;
+//		this.position = new Point(position);
+//		this.speed = speed;
+//		this.energy = energy;
+//	}
 
-	public Shoot(Team team, Point position, double speed, double energy) {
+	public Shoot(Team team, double startX, double startY, double speed, double energy) {
 		this.team = team;
-		this.position = new Point(position);
+		this.position = new Point(startX, startY);
 		this.speed = speed;
 		this.energy = energy;
 	}
@@ -46,7 +53,7 @@ public class Shoot {
 		this.energy = energy;
 	}
 
-	public boolean isItWillHurt() {
+	public boolean isItEnergy() {
 		return energy > 0;
 	}
 }

@@ -7,9 +7,11 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.Random;
+
 public class BGLayer implements IGCLayer {
 
-	private static final String BG_RESOURCE = "img/bg.jpeg";
+	private static final String BG_RESOURCE = "img/bg4.jpg";
 
 	private static final int SKIP_FRAMES = 10;
 
@@ -27,7 +29,9 @@ public class BGLayer implements IGCLayer {
 	public void init(Resolutions res) {
 
 		this.res = res;
-		bgImg = ResourceUtil.loadImg(BG_RESOURCE);
+		Random r = new Random();
+
+		bgImg = ResourceUtil.loadImg("img/bg"+r.nextInt(4)+".jpg");
 		canvas = new Canvas(res.getW(), res.getH());
 		gc = canvas.getGraphicsContext2D();
 

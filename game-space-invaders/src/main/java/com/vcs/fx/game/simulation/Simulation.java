@@ -4,6 +4,7 @@ import com.vcs.fx.game.loaders.EnemiesLoader;
 import com.vcs.fx.game.model.*;
 import com.vcs.fx.game.spaceship.EnemySpaceShip;
 import com.vcs.fx.game.spaceship.PlayerSpaceShip;
+import com.vcs.fx.game.utils.ResourceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,20 +12,13 @@ import java.util.Random;
 
 public class Simulation implements ISimulation {
 
-    private static final double SHOT_SPEED = 0.7;
-    private static final double SHOT_ENERGY = 3.0;
 
-    private static final double EN_SHOT_SPEED = 0.4;
-    private static final double EN_SHOT_ENERGY = 1.0;
-
-    private static final int SHIP_SIZE = 50;
-
-    private static final long SHOOT_FREQUENCY = 1000000000L;
-    private static final long SHOOT_FREQUENCY_MAX = 100000000L * 20;
+    private static final long EN_SHOOT_FREQUENCY = 500L;
+    private static final String PLAYER_SHIP = "img/player1.png";
 
     private Resolutions res;
-
     private Random rnd = new Random();
+    private double wasLastShot;
 
     private List<Shoot> shoots = new ArrayList<>();
     private PlayerSpaceShip player;
@@ -34,21 +28,49 @@ public class Simulation implements ISimulation {
     public void init(Resolutions res) {
         this.res = res;
 
-        EnemiesLoader loader = new EnemiesLoader();
-        enemies = loader.load(res);
 
-        Point pos = new Point(res.getW() / 2 - SHIP_SIZE / 2, res.getH() - SHIP_SIZE);
-        Rectangle playerMoveBounds = new Rectangle(new Point(0, res.getH() / 2), res.getH() / 2, res.getW());
-        player = new PlayerSpaceShip(new Rectangle(pos, SHIP_SIZE, SHIP_SIZE), Team.ALIAS, playerMoveBounds);
+        enemies = new EnemiesLoader().load(res);
+
+//        Rectangle playerMoveBounds = new Rectangle(new Point(0, res.getH() / 2), res.getH() / 2, res.getW());
+        Rectangle playerMoveBounds = new Rectangle(new Point(0, 0), res.getH(), res.getW());
+
+        player = new PlayerSpaceShip(new Point(res.getW() / 2, res.getH() - 50), ResourceUtil.loadImg(PLAYER_SHIP), playerMoveBounds);
     }
 
-    public void playerShooting() {
-        shoots.add(new Shoot(player.getTeam(), player.getCanonPosition(), SHOT_SPEED, SHOT_ENERGY));
+    public void playerShooting(long now) {
+        shoots.addAll(player.createShoot(now));
     }
 
     public void pressedTheButton(MoveDirection direction, long now) {
         player.move(direction);
         player.doPhisics(now);
+    }
+
+    public void changeGun(int number) {
+        System.out.println(number);
+        player.selectGun(Gun.values()[number - 1]);
+    }
+
+    @Override
+    public void updateTime(long now) {
+
+        shoots.removeIf(shoot -> !isInside(shoot.getPosition(), res.getW(), res.getH()) || !shoot.isItEnergy());
+        enemies.removeIf(ship -> ship.isDead());
+
+        enemies.forEach(ship -> {
+
+            if (now - wasLastShot > (rnd.nextInt(1100000) + 500000) * EN_SHOOT_FREQUENCY) {
+                shoots.addAll(ship.createShoot(now));
+                wasLastShot = now;
+            }
+
+            ship.doPhisics(now);
+        });
+
+        shoots.forEach(shoot -> shoot.getPosition().move((Team.ENEMY.equals(shoot.getTeam()) ? shoot.getSpeed() : -shoot.getSpeed())));
+
+        collisions();
+
     }
 
     @Override
@@ -66,36 +88,13 @@ public class Simulation implements ISimulation {
         return enemies;
     }
 
-    @Override
-    public void updateTime(long now) {
-
-        shoots.removeIf(shoot -> !isInside(shoot.getPosition(), res.getW(), res.getH()) || !shoot.isItWillHurt());
-        enemies.removeIf(ship -> ship.isDead());
-
-        enemies.forEach(ship ->  {
-
-            if (now - ship.getWasLastShot() > (rnd.nextInt(11) + 5) * SHOOT_FREQUENCY) {
-                shoots.add(new Shoot(Team.ENEMY, ship.getCanonPosition(), EN_SHOT_SPEED, EN_SHOT_ENERGY));
-                ship.setWasLastShot(now);
-            }
-
-            ship.doPhisics(now);
-
-        });
-
-        shoots.forEach(shoot -> shoot.getPosition().move( (Team.ENEMY.equals(shoot.getTeam()) ? shoot.getSpeed() : - shoot.getSpeed())));
-
-        collisions();
-
-    }
-
     private void collisions() {
         //shoots.stream().filter(shoot -> Team.ALIAS.equals(shoot.getTeam()) ).forEach(shoot -> enemies.);
 
-        for (Shoot shoot: shoots) {
-            if (Team.ALIAS.equals(shoot.getTeam()) ) {
-                for (EnemySpaceShip ship: enemies) {
-                    if ( ship.getPosition().isInside(shoot.getPosition())) {
+        for (Shoot shoot : shoots) {
+            if (Team.ALIAS.equals(shoot.getTeam())) {
+                for (EnemySpaceShip ship : enemies) {
+                    if (ship.getPosition().isInside(shoot.getPosition())) {
 
                         // bullet calcs
                         // damaging ship and calc bullet energy
@@ -107,7 +106,7 @@ public class Simulation implements ISimulation {
                     }
                 }
             } else {
-                if ( player.getPosition().isInside(shoot.getPosition())) {
+                if (player.getPosition().isInside(shoot.getPosition())) {
                     System.out.println("you lost");
                     //FIXME callback to main cycle
                 }
@@ -116,6 +115,8 @@ public class Simulation implements ISimulation {
     }
 
     private boolean isInside(Point sp, double w, double h) {
-        return (sp.getY() > 0 && sp.getY() < h) && (sp.getX() > 0 && sp.getX() <w);
+        return (sp.getY() > 0 && sp.getY() < h) && (sp.getX() > 0 && sp.getX() < w);
     }
+
+
 }

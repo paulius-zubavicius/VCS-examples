@@ -1,8 +1,9 @@
 package com.vcs.fx.game.spaceship;
 
-import com.vcs.fx.game.model.Team;
-import com.vcs.fx.game.model.MoveDirection;
-import com.vcs.fx.game.model.Rectangle;
+import com.vcs.fx.game.model.*;
+import javafx.scene.image.Image;
+
+import java.util.Collection;
 
 public class PlayerSpaceShip extends SpaceShip {
 
@@ -13,23 +14,25 @@ public class PlayerSpaceShip extends SpaceShip {
 	private static final double DIAGONAL_SPEED = 1.0 / 1.414213562;
 	private static final double SHIP_SPEED = 1.0;
 
-
-
 	private final Rectangle moveBounds;
 	private MoveDirection direction;
 
-	public PlayerSpaceShip(Rectangle rect, Team alies, Rectangle moveBounds) {
-		super(rect, alies);
-		this.moveBounds = moveBounds;
 
+	public PlayerSpaceShip(Point point, Image img , Rectangle moveBounds) {
+		super(Team.ALIAS, img, point.getX(), point.getY());
+		this.moveBounds = moveBounds;
+		this.img = img;
 	}
 
 	public void move(MoveDirection direction) {
 		this.direction = direction;
 	}
 
+
 	@Override
 	public void doPhisics(long now) {
+
+
 
 		switch (direction) {
 		case UP:
@@ -60,6 +63,9 @@ public class PlayerSpaceShip extends SpaceShip {
 			return;
 		}
 	}
+
+
+
 
 	private void boundsCheckAndMove(double xOffset, double yOffset) {
 

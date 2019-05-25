@@ -43,12 +43,4 @@ public class Point {
         y += yOffset;
         return this;
     }
-
-    @Override
-    public String toString() {
-        return "Point{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
-    }
 }

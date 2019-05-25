@@ -16,4 +16,5 @@ public interface ISimulation extends ILayer {
 
      List<EnemySpaceShip> getEnemies();
 
+
 }

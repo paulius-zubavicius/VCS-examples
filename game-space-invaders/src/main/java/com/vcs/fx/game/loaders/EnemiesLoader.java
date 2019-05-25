@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.vcs.fx.game.spaceship.EnemySpaceShip;
+import com.vcs.fx.game.utils.ResourceUtil;
+import javafx.scene.image.Image;
 import org.apache.commons.io.FileUtils;
 
 import com.vcs.fx.game.model.Team;
@@ -16,12 +18,18 @@ import com.vcs.fx.game.model.Resolutions;
 
 public class EnemiesLoader {
 
+	private static final String ENEMY_SHIP = "img/enemies.png";
+
 	private static final int W = 30;
 	private static final int H = 30;
+
+	private static final int SCALE_FACTOR = 2;
 
 	private Random rnd = new Random();
 
 	public List<EnemySpaceShip> load(Resolutions res) {
+		 Image[] enemyShipImg = enemyShipImg = ResourceUtil.loadSpriteArr(ENEMY_SHIP, 8, 3);
+
 
 		List<EnemySpaceShip> ships = new ArrayList<>();
 
@@ -38,8 +46,9 @@ public class EnemiesLoader {
 			sway = (5 + rnd.nextInt(20)) * (rnd.nextInt(2) == 0 ? -1 : 1);
 			for (int i = 0; i < line.length(); i++) {
 				if (line.charAt(i) != ' ') {
-					ships.add(new EnemySpaceShip(new Rectangle(new Point(x * w, y * H), W, H), Team.ENEMY,
-							rnd.nextInt(24), sway));
+
+					int shipType = rnd.nextInt(24);
+					ships.add(new EnemySpaceShip(new Point(x * w, y * enemyShipImg[shipType].getHeight() / SCALE_FACTOR + 20), enemyShipImg[shipType], shipType, sway));
 				}
 				x++;
 			}

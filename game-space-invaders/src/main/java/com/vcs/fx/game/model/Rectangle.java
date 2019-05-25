@@ -5,17 +5,17 @@ public class Rectangle {
 	private Point pos1;
 	private Point pos2;
 
-	private int height;
-	private int weight;
+	private double height;
+	private double width;
 
-	public Rectangle(Point pos1, int height, int weight) {
+	public Rectangle(Point pos1, double height, double width) {
 
 		this.height = height;
-		this.weight = weight;
+		this.width = width;
 
 		this.pos1 = pos1;
 		this.pos2 = new Point(pos1);
-		pos2.increaseX(weight);
+		pos2.increaseX(width);
 		pos2.increaseY(height);
 
 	}
@@ -56,20 +56,20 @@ public class Rectangle {
 		this.pos2 = pos2;
 	}
 
-	public int getHeight() {
+	public double getHeight() {
 		return height;
 	}
 
-	public void setHeight(int height) {
+	public void setHeight(double height) {
 		this.height = height;
 	}
 
-	public int getWeight() {
-		return weight;
+	public double getWidth() {
+		return width;
 	}
 
-	public void setWeight(int weight) {
-		this.weight = weight;
+	public void setWidth(double width) {
+		this.width = width;
 	}
 
 }

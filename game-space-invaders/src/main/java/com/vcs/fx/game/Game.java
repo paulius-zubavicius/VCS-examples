@@ -85,8 +85,8 @@ public class Game extends Application {
             }
 
             if (KeyCode.SPACE.equals(evt.getCode())) {
-                keyShoot = false;
-                //playerShooting = false;
+//                keyShoot = false;
+                playerShooting = false;
             }
 
         });
@@ -97,9 +97,13 @@ public class Game extends Application {
                 playerDirection = detectDirection(evt, true);
             }
 
-            if (!keyShoot && KeyCode.SPACE.equals(evt.getCode())) {
-                keyShoot = true;
+            if (/*!keyShoot &&*/ KeyCode.SPACE.equals(evt.getCode())) {
+//                keyShoot = true;
                 playerShooting = true;
+            }
+
+            if ( evt.getCode().isDigitKey()) {
+                sim.changeGun(getNumber(evt));
             }
 
             if (KeyCode.R.equals(evt.getCode())) {
@@ -118,8 +122,8 @@ public class Game extends Application {
             public void handle(long now) {
 
                 if (playerShooting) {
-                    playerShooting = false;
-                    sim.playerShooting();
+//                    playerShooting = false;
+                    sim.playerShooting(now);
                 }
                 sim.pressedTheButton(playerDirection, now);
 
@@ -133,6 +137,17 @@ public class Game extends Application {
             }
         }.start();
 
+    }
+
+    private int getNumber(KeyEvent evt) {
+
+//        if (KeyCode.NUMPAD1.equals(evt.getCode())) return 1;
+        if (KeyCode.DIGIT2.equals(evt.getCode())) return 2;
+        if (KeyCode.DIGIT3.equals(evt.getCode())) return 3;
+        if (KeyCode.DIGIT4.equals(evt.getCode())) return 4;
+        if (KeyCode.DIGIT5.equals(evt.getCode())) return 5;
+
+        return 1;
     }
 
     private MoveDirection detectDirection(KeyEvent evt, boolean pressed) {
