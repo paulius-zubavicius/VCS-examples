@@ -39,6 +39,7 @@ public class Point {
         this.y = y;
     }
 
+    @Deprecated
     public Point move(double yOffset) {
         y += yOffset;
         return this;

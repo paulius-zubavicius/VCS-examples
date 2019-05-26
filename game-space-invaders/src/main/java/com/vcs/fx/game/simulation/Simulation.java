@@ -63,20 +63,25 @@ public class Simulation implements ISimulation {
         shoots.removeIf(shoot -> !isInside(shoot.getPosition(), res.getW(), res.getH()) || !shoot.isItEnergy());
         enemies.removeIf(ship -> ship.isDead());
 
+
+
+
         enemies.forEach(ship -> {
 
             if (now - wasLastShot > (rnd.nextInt(1100000) + 500000) * EN_SHOOT_FREQUENCY) {
-                shoots.addAll(ship.createShoot(now));
+                shoots.addAll(ship.createShoot(now, player));
                 wasLastShot = now;
             }
 
             ship.doPhisics(now);
         });
 
-        shoots.forEach(shoot -> shoot.getPosition().move((Team.ENEMY.equals(shoot.getTeam()) ? shoot.getSpeed() : -shoot.getSpeed())));
+//        shoots.forEach(shoot -> shoot.getPosition().move((Team.ENEMY.equals(shoot.getTeam()) ? shoot.getSpeedDeltaY() : -shoot.getSpeedDeltaY())));
+
+        shoots.forEach(shoot -> shoot.doPhisics());
+
 
         collisions();
-
     }
 
     @Override
@@ -95,7 +100,21 @@ public class Simulation implements ISimulation {
     }
 
     private void collisions() {
-        //shoots.stream().filter(shoot -> Team.ALIAS.equals(shoot.getTeam()) ).forEach(shoot -> enemies.);
+
+
+
+        for (EnemySpaceShip ship : enemies) {
+            if (ship.getPosition().isTouching(player.getPosition())) {
+                System.out.println("Kamikaze style ending");
+            }
+
+            if (ship.getPosition().getPos2().getY() >= res.getH()) {
+                ship.kill();
+
+                System.out.println("Mission failed");
+            }
+
+        }
 
         for (Shoot shoot : shoots) {
             if (Team.ALIAS.equals(shoot.getTeam())) {
@@ -107,14 +126,19 @@ public class Simulation implements ISimulation {
                         shoot.setEnergy(ship.energyAfterShot(shoot.getEnergy()));
 
                         // if it still have a energy - just slowdown
-                        shoot.setSpeed(shoot.getSpeed() * 0.5);
+                        shoot.setSpeedDeltaY(shoot.getSpeedDeltaY() * 0.5);
 
                     }
                 }
             } else {
                 if (player.getPosition().isInside(shoot.getPosition())) {
-                    System.out.println("you lost");
-                    //FIXME callback to main cycle
+
+                    shoot.setEnergy(player.energyAfterShot(shoot.getEnergy()));
+                    shoot.setEnergy(0);
+
+                    if (player.isDead()) {
+                        System.out.println("You tried...");
+                    }
                 }
             }
         }

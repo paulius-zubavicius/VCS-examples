@@ -7,6 +7,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.io.File;
 import java.util.Random;
 
 public class BGLayer implements IGCLayer {
@@ -31,7 +32,7 @@ public class BGLayer implements IGCLayer {
 		this.res = res;
 		Random r = new Random();
 
-		bgImg = ResourceUtil.loadImg("img/bg"+r.nextInt(4)+".jpg");
+		bgImg =new Image(ResourceUtil.findAny("img/bg", "jpg").toURI().toString());
 		canvas = new Canvas(res.getW(), res.getH());
 		gc = canvas.getGraphicsContext2D();
 

@@ -1,11 +1,13 @@
 package com.vcs.fx.game;
 
 import com.vcs.fx.game.layers.BGLayer;
+import com.vcs.fx.game.layers.Menu;
 import com.vcs.fx.game.layers.ShipsLayer;
 import com.vcs.fx.game.layers.ShootsLayer;
 import com.vcs.fx.game.model.MoveDirection;
 import com.vcs.fx.game.model.Resolutions;
 import com.vcs.fx.game.simulation.Simulation;
+import com.vcs.fx.game.utils.ResourceUtil;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -30,6 +32,7 @@ public class Game extends Application {
     private boolean keyLeft = false;
     private boolean keyRight = false;
     private boolean keyShoot = false;
+    private MediaPlayer mediaPlayer;
 
 
     /**
@@ -54,8 +57,8 @@ public class Game extends Application {
         primaryStage.resizableProperty().setValue(Boolean.FALSE);
         primaryStage.setAlwaysOnTop(true);
 
-        Media sound = new Media(new File("snd/bg.wav").toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        Media sound = new Media(ResourceUtil.findAny("snd/music", "mp3").toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(Duration.ZERO));
         mediaPlayer.play();
 
@@ -72,7 +75,10 @@ public class Game extends Application {
         ShootsLayer shootsLayer = new ShootsLayer(sim);
         shootsLayer.init(res);
 
-        Pane root = new Pane(gb.getCanvas(), shipsLayer.getCanvas(), shootsLayer.getCanvas());
+        Menu menuLayer = new Menu();
+        menuLayer.init(res);
+
+        Pane root = new Pane(gb.getCanvas(), shipsLayer.getCanvas(), shootsLayer.getCanvas()/*, menuLayer.getCanvas()*/);
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
@@ -93,27 +99,35 @@ public class Game extends Application {
 
         scene.setOnKeyPressed((evt) -> {
 
-            if (evt.getCode().isArrowKey()) {
-                playerDirection = detectDirection(evt, true);
-            }
+//            if (menuLayer.isMenuMode()) {
+//                if (KeyCode.ESCAPE.equals(evt.getCode())) {
+//                   //go back
+//                }
+//                if (evt.getCode().isArrowKey()) {
+//                    //navigate
+//                }
+//                if (KeyCode.ENTER.equals(evt.getCode())) {
+//                    System.exit(0);
+//                }
+//
+//            } else {
+                if (evt.getCode().isArrowKey()) {
+                    playerDirection = detectDirection(evt, true);
+                }
 
-            if (/*!keyShoot &&*/ KeyCode.SPACE.equals(evt.getCode())) {
+                if (/*!keyShoot &&*/ KeyCode.SPACE.equals(evt.getCode())) {
 //                keyShoot = true;
-                playerShooting = true;
-            }
+                    playerShooting = true;
+                }
 
-            if ( evt.getCode().isDigitKey()) {
-                sim.changeGun(getNumber(evt));
-            }
+                if ( evt.getCode().isDigitKey()) {
+                    sim.changeGun(getNumber(evt));
+                }
 
-            if (KeyCode.R.equals(evt.getCode())) {
-                // TODO reset the game
-            }
-
-            if (KeyCode.ESCAPE.equals(evt.getCode())) {
-                System.exit(0);
-            }
-
+                if (KeyCode.ESCAPE.equals(evt.getCode())) {
+                    System.exit(0);
+                }
+//            }
         });
 
         new AnimationTimer() {
@@ -132,7 +146,6 @@ public class Game extends Application {
                 gb.updateTime(now);
                 shootsLayer.updateTime(now);
                 shipsLayer.updateTime(now);
-
 
             }
         }.start();

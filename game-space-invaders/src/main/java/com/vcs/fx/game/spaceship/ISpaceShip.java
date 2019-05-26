@@ -24,6 +24,7 @@ public interface ISpaceShip {
     double getCannonX(int canonNb);
     double getCannonY();
 
+    Collection<? extends Shoot> createShoot(long now, ISpaceShip target);
     Collection<? extends Shoot> createShoot(long now);
     Gun getGun();
     boolean selectGun(Gun gun);

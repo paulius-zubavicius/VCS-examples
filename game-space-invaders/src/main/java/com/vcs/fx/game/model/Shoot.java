@@ -7,22 +7,23 @@ public class Shoot {
 	private Team team;
 	private double energy;
 	private Point position;
-	private double speed;
+	private double speedDeltaX;
+    private double speedDeltaY;
 //	private EnergyType type;
 
 
-//	public Shoot(Team team, Point position, double speed, double energy) {
-//		this.team = team;
-//		this.position = new Point(position);
-//		this.speed = speed;
-//		this.energy = energy;
-//	}
-
-	public Shoot(Team team, double startX, double startY, double speed, double energy) {
+	public Shoot(Team team, double energy, double startX, double startY, double speedDeltaX, double speedDeltaY) {
 		this.team = team;
 		this.position = new Point(startX, startY);
-		this.speed = speed;
+		this.speedDeltaX = speedDeltaX;
+        this.speedDeltaY = speedDeltaY;
 		this.energy = energy;
+	}
+
+	public void doPhisics() {
+
+		position.increaseX(speedDeltaX);
+		position.increaseY(speedDeltaY);
 	}
 
 	public Team getTeam() {
@@ -37,15 +38,23 @@ public class Shoot {
 		this.position = position;
 	}
 
-	public double getSpeed() {
-		return speed;
+	public double getSpeedDeltaY() {
+		return speedDeltaY;
 	}
 
-	public void setSpeed(double speed) {
-		this.speed = speed;
+	public void setSpeedDeltaY(double speedDeltaY) {
+		this.speedDeltaY = speedDeltaY;
 	}
 
-	public double getEnergy() {
+    public double getSpeedDeltaX() {
+        return speedDeltaX;
+    }
+
+    public void setSpeedDeltaX(double speedDeltaX) {
+        this.speedDeltaX = speedDeltaX;
+    }
+
+    public double getEnergy() {
 		return energy;
 	}
 

@@ -35,24 +35,33 @@ public class ShootsLayer implements IGCLayer {
         gc.clearRect(0, 0, res.getW(), res.getH());
 
 
-//        gc.setFill(Color.YELLOW);
-        gc.setLineWidth(1);
+        // gc.setLineWidth(1);
 
         shoots.forEach(shoot -> {
                     if (Team.ALIAS.equals(shoot.getTeam())) {
-                        gc.setFill(Color.YELLOW);
+                        gc.setFill(Color.WHITE);
                         gc.setStroke(Color.RED);
                     } else {
                         gc.setFill(Color.WHITE);
-                        gc.setStroke(Color.BLUE);
+                        gc.setStroke(Color.AQUA);
                     }
-                    gc.fillRect(shoot.getPosition().getX(), shoot.getPosition().getY(), 3, shoot.getSpeed() + 15);
-                    gc.strokeRect(shoot.getPosition().getX(), shoot.getPosition().getY(),  3, shoot.getSpeed() + 15);
+                    gc.fillRect(shoot.getPosition().getX(), shoot.getPosition().getY(), 5, 5 * shoot.getEnergy());
+                    gc.strokeRect(shoot.getPosition().getX(), shoot.getPosition().getY(), 5, 5 * shoot.getEnergy());
 
+//
+//
 //                    gc.beginPath();
 //                    gc.moveTo(shoot.getPosition().getX(), shoot.getPosition().getY());
-//                    gc.lineTo(shoot.getPosition().getX(), shoot.getPosition().getY() + shoot.getEnergy() * 10);
+//                    gc.lineTo(shoot.getPosition().getX() + 20 * shoot.getSpeedDeltaX(), shoot.getPosition().getY() +  20 * shoot.getSpeedDeltaY());
 //                    gc.stroke();
+//
+//                    gc.fillOval(shoot.getPosition().getX() + 20 * shoot.getSpeedDeltaX() - 3, shoot.getPosition().getY() +  20 * shoot.getSpeedDeltaY()- 3,6,6);
+
+//                    if (Team.ALIAS.equals(shoot.getTeam())) {
+//                        gc.setStroke(Color.RED);
+//                    } else {
+//                        gc.setStroke(Color.BLUE);
+//                    }
 
 
                 }

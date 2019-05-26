@@ -2,7 +2,9 @@ package com.vcs.fx.game.spaceship;
 
 import com.vcs.fx.game.model.*;
 import javafx.scene.image.Image;
+import javafx.scene.media.AudioClip;
 
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,19 +22,24 @@ public abstract class SpaceShip implements ISpaceShip {
     private Team team;
     protected Rectangle pos;
     protected Image img;
-    private Gun gun = Gun.PEW_PEW;
+    protected Gun gun = Gun.PEW_PEW;
     private long wasLastShot;
+    private AudioClip sndFx;
 
 
     private List<Shoot> shoots = new ArrayList<>();
 
-    private double health = 10;
+    protected double health = 10;
 
 
     public SpaceShip( Team team, Image img, double x, double y) {
         this.pos = new Rectangle(new Point(x , y), img.getHeight() / SCALE_FACTOR, img.getWidth() / SCALE_FACTOR);
         this.team = team;
         this.img = img;
+
+        sndFx = new AudioClip(Paths.get("snd/LaserBlasts.wav").toUri().toString());
+        sndFx.setVolume(0.1);
+        sndFx.setCycleCount(1);
     }
 
     public Rectangle getPosition() {
@@ -78,12 +85,42 @@ public abstract class SpaceShip implements ISpaceShip {
 
     @Override
     public Collection<? extends Shoot> createShoot(long now) {
+        return createShoot(now, null);
+    }
+        @Override
+    public Collection<? extends Shoot> createShoot(long now, ISpaceShip target) {
 
         if (now - wasLastShot > gun.getFrequency()) {
             shoots.clear();
 
+
+            double speedDeltaX = 0;
+            double speedDeltaY = gun.getSpeed();
+
+            if (target != null) {
+
+                double posDiffX = target.getCannonX(0) - getCannonX(0) ;
+                double posDiffY = target.getCannonY() - getCannonY() ;
+                double diagonalDiff = Math.sqrt( posDiffX * posDiffX + posDiffY * posDiffY);
+                speedDeltaX = posDiffX / diagonalDiff;
+                speedDeltaY = posDiffY / diagonalDiff;
+                speedDeltaX *= gun.getSpeed();
+                speedDeltaY *= gun.getSpeed();
+
+            } else {
+                speedDeltaY = -gun.getSpeed();
+            }
+
+//            target - calc offsets
+
             for (int canPos : gun.getCanPos()) {
-                shoots.add(new Shoot(team, getCannonX(canPos), getCannonY(), gun.getSpeed(), gun.getDamage()));
+                shoots.add(new Shoot(team, gun.getDamage(), getCannonX(canPos), getCannonY(), speedDeltaX, speedDeltaY));
+            }
+
+            if (Team.ALIAS.equals(team)) {
+                sndFx.play();
+            } else {
+                // mute
             }
 
             wasLastShot = now;
@@ -106,4 +143,7 @@ public abstract class SpaceShip implements ISpaceShip {
     }
 
 
+    public void kill() {
+        health = -1;
+    }
 }

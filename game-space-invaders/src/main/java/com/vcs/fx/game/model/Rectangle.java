@@ -21,9 +21,20 @@ public class Rectangle {
 	}
 	
 	public boolean isInside(Rectangle p) {
-		
-		return p.pos1.getX() >= pos1.getX() && p.pos2.getX() <= pos2.getX() && 
+
+		return p.pos1.getX() >= pos1.getX() && p.pos2.getX() <= pos2.getX() &&
 				p.pos1.getY() >= pos1.getY() && p.pos2.getY() <= pos2.getY();
+	}
+
+	public boolean isTouching(Rectangle p) {
+
+		boolean xCross1 = pos1.getX() >= p.pos1.getX() && pos1.getX() <= p.pos2.getX();
+		boolean xCross2 = pos2.getX() >= p.pos1.getX() && pos2.getX() <= p.pos2.getX();
+
+		boolean yCross1 = pos1.getY() >= p.pos1.getY() && pos1.getY() <= p.pos2.getY();
+		boolean yCross2 = pos2.getY() >= p.pos1.getY() && pos2.getY() <= p.pos2.getY();
+
+		return (xCross1 || xCross2) && (yCross1 || yCross2);
 	}
 
 	public boolean isInside(Point p) {

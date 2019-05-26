@@ -2,15 +2,21 @@ package com.vcs.fx.game.model;
 
 public enum Gun {
 
-    //FIXME add sound
-    //FIXME add graphical info
-    //AMO?
 
-    PEW_PEW("PewPew", 0.5, 0.7, 1000000000L, 0 ),
+    PEW_PEW("PewPew", 0.5, 0.7, 300000000L, 0 ),
     JUSTICE("Justice", 1.0, 1.0, 100000000L, -4, -2, 0, 2, 4 ),
     LASER("Laser", 3.0, 10.0, 100000000L, -2,  2  ),
+
     BFG("BFG", 15.0, 0.4,     1000000000L, 0  ),
-    X_RAY("X", 50.0, 15.0,     100000000L, -2,-1,0,1,2  );
+    JUDGMENT_DAY_GUN("JudgmentDayGun", 50.0, 15.0,     100000000L, -2,-1,0,1,2  );
+
+
+    // REVENGE
+    // BULLETS RAINING
+    // LIFE_CUTTER
+    // FIREWORK
+    // TSAR
+    //
 
 
 

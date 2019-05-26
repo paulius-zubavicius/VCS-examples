@@ -6,15 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.vcs.fx.game.model.*;
 import com.vcs.fx.game.spaceship.EnemySpaceShip;
 import com.vcs.fx.game.utils.ResourceUtil;
 import javafx.scene.image.Image;
 import org.apache.commons.io.FileUtils;
-
-import com.vcs.fx.game.model.Team;
-import com.vcs.fx.game.model.Point;
-import com.vcs.fx.game.model.Rectangle;
-import com.vcs.fx.game.model.Resolutions;
 
 public class EnemiesLoader {
 
@@ -48,7 +44,7 @@ public class EnemiesLoader {
 				if (line.charAt(i) != ' ') {
 
 					int shipType = rnd.nextInt(24);
-					ships.add(new EnemySpaceShip(new Point(x * w, y * enemyShipImg[shipType].getHeight() / SCALE_FACTOR + 20), enemyShipImg[shipType], shipType, sway));
+					ships.add(new EnemySpaceShip(new Point(x * w - w/2, y * enemyShipImg[shipType].getHeight() / SCALE_FACTOR + 20), enemyShipImg[shipType], Ship.values()[shipType] , sway));
 				}
 				x++;
 			}
