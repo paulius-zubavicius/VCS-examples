@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 public class Game {
 
     public static final int RECT_SIZE = 20;
-    public static final int DELAY = 2000;
+    public static final int DELAY = 1000;
     private Snake snake;
 
 
@@ -47,7 +47,6 @@ public class Game {
                 if (KeyEvent.VK_A == keyEvent.getKeyCode()) snake.direction('L');
                 if (KeyEvent.VK_D == keyEvent.getKeyCode()) snake.direction('R');
                 if (KeyEvent.VK_ESCAPE == keyEvent.getKeyCode()) System.exit(0);
-
             }
 
             @Override

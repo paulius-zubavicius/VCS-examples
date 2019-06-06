@@ -14,32 +14,14 @@ public class Pill {
         this.y = y;
     }
 
-    public void move(int xOffset, int yOffset) {
-
-        if (!(xOffset != 0 ^ yOffset != 0 )) return;
-        xOffset += (xOffset > 0 ? 1 : 0) + (xOffset < 0 ? -1 : 0);
-        yOffset += (yOffset > 0 ? 1 : 0) + (yOffset < 0 ? -1 : 0);
-
-        if (nextPill != null) {
-//            nextPill.x = x;
-//            nextPill.y = y;
-            nextPill.moveToParentPos(x, y);
-        }
-
-        x += xOffset;
-        y += yOffset;
-
-
-    }
-
-    private void moveToParentPos(int parentX, int parentY) {
+    public void move(int coordX, int coordY) {
         if (nextPill != null) {
             nextPill.move(x, y);
         }
-
-        x = parentX;
-        y = parentY;
+        x = coordX;
+        y = coordY;
     }
+
 
     public boolean isEatingItSelf() {
         return isItOnSnake(x, y);

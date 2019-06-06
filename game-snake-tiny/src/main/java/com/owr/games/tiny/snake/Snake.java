@@ -34,17 +34,17 @@ public class Snake {
 
     public boolean moveOneStep() {
 
-        if (dir == 'R') head.move(1, 0);
-        if (dir == 'L') head.move(-1, 0);
-        if (dir == 'U') head.move(0, -1);
-        if (dir == 'D') head.move(0, 1);
+        if (dir == 'R') head.move(head.getX() + 1, head.getY());
+        if (dir == 'L') head.move(head.getX() - 1, head.getY());
+        if (dir == 'U') head.move(head.getX(), head.getY() - 1);
+        if (dir == 'D') head.move(head.getX(), head.getY() + 1);
 
         if (head.getX() >= SIZE - 1 || head.getX() < 0) return false;
         if (head.getY() >= SIZE - 1 || head.getY() < 0) return false;
         if (head.isEatingItSelf()) return false;
 
         if (head.isItOnSnake(appX, appY)) {
-            head = new Pill(appX, appY, head );
+            head = new Pill(appX, appY, head);
             addNewApple();
         }
 
