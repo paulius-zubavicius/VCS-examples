@@ -5,16 +5,22 @@ import java.util.Random;
 
 public class Snake {
 
-    public static final int SIZE = 20;
+    public static final int SIZE = 15;
 
+    private static final char DIR = 'R';
     private Pill head;
-    private char dir = 'R';
+    private char dir = DIR;
 
     private int appX;
     private int appY;
 
     public Snake() {
-        head = new Pill(3, 0, new Pill(2, 0, new Pill(1, 0, null)));
+        reset();
+    }
+
+    public void reset() {
+        head = new Pill(3, 0, null);
+        dir = DIR;
         addNewApple();
     }
 
@@ -32,21 +38,30 @@ public class Snake {
         if (userDir == 'D' && (dir == 'R' || dir == 'L')) dir = 'D';
     }
 
-    public boolean moveOneStep() {
+    public int moveOneStep() {
 
-        if (dir == 'R') head.move(head.getX() + 1, head.getY());
-        if (dir == 'L') head.move(head.getX() - 1, head.getY());
-        if (dir == 'U') head.move(head.getX(), head.getY() - 1);
-        if (dir == 'D') head.move(head.getX(), head.getY() + 1);
+        int fHeadPosX = head.getX();
+        int fHeadPosY = head.getY();
 
-        if (head.getX() >= SIZE - 1 || head.getX() < 0) return false;
-        if (head.getY() >= SIZE - 1 || head.getY() < 0) return false;
-        if (head.isEatingItSelf()) return false;
+        if (dir == 'R') fHeadPosX++;
+        if (dir == 'L') fHeadPosX--;
+        if (dir == 'U') fHeadPosY--;
+        if (dir == 'D') fHeadPosY++;
 
-        if (head.isItOnSnake(appX, appY)) {
+        if (fHeadPosX== appX && fHeadPosY== appY) {
             head = new Pill(appX, appY, head);
             addNewApple();
+        } else {
+            head.move(fHeadPosX, fHeadPosY);
         }
+
+        return head.getSize(0);//level
+    }
+
+    public boolean isStillAlive() {
+        if (head.getX() >= SIZE || head.getX() < 0) return false;
+        if (head.getY() >= SIZE || head.getY() < 0) return false;
+        if (head.isEatingItSelf()) return false;
 
         return true;
     }

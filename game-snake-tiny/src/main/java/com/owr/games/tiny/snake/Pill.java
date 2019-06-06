@@ -24,7 +24,11 @@ public class Pill {
 
 
     public boolean isEatingItSelf() {
-        return isItOnSnake(x, y);
+        return (nextPill != null ? nextPill.isItOnSnake(x, y) : false);
+    }
+
+    public int getSize(int counter) {
+        return (nextPill != null ? nextPill.getSize(counter + 1) : counter);
     }
 
     public boolean isItOnSnake(int pointX, int pointY) {

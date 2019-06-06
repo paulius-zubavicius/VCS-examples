@@ -4,12 +4,42 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Map;
 
 public class Game {
 
     public static final int RECT_SIZE = 20;
-    public static final int DELAY = 1000;
+    public static final int ROUND = 6;
+    public static final int DELAY = 800;
+    public static final int TICS = 5;
     private Snake snake;
+    private Map<Integer, Integer> delays;
+
+    private int delayByLevel(int level) {
+        switch (level) {
+            case 0:
+            case 1: return 1000;
+            case 2:
+            case 3: return 800;
+            case 4:
+            case 5: return 700;
+            case 6:
+            case 7: return 600;
+            case 8:
+            case 9: return 500;
+            case 10:
+            case 11: return 400;
+            case 12:
+            case 13: return 300;
+            case 14:
+            case 15: return 250;
+            case 16:
+            case 17: return 200;
+            case 18:
+            case 19: return 180;
+            default: return 180 - level;
+        }
+    }
 
 
     public static void main(String[] args) {
@@ -24,21 +54,14 @@ public class Game {
 
     private void createAndShowGUI() {
 
-
         snake = new Snake();
 
         JFrame f = new JFrame();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-//        JButton b = new JButton("click");
-//        b.setBounds(130, 100, 100, 40);
-//        f.add(b);
-        JPanel pan = new GameBoard(snake);
-
-
         f.addKeyListener(new KeyListener() {
             @Override
-            public void keyTyped(KeyEvent keyEvent) {}
+            public void keyTyped(KeyEvent keyEvent) {
+            }
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
@@ -50,36 +73,58 @@ public class Game {
             }
 
             @Override
-            public void keyReleased(KeyEvent keyEvent) { }
+            public void keyReleased(KeyEvent keyEvent) {
+            }
         });
 
+        JPanel pan = new GameBoard(snake);
         f.add(pan);
 
         f.setSize(RECT_SIZE * Snake.SIZE, RECT_SIZE * Snake.SIZE);
         f.setLayout(null);
         f.setType(Window.Type.UTILITY);
-        //f.pack();
         f.setVisible(true);
 
 
         new Thread() {
             @Override
             public void run() {
+
+                JOptionPane.showMessageDialog(f, "Ready?");
+
+
                 long moment = System.currentTimeMillis();
+                boolean canContinue = true;
+                double delay = DELAY;
+                int level = 0;
+                int ticks = TICS;
                 while (true) {
-                    if (System.currentTimeMillis() - moment > DELAY) {
-                        snake.moveOneStep();
-                        pan.repaint();
+                    if (System.currentTimeMillis() - moment > delayByLevel(level) / TICS) {
+                        if (ticks < 1) {
+                            ticks = TICS;
+
+                            level = snake.moveOneStep();
+                            canContinue = snake.isStillAlive();
+                            pan.repaint();
+                            f.setTitle("Level: " + level);
+                            if (!canContinue) {
+                                int opt = JOptionPane.showOptionDialog(f, "Reset the game?", "Game is over", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+                                if (opt == 0) {
+                                    canContinue = true;
+                                    snake.reset();
+                                } else {
+                                    System.exit(0);
+                                }
+
+                            }
+                        }
                         moment = System.currentTimeMillis();
+                        ticks--;
                     }
                 }
             }
 
         }.start();
-
-
-//cycle
-
     }
 
 
@@ -104,35 +149,29 @@ class GameBoard extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-
-
         Pill h = snake.getHead();
 
-        g.setColor(Color.DARK_GRAY);
-        g.fillRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, 3, 3);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, 3, 3);
+        g.fillRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, Game.ROUND, Game.ROUND);
+        g.setColor(Color.BLACK);
+        g.drawRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, Game.ROUND, Game.ROUND);
 
-        g.drawString("H", h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE);
 
         h = h.getNextPill();
         int c = 1;
         while (h != null) {
 
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, 3, 3);
+            g.setColor(Color.GREEN);
+            g.fillRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, Game.ROUND, Game.ROUND);
             g.setColor(Color.BLACK);
-            g.drawRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, 3, 3);
-
-            g.drawString("" + c++, h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE + Game.RECT_SIZE);
+            g.drawRoundRect(h.getX() * Game.RECT_SIZE, h.getY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, Game.ROUND, Game.ROUND);
             h = h.getNextPill();
         }
 
         g.setColor(Color.RED);
-        g.fillRoundRect(snake.getAppX() * Game.RECT_SIZE, snake.getAppY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, 3, 3);
+        g.fillRoundRect(snake.getAppX() * Game.RECT_SIZE, snake.getAppY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, Game.ROUND, Game.ROUND);
         g.setColor(Color.BLACK);
-        g.drawRoundRect(snake.getAppX() * Game.RECT_SIZE, snake.getAppY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, 3, 3);
-
+        g.drawRoundRect(snake.getAppX() * Game.RECT_SIZE, snake.getAppY() * Game.RECT_SIZE, Game.RECT_SIZE, Game.RECT_SIZE, Game.ROUND, Game.ROUND);
 
     }
 }
