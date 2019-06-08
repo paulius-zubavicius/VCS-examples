@@ -18,26 +18,37 @@ public class Game {
     private int delayByLevel(int level) {
         switch (level) {
             case 0:
-            case 1: return 1000;
+            case 1:
+                return 1000;
             case 2:
-            case 3: return 800;
+            case 3:
+                return 800;
             case 4:
-            case 5: return 700;
+            case 5:
+                return 700;
             case 6:
-            case 7: return 600;
+            case 7:
+                return 600;
             case 8:
-            case 9: return 500;
+            case 9:
+                return 500;
             case 10:
-            case 11: return 400;
+            case 11:
+                return 400;
             case 12:
-            case 13: return 300;
+            case 13:
+                return 300;
             case 14:
-            case 15: return 250;
+            case 15:
+                return 250;
             case 16:
-            case 17: return 200;
+            case 17:
+                return 200;
             case 18:
-            case 19: return 180;
-            default: return 180 - level;
+            case 19:
+                return 180;
+            default:
+                return 180 - level;
         }
     }
 
@@ -90,37 +101,50 @@ public class Game {
             @Override
             public void run() {
 
+                while (true) {
+                    pan.repaint();
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }.start();
+
+        new Thread() {
+            @Override
+            public void run() {
+
                 JOptionPane.showMessageDialog(f, "Ready?");
 
-
-                long moment = System.currentTimeMillis();
                 boolean canContinue = true;
-                double delay = DELAY;
                 int level = 0;
-                int ticks = TICS;
+
                 while (true) {
-                    if (System.currentTimeMillis() - moment > delayByLevel(level) / TICS) {
-                        if (ticks < 1) {
-                            ticks = TICS;
 
-                            level = snake.moveOneStep();
-                            canContinue = snake.isStillAlive();
-                            pan.repaint();
-                            f.setTitle("Level: " + level);
-                            if (!canContinue) {
-                                int opt = JOptionPane.showOptionDialog(f, "Reset the game?", "Game is over", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
-                                if (opt == 0) {
-                                    canContinue = true;
-                                    snake.reset();
-                                } else {
-                                    System.exit(0);
-                                }
-
-                            }
-                        }
-                        moment = System.currentTimeMillis();
-                        ticks--;
+                    try {
+                        Thread.sleep(delayByLevel(level));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+
+                    level = snake.moveOneStep();
+                    canContinue = snake.isStillAlive();
+
+                    f.setTitle("Level: " + level);
+                    if (!canContinue) {
+                        int opt = JOptionPane.showOptionDialog(f, "Reset the game?", "Game is over", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+                        if (opt == 0) {
+                            canContinue = true;
+                            snake.reset();
+                        } else {
+                            System.exit(0);
+                        }
+
+                    }
+
                 }
             }
 
