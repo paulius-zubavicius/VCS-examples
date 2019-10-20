@@ -9,8 +9,8 @@ import com.vcs.bb.game.model.UserKey;
 
 public class Physics {
 
-	public static final int RES_H = 400;
-	public static final int RES_W = 600;
+	public static final int RES_H = 640;
+	public static final int RES_W = 800;
 
 	public static final int BALL_START_POS_X = RES_W / 5;
 	public static final int BALL_START_POS_Y = RES_H / 2;
@@ -32,7 +32,7 @@ public class Physics {
 	public static final int BRICK_MARGIN = BRICK_W / 15;
 
 	
-	public static final double GAME_CYCLE_DELAY = 20.0; // ball speed
+	public static final double GAME_CYCLE_DELAY = 4.0; // ball speed
 
 	private State state;
 
@@ -138,9 +138,10 @@ public class Physics {
 			state.ballPosXDirChange();
 		}
 
-		if (state.getBallPosY() + BALL_R >= PAD_START_POS_Y) {
+		if (state.getBallPosY() + BALL_R > PAD_START_POS_Y) {
 			if (state.getPapX() <= state.getBallPosX() + BALL_R) {
 				if ((state.getPapX() + PAD_W) >= state.getBallPosX()) {
+					state.setBallPosY(PAD_START_POS_Y - BALL_R);
 					state.ballPosYDirChange();
 				}
 			}

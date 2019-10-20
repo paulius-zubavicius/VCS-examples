@@ -29,7 +29,7 @@ public class State {
 		bricks.addAll(level.getBricks());
 
 		score = 0;
-		speedMs = Physics.GAME_CYCLE_DELAY;
+		speedMs = Physics.GAME_CYCLE_DELAY * level.getSpeed();
 		padX = Physics.PAD_START_POS_X;
 		ballposX = Physics.BALL_START_POS_X;
 		ballposY = Physics.BALL_START_POS_Y;
@@ -100,6 +100,11 @@ public class State {
 
 	public void ballPosXInc(double incVal) {
 		this.ballposX += incVal;
+
+	}
+
+	public void setBallPosY(double posY) {
+		this.ballposY = posY;
 
 	}
 

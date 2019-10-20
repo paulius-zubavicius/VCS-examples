@@ -21,9 +21,8 @@ import com.vcs.bb.game.model.UserKey;
 
 /**
  * 
- * <li>2) Kamuoliukas kartais palenda po pad'u</li>
  * <li>5) Rezoliucija ir setingus iskelti</li>
- * 
+ * <li>9) Leveliai turi kestis</li>
  */
 
 public class Game {
