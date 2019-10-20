@@ -41,10 +41,12 @@ public class SwingGUI extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		// background
+		// FIXME Draw ir changes
 		g.setColor(Color.black);
 		g.fillRect(0, 0, Physics.RES_W, Physics.RES_H);
 
 		// draw map
+		// FIXME Draw ir changes
 		draw((Graphics2D) g);
 
 		// borders
@@ -57,7 +59,7 @@ public class SwingGUI extends JPanel {
 		g.setColor(Color.white);
 		g.setFont(new Font("serif", Font.BOLD, MSG_FONT_SIZE_1));
 		g.drawString("Score: " + state.getScore(), MSG_SCORE_X, MSG_SCORE_Y);
-		g.drawString( state.getLevel().getName() , MSG_LEVEL_X, MSG_SCORE_Y);
+		g.drawString(state.getLevel().getName(), MSG_LEVEL_X, MSG_SCORE_Y);
 
 		// the paddle
 		g.setColor(Color.green);
@@ -71,7 +73,9 @@ public class SwingGUI extends JPanel {
 			endMessage(g, "Game Over");
 		if (state.isItWin())
 			endMessage(g, "Victory!");
-
+		if (state.isItPaused())
+			endMessage(g, "[||] Paused");
+		
 		g.dispose();
 
 	}
@@ -90,12 +94,12 @@ public class SwingGUI extends JPanel {
 
 	public void draw(Graphics2D g) {
 		for (Brick b : state.getBrics()) {
-			
+
 			g.setColor(new Color(b.getType().getRGB()));
 			g.fillRect(b.getX(), b.getY(), Physics.BRICK_W, Physics.BRICK_H);
 
 			g.setStroke(new BasicStroke(3));
-			g.setColor(Color.black);
+			g.setColor(Color.ORANGE);
 			g.drawRect(b.getX(), b.getY(), Physics.BRICK_W, Physics.BRICK_H);
 		}
 	}

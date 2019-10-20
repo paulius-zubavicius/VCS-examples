@@ -23,7 +23,7 @@ public class Physics {
 
 	public static final int PAD_MOVE_OFFSET = RES_H / 50;
 	public static final int PAD_W = RES_W / 7;
-	public static final int PAD_H = ( RES_H / 100 < 1 ? 1 : RES_H / 100);
+	public static final int PAD_H = (RES_H / 100 < 1 ? 1 : RES_H / 100);
 	public static final int PAD_START_POS_X = RES_W / 2 - PAD_W / 2;
 	public static final int PAD_START_POS_Y = RES_H - RES_H / 6;
 
@@ -31,7 +31,6 @@ public class Physics {
 	public static final int BRICK_H = RES_H / 15;
 	public static final int BRICK_MARGIN = BRICK_W / 15;
 
-	
 	public static final double GAME_CYCLE_DELAY = 4.0; // ball speed
 
 	private State state;
@@ -45,39 +44,51 @@ public class Physics {
 	}
 
 	public void onUserKey(Set<UserKey> pressedKeys) {
-		
+
 		for (UserKey key : pressedKeys) {
 			takeAction(key);
 		}
 	}
 
 	private void takeAction(UserKey key) {
-		if (UserKey.RIGHT.equals(key)) {
-			int predicX = state.getPapX() + PAD_MOVE_OFFSET;
-			int mostLeft = RES_W - PAD_W;
 
-			state.setPadX(predicX >= mostLeft ? mostLeft : predicX);
+		if (state.isItPlay()) {
+			if (UserKey.RIGHT.equals(key)) {
+				int predicX = state.getPapX() + PAD_MOVE_OFFSET;
+				int mostLeft = RES_W - PAD_W;
 
-			if (state.isItPaused()) {
-				state.setGameStatus(GameStatus.PLAY);
+				state.setPadX(predicX >= mostLeft ? mostLeft : predicX);
+
+				if (state.isItPaused()) {
+					state.setGameStatus(GameStatus.PLAY);
+				}
+			}
+
+			if (UserKey.LEFT.equals(key)) {
+				int predicX = state.getPapX() - PAD_MOVE_OFFSET;
+
+				state.setPadX(predicX < 0 ? 0 : predicX);
+
+				if (state.isItPaused()) {
+					state.setGameStatus(GameStatus.PLAY);
+				}
 			}
 		}
 
-		if (UserKey.LEFT.equals(key)) {
-			int predicX = state.getPapX() - PAD_MOVE_OFFSET;
-
-			state.setPadX(predicX < 0 ? 0 : predicX);
-
-			if (state.isItPaused()) {
-				state.setGameStatus(GameStatus.PLAY);
-			}
-		}
-
-		if (UserKey.SPACE.equals(key)) {
+		if (UserKey.ENTER.equals(key)) {
 			if (!state.isItPaused()) {
 				state.reset();
 			}
 		}
+
+		if (UserKey.SPACE.equals(key)) {
+			if (state.isItPlay()) {
+				state.setGameStatus(GameStatus.PAUSE);
+			} else if (state.isItPaused()) {
+				state.setGameStatus(GameStatus.PLAY);
+			}
+		}
+
 		if (UserKey.F1.equals(key)) {
 			throw new RuntimeException();
 		}
@@ -85,7 +96,7 @@ public class Physics {
 		if (UserKey.ESC.equals(key)) {
 			System.exit(0);
 		}
-		
+
 	}
 
 	public void simulation() {
@@ -146,10 +157,10 @@ public class Physics {
 				}
 			}
 		}
-		
+
 		state.ballPosXInc(state.getBallXdir());
 		state.ballPosYInc(state.getBallYdir());
-		
+
 	}
 
 }

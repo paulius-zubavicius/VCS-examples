@@ -2,6 +2,9 @@ package com.vcs.bb.game.run;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +17,7 @@ import javax.swing.Timer;
 import com.vcs.bb.game.Physics;
 import com.vcs.bb.game.gui.swing.SwingGUI;
 import com.vcs.bb.game.levels.LevelsLoader;
+import com.vcs.bb.game.model.GameStatus;
 import com.vcs.bb.game.model.Level;
 import com.vcs.bb.game.model.Resolution;
 import com.vcs.bb.game.model.State;
@@ -26,7 +30,7 @@ import com.vcs.bb.game.model.UserKey;
  */
 
 public class Game {
-	
+
 	private static final int FPS = 60;
 	private static final int FPS_DELAY = 1000 / FPS;
 
@@ -41,26 +45,67 @@ public class Game {
 	{
 		mappedKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
 		mappedKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
-		mappedKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
+		mappedKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
 		mappedKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
+		mappedKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
 	}
 
 	void startGameApp() {
-		
+
 		LevelsLoader ll = new LevelsLoader();
 		List<Level> levels = ll.loadLevels(Resolution.RES_600x400);
 
 		phs = new Physics(new State(levels.get(0)));
 		gui = new SwingGUI(phs.getState());
+		gui.addMouseMotionListener(new MouseMotionListener() {
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				if (phs.getState().isItPlay()) {
+					phs.getState().setPadX(e.getX() - Physics.PAD_W / 2);
+				}
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+			}
+		});
+		gui.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+				phs.getState().setGameStatus(GameStatus.PLAY);
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
 		gui.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				pressedKeys.add(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
+				phs.onUserKey(pressedKeys);
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
+				phs.onUserKey(pressedKeys);
 			}
 
 			@Override
@@ -68,9 +113,8 @@ public class Game {
 			}
 		});
 
-		phsTimer = new Timer((int)phs.getState().getSpeedMs(), (e) -> {
+		phsTimer = new Timer((int) phs.getState().getSpeedMs(), (e) -> {
 			// Sends keyboard events to simulate
-			phs.onUserKey(pressedKeys);
 			phs.simulation();
 			gui.repaint();
 			guiTimer.restart();
