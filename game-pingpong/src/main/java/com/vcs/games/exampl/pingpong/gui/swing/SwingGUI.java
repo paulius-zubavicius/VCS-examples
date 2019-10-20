@@ -9,8 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -23,7 +27,7 @@ import com.vcs.games.exampl.pingpong.model.UserKey;
 /**
  * 
  * 1) Pasileidzia tuscias screen'as 2) Brick naudoti ne array[][] o List'a
- * 
+ * 2) Kamuoliukas kartais palenda po pad'u
  */
 
 public class SwingGUI extends JPanel implements KeyListener, ActionListener {
@@ -38,13 +42,15 @@ public class SwingGUI extends JPanel implements KeyListener, ActionListener {
 
 	public static final int MSG_GAME_X = Game.RES_W / 2;
 	public static final int MSG_GAME_Y = Game.RES_H / 2;
+	
+	private Set<UserKey> pressedKeys = new HashSet<>();
 
-	private Map<Integer, UserKey> ui = new HashMap<>();
+	private Map<Integer, UserKey> mappedKeys = new HashMap<>();
 	{
-		ui.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
-		ui.put(KeyEvent.VK_LEFT, UserKey.LEFT);
-		ui.put(KeyEvent.VK_ENTER, UserKey.ENTER);
-		ui.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
+		mappedKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
+		mappedKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
+		mappedKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
+		mappedKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
 	}
 
 	private State state;
@@ -115,6 +121,8 @@ public class SwingGUI extends JPanel implements KeyListener, ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		timer.restart();
+		//Sends keyboard events to simulate
+		game.onUserKey(pressedKeys);
 		game.simulation();
 		repaint();
 	}
@@ -131,12 +139,11 @@ public class SwingGUI extends JPanel implements KeyListener, ActionListener {
 	}
 
 	public void keyPressed(KeyEvent e) {
-		// TODO 2) Brick numusimas is desines kazkur praskipinta plotis ar tarpas
-
-		game.onUserKey(ui.getOrDefault(e.getKeyCode(), UserKey.ANY));
+		pressedKeys.add( mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
 	}
 
 	public void keyReleased(KeyEvent e) {
+		pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
 	}
 
 	public void keyTyped(KeyEvent e) {

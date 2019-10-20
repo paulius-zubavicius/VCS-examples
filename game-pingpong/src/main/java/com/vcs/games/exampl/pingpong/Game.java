@@ -1,5 +1,7 @@
 package com.vcs.games.exampl.pingpong;
 
+import java.util.Set;
+
 import com.vcs.games.exampl.pingpong.model.Brick;
 import com.vcs.games.exampl.pingpong.model.GameStatus;
 import com.vcs.games.exampl.pingpong.model.State;
@@ -7,8 +9,8 @@ import com.vcs.games.exampl.pingpong.model.UserKey;
 
 public class Game {
 
-	public static final int RES_H = 900;
-	public static final int RES_W = 1920;
+	public static final int RES_H = 400;
+	public static final int RES_W = 600;
 
 	public static final int BALL_START_POS_X = RES_W / 5;
 	public static final int BALL_START_POS_Y = RES_H / 2;
@@ -42,7 +44,14 @@ public class Game {
 		return state;
 	}
 
-	public void onUserKey(UserKey key) {
+	public void onUserKey(Set<UserKey> pressedKeys) {
+		
+		for (UserKey key : pressedKeys) {
+			takeAction(key);
+		}
+	}
+
+	private void takeAction(UserKey key) {
 		if (UserKey.RIGHT.equals(key)) {
 			int predicX = state.getPlayerX() + PLAYER_MOVE_OFFSET;
 			int mostLeft = RES_W - PLAYER_PAD_W;
@@ -76,7 +85,7 @@ public class Game {
 		if (UserKey.ESC.equals(key)) {
 			System.exit(0);
 		}
-
+		
 	}
 
 	public void simulation() {
