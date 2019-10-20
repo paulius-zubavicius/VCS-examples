@@ -83,6 +83,7 @@ public class DelfiParser implements WebParser {
 		html = cutOutRange(html, "<a href=", "</a>");
 		html = cutOutRange(html, "<iframe", "</iframe>");
 		html = cutOutRange(html, "<style", "</style>");
+		html = cutOutRange(html, "<span", "</span>");
 		html = cutOutRange(html, "<blockquote", "</blockquote>");
 		
 
