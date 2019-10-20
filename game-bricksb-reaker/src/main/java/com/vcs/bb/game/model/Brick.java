@@ -1,7 +1,9 @@
 package com.vcs.bb.game.model;
 
 public class Brick {
+	public static final int BRICK_POINTS = 5;
 
+	private int score = BRICK_POINTS;
 	private int x;
 	private int y;
 	private int w;
@@ -58,6 +60,10 @@ public class Brick {
 
 	public void setH(int h) {
 		this.h = h;
+	}
+
+	public int getScore() {
+		return score;
 	}
 
 }

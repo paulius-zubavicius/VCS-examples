@@ -21,18 +21,18 @@ public class Physics {
 	public static final double BALL_X_START_DIR = -BALL_X_SPEED;
 	public static final double BALL_Y_START_DIR = -BALL_Y_SPEED;
 
-	public static final int PAD_MOVE_OFFSET = RES_H / 30;
+	public static final int PAD_MOVE_OFFSET = RES_H / 50;
 	public static final int PAD_W = RES_W / 7;
-	public static final int PAD_H = 15;// ( RES_H / 100 < 1 ? 1 : RES_H / 100);
+	public static final int PAD_H = ( RES_H / 100 < 1 ? 1 : RES_H / 100);
 	public static final int PAD_START_POS_X = RES_W / 2 - PAD_W / 2;
-	public static final int PAD_START_POS_Y = RES_H - RES_H / 12;
+	public static final int PAD_START_POS_Y = RES_H - RES_H / 6;
 
 	public static final int BRICK_W = RES_W / 10;
 	public static final int BRICK_H = RES_H / 15;
 	public static final int BRICK_MARGIN = BRICK_W / 15;
 
-	public static final int GAME_SCORE_INC = 5;
-	public static final int GAME_CYCLE_DELAY = 40; // ball speed
+	
+	public static final double GAME_CYCLE_DELAY = 20.0; // ball speed
 
 	private State state;
 
@@ -115,7 +115,7 @@ public class Physics {
 		for (Brick b : state.getBrics()) {
 			if (b.isTouching(state.getBallPosX(), state.getBallPosY(), BALL_R)) {
 
-				state.scoreInc(GAME_SCORE_INC);
+				state.scoreInc(b.getScore());
 
 				if (state.getBallPosX() + (BALL_R - 1) <= b.getX() || state.getBallPosX() + 1 >= b.getX() + BRICK_W) {
 					state.ballPosXDirChange();

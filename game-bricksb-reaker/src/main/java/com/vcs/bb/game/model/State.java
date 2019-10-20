@@ -16,6 +16,7 @@ public class State {
 	private double ballXdir;
 	private double ballYdir;
 	private GameStatus gameStatus;
+	private double speedMs;
 
 	private int col;
 	private int rows;
@@ -30,12 +31,21 @@ public class State {
 	public void reset() {
 		resetMap();
 		score = 0;
+		speedMs = Physics.GAME_CYCLE_DELAY;
 		padX = Physics.PAD_START_POS_X;
 		ballposX = Physics.BALL_START_POS_X;
 		ballposY = Physics.BALL_START_POS_Y;
 		ballXdir = Physics.BALL_X_START_DIR;
 		ballYdir = Physics.BALL_Y_START_DIR;
 		gameStatus = GameStatus.PAUSE;
+	}
+
+	public double getSpeedMs() {
+		return speedMs;
+	}
+
+	public void speedMsInc(double incVal) {
+		this.speedMs += incVal;
 	}
 
 	public boolean isItPaused() {

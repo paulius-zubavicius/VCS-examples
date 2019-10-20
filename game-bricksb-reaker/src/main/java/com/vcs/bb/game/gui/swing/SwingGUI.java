@@ -21,8 +21,8 @@ public class SwingGUI extends JPanel {
 	public static final int MSG_FONT_SIZE_2 = MSG_FONT_SIZE_1 + MSG_FONT_SIZE_OFFSET;
 	public static final int MSG_FONT_SIZE_3 = MSG_FONT_SIZE_2 + MSG_FONT_SIZE_OFFSET;
 
-	public static final int MSG_SCORE_X = Physics.RES_W - Physics.RES_W / 4;
-	public static final int MSG_SCORE_Y = Physics.RES_H / 20;
+	public static final int MSG_SCORE_X = MSG_FONT_SIZE_OFFSET;// Physics.RES_W - Physics.RES_W / 4;
+	public static final int MSG_SCORE_Y = Physics.RES_H - Physics.RES_H / 10;
 
 	public static final int MSG_GAME_X = Physics.RES_W / 2;
 	public static final int MSG_GAME_Y = Physics.RES_H / 2;
@@ -54,7 +54,7 @@ public class SwingGUI extends JPanel {
 
 		// score\
 		g.setColor(Color.white);
-		g.setFont(new Font("serif", Font.BOLD, MSG_FONT_SIZE_2));
+		g.setFont(new Font("serif", Font.BOLD, MSG_FONT_SIZE_1));
 		g.drawString("Score: " + state.getScore(), MSG_SCORE_X, MSG_SCORE_Y);
 
 		// the paddle
@@ -63,7 +63,7 @@ public class SwingGUI extends JPanel {
 
 		// ball
 		g.setColor(Color.red);
-		g.fillOval((int)state.getBallPosX(), (int)state.getBallPosY(), Physics.BALL_R, Physics.BALL_R);
+		g.fillOval((int) state.getBallPosX(), (int) state.getBallPosY(), Physics.BALL_R, Physics.BALL_R);
 
 		if (state.isItOver())
 			endMessage(g, "Game Over");

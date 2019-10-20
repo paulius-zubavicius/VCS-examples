@@ -18,13 +18,15 @@ import com.vcs.bb.game.model.UserKey;
 /**
  * 
  * <li>2) Kamuoliukas kartais palenda po pad'u</li>
- * <li>3) Kamuoliukas leidziasi palei siena</li>
  * <li>4) Kaladeliu isdestymas</li>
  * <li>5) Rezoliucija ir setingus iskelti</li>
- * <li>6) enteris neveikia</li>
+ * 
  */
 
 public class Game {
+	
+	private static final int FPS = 60;
+	private static final int FPS_DELAY = 1000 / FPS;
 
 	private Physics phs;
 	private SwingGUI gui;
@@ -61,7 +63,7 @@ public class Game {
 			}
 		});
 
-		phsTimer = new Timer(Physics.GAME_CYCLE_DELAY, (e) -> {
+		phsTimer = new Timer((int)phs.getState().getSpeedMs(), (e) -> {
 			// Sends keyboard events to simulate
 			phs.onUserKey(pressedKeys);
 			phs.simulation();
@@ -69,7 +71,7 @@ public class Game {
 			guiTimer.restart();
 		});
 
-		guiTimer = new Timer(15, (e) -> {
+		guiTimer = new Timer(FPS_DELAY, (e) -> {
 			gui.repaint();
 			guiTimer.restart();
 		});
