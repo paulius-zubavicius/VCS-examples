@@ -5,76 +5,43 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
-import com.vcs.games.exampl.pingpong.Game;
+import com.vcs.games.exampl.pingpong.Physics;
 import com.vcs.games.exampl.pingpong.model.Brick;
 import com.vcs.games.exampl.pingpong.model.State;
-import com.vcs.games.exampl.pingpong.model.UserKey;
 
-/**
- * 
- * 1) Pasileidzia tuscias screen'as 2) Brick naudoti ne array[][] o List'a
- * 2) Kamuoliukas kartais palenda po pad'u
- */
+public class SwingGUI extends JPanel {
 
-public class SwingGUI extends JPanel implements KeyListener, ActionListener {
+	private static final long serialVersionUID = 1L;
 
-	public static final int MSG_FONT_SIZE_OFFSET = Game.RES_W / 140;
-	public static final int MSG_FONT_SIZE_1 = Game.RES_W / 35;
+	public static final int MSG_FONT_SIZE_OFFSET = Physics.RES_W / 140;
+	public static final int MSG_FONT_SIZE_1 = Physics.RES_W / 35;
 	public static final int MSG_FONT_SIZE_2 = MSG_FONT_SIZE_1 + MSG_FONT_SIZE_OFFSET;
 	public static final int MSG_FONT_SIZE_3 = MSG_FONT_SIZE_2 + MSG_FONT_SIZE_OFFSET;
 
-	public static final int MSG_SCORE_X = Game.RES_W - Game.RES_W / 4;
-	public static final int MSG_SCORE_Y = Game.RES_H / 20;
+	public static final int MSG_SCORE_X = Physics.RES_W - Physics.RES_W / 4;
+	public static final int MSG_SCORE_Y = Physics.RES_H / 20;
 
-	public static final int MSG_GAME_X = Game.RES_W / 2;
-	public static final int MSG_GAME_Y = Game.RES_H / 2;
-	
-	private Set<UserKey> pressedKeys = new HashSet<>();
-
-	private Map<Integer, UserKey> mappedKeys = new HashMap<>();
-	{
-		mappedKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
-		mappedKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
-		mappedKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
-		mappedKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
-	}
+	public static final int MSG_GAME_X = Physics.RES_W / 2;
+	public static final int MSG_GAME_Y = Physics.RES_H / 2;
 
 	private State state;
-	private Game game;
-	private Timer timer;
 
-	public SwingGUI(Game sim) {
-		this.state = sim.getState();
-		this.game = sim;
+	public SwingGUI(State state) {
+		this.state = state;
 
-		state.reset();
-
-		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
-		timer = new Timer(Game.GAME_CYCLE_DELAY, this);
-		timer.start();
 
 	}
 
+	@Override
 	public void paint(Graphics g) {
 		// background
 		g.setColor(Color.black);
-		g.fillRect(0, 0, Game.RES_W, Game.RES_H);
+		g.fillRect(0, 0, Physics.RES_W, Physics.RES_H);
 
 		// draw map
 		draw((Graphics2D) g);
@@ -92,11 +59,11 @@ public class SwingGUI extends JPanel implements KeyListener, ActionListener {
 
 		// the paddle
 		g.setColor(Color.green);
-		g.fillRect(state.getPlayerX(), Game.PLAYER_START_POS_Y, Game.PLAYER_PAD_W, Game.PLAYER_PAD_H);
+		g.fillRect(state.getPlayerX(), Physics.PLAYER_START_POS_Y, Physics.PLAYER_PAD_W, Physics.PLAYER_PAD_H);
 
 		// ball
 		g.setColor(Color.red);
-		g.fillOval(state.getBallposX(), state.getBallposY(), Game.BALL_R, Game.BALL_R);
+		g.fillOval(state.getBallposX(), state.getBallposY(), Physics.BALL_R, Physics.BALL_R);
 
 		if (state.isItOver())
 			endMessage(g, "Game Over");
@@ -119,34 +86,15 @@ public class SwingGUI extends JPanel implements KeyListener, ActionListener {
 				SwingGUI.MSG_GAME_Y + SwingGUI.MSG_FONT_SIZE_3 * 2 + SwingGUI.MSG_FONT_SIZE_OFFSET);
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		timer.restart();
-		//Sends keyboard events to simulate
-		game.onUserKey(pressedKeys);
-		game.simulation();
-		repaint();
-	}
-
 	public void draw(Graphics2D g) {
 		for (Brick b : state.getMap()) {
 			g.setColor(Color.red);
-			g.fillRect(b.getX(), b.getY(), Game.BRICK_W, Game.BRICK_H);
+			g.fillRect(b.getX(), b.getY(), Physics.BRICK_W, Physics.BRICK_H);
 
 			g.setStroke(new BasicStroke(3));
 			g.setColor(Color.black);
-			g.drawRect(b.getX(), b.getY(), Game.BRICK_W, Game.BRICK_H);
+			g.drawRect(b.getX(), b.getY(), Physics.BRICK_W, Physics.BRICK_H);
 		}
-	}
-
-	public void keyPressed(KeyEvent e) {
-		pressedKeys.add( mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
-	}
-
-	public void keyReleased(KeyEvent e) {
-		pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
-	}
-
-	public void keyTyped(KeyEvent e) {
 	}
 
 }

@@ -3,7 +3,7 @@ package com.vcs.games.exampl.pingpong.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vcs.games.exampl.pingpong.Game;
+import com.vcs.games.exampl.pingpong.Physics;
 
 public class State {
 
@@ -30,11 +30,11 @@ public class State {
 	public void reset() {
 		resetMap();
 		score = 0;
-		playerX = Game.PLAYER_START_POS_X;
-		ballposX = Game.BALL_START_POS_X;
-		ballposY = Game.BALL_START_POS_Y;
-		ballXdir = Game.BALL_X_START_DIR;
-		ballYdir = Game.BALL_Y_START_DIR;
+		playerX = Physics.PLAYER_START_POS_X;
+		ballposX = Physics.BALL_START_POS_X;
+		ballposY = Physics.BALL_START_POS_Y;
+		ballXdir = Physics.BALL_X_START_DIR;
+		ballYdir = Physics.BALL_Y_START_DIR;
 		gameStatus = GameStatus.PAUSE;
 	}
 
@@ -64,8 +64,8 @@ public class State {
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < col; j++) {
-				bricks.add(new Brick(10 + i * (Game.BRICK_W + Game.BRICK_SPACE),
-						10 + j * (Game.BRICK_H + Game.BRICK_SPACE), Game.BRICK_W, Game.BRICK_H));
+				bricks.add(new Brick(10 + i * (Physics.BRICK_W + Physics.BRICK_SPACE),
+						10 + j * (Physics.BRICK_H + Physics.BRICK_SPACE), Physics.BRICK_W, Physics.BRICK_H));
 			}
 		}
 

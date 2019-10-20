@@ -7,7 +7,7 @@ import com.vcs.games.exampl.pingpong.model.GameStatus;
 import com.vcs.games.exampl.pingpong.model.State;
 import com.vcs.games.exampl.pingpong.model.UserKey;
 
-public class Game {
+public class Physics {
 
 	public static final int RES_H = 400;
 	public static final int RES_W = 600;
@@ -32,11 +32,11 @@ public class Game {
 	public static final int BRICK_SPACE = BRICK_W / 15;
 
 	public static final int GAME_SCORE_INC = 5;
-	public static final int GAME_CYCLE_DELAY = 40; // ball speed
+	public static final int GAME_CYCLE_DELAY = 5; // ball speed
 
 	private State state;
 
-	public Game(State state) {
+	public Physics(State state) {
 		this.state = state;
 	}
 
