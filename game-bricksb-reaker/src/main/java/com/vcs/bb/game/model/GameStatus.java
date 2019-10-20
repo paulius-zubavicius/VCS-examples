@@ -1,4 +1,4 @@
-package com.vcs.games.exampl.pingpong.model;
+package com.vcs.bb.game.model;
 
 public enum GameStatus {
 	

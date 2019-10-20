@@ -1,11 +1,11 @@
-package com.vcs.games.exampl.pingpong;
+package com.vcs.bb.game;
 
 import java.util.Set;
 
-import com.vcs.games.exampl.pingpong.model.Brick;
-import com.vcs.games.exampl.pingpong.model.GameStatus;
-import com.vcs.games.exampl.pingpong.model.State;
-import com.vcs.games.exampl.pingpong.model.UserKey;
+import com.vcs.bb.game.model.Brick;
+import com.vcs.bb.game.model.GameStatus;
+import com.vcs.bb.game.model.State;
+import com.vcs.bb.game.model.UserKey;
 
 public class Physics {
 

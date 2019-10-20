@@ -1,4 +1,4 @@
-package com.vcs.games.exampl.pingpong.run;
+package com.vcs.bb.game.run;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -10,16 +10,16 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import com.vcs.games.exampl.pingpong.Physics;
-import com.vcs.games.exampl.pingpong.gui.swing.SwingGUI;
-import com.vcs.games.exampl.pingpong.model.State;
-import com.vcs.games.exampl.pingpong.model.UserKey;
+import com.vcs.bb.game.Physics;
+import com.vcs.bb.game.gui.swing.SwingGUI;
+import com.vcs.bb.game.model.State;
+import com.vcs.bb.game.model.UserKey;
 
 /**
  * 
- * <li>1) Pasileidzia tuscias screen'as</li>
  * <li>2) Kamuoliukas kartais palenda po pad'u</li>
- * <li>3)Kamuoliukas leidziasi palei siena</li>
+ * <li>3) Kamuoliukas leidziasi palei siena</li>
+ * <li>4) Kaladeliu isdestymas</li>
  */
 
 public class Game {

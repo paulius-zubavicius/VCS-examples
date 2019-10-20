@@ -1,4 +1,4 @@
-package com.vcs.games.exampl.pingpong.gui.swing;
+package com.vcs.bb.game.gui.swing;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -8,9 +8,9 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
-import com.vcs.games.exampl.pingpong.Physics;
-import com.vcs.games.exampl.pingpong.model.Brick;
-import com.vcs.games.exampl.pingpong.model.State;
+import com.vcs.bb.game.Physics;
+import com.vcs.bb.game.model.Brick;
+import com.vcs.bb.game.model.State;
 
 public class SwingGUI extends JPanel {
 

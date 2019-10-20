@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.vcs.games.exampl.pingpong.model.Brick;
+import com.vcs.bb.game.model.Brick;
 
 public class BrickTouchingTest {
 	

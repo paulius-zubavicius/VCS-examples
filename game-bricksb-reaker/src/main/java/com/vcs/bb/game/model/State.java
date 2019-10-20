@@ -1,9 +1,9 @@
-package com.vcs.games.exampl.pingpong.model;
+package com.vcs.bb.game.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vcs.games.exampl.pingpong.Physics;
+import com.vcs.bb.game.Physics;
 
 public class State {
 
