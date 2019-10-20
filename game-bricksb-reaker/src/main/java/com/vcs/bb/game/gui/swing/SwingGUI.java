@@ -59,7 +59,7 @@ public class SwingGUI extends JPanel {
 
 		// the paddle
 		g.setColor(Color.green);
-		g.fillRect(state.getPlayerX(), Physics.PLAYER_START_POS_Y, Physics.PLAYER_PAD_W, Physics.PLAYER_PAD_H);
+		g.fillRect(state.getPapX(), Physics.PAD_START_POS_Y, Physics.PAD_W, Physics.PAD_H);
 
 		// ball
 		g.setColor(Color.red);
@@ -87,7 +87,7 @@ public class SwingGUI extends JPanel {
 	}
 
 	public void draw(Graphics2D g) {
-		for (Brick b : state.getMap()) {
+		for (Brick b : state.getBrics()) {
 			g.setColor(Color.red);
 			g.fillRect(b.getX(), b.getY(), Physics.BRICK_W, Physics.BRICK_H);
 

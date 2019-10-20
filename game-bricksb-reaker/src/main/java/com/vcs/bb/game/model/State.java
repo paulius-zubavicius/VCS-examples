@@ -10,7 +10,7 @@ public class State {
 	private int score;
 	private List<Brick> bricks = new ArrayList<>();
 
-	private int playerX;
+	private int padX;
 	private double ballposX;
 	private double ballposY;
 	private double ballXdir;
@@ -30,7 +30,7 @@ public class State {
 	public void reset() {
 		resetMap();
 		score = 0;
-		playerX = Physics.PLAYER_START_POS_X;
+		padX = Physics.PAD_START_POS_X;
 		ballposX = Physics.BALL_START_POS_X;
 		ballposY = Physics.BALL_START_POS_Y;
 		ballXdir = Physics.BALL_X_START_DIR;
@@ -64,8 +64,8 @@ public class State {
 
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < col; j++) {
-				bricks.add(new Brick(10 + i * (Physics.BRICK_W + Physics.BRICK_SPACE),
-						10 + j * (Physics.BRICK_H + Physics.BRICK_SPACE), Physics.BRICK_W, Physics.BRICK_H));
+				bricks.add(new Brick(10 + i * (Physics.BRICK_W + Physics.BRICK_MARGIN),
+						10 + j * (Physics.BRICK_H + Physics.BRICK_MARGIN), Physics.BRICK_W, Physics.BRICK_H));
 			}
 		}
 
@@ -75,16 +75,12 @@ public class State {
 		return score;
 	}
 
-	public int getTotalBricks() {
-		return bricks.size();
-	}
-
-	public List<Brick> getMap() {
+	public List<Brick> getBrics() {
 		return bricks;
 	}
 
-	public int getPlayerX() {
-		return playerX;
+	public int getPapX() {
+		return padX;
 	}
 
 	public double getBallPosX() {
@@ -103,8 +99,8 @@ public class State {
 		return ballYdir;
 	}
 
-	public void setPlayerX(int playerX) {
-		this.playerX = playerX;
+	public void setPadX(int playerX) {
+		this.padX = playerX;
 	}
 
 	public void ballPosXInc(double incVal) {

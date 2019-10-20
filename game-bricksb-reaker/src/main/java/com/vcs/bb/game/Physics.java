@@ -21,15 +21,15 @@ public class Physics {
 	public static final double BALL_X_START_DIR = -BALL_X_SPEED;
 	public static final double BALL_Y_START_DIR = -BALL_Y_SPEED;
 
-	public static final int PLAYER_MOVE_OFFSET = RES_H / 30;
-	public static final int PLAYER_PAD_W = RES_W / 7;
-	public static final int PLAYER_PAD_H = 15;// ( RES_H / 100 < 1 ? 1 : RES_H / 100);
-	public static final int PLAYER_START_POS_X = RES_W / 2 - PLAYER_PAD_W / 2;
-	public static final int PLAYER_START_POS_Y = RES_H - RES_H / 12;
+	public static final int PAD_MOVE_OFFSET = RES_H / 30;
+	public static final int PAD_W = RES_W / 7;
+	public static final int PAD_H = 15;// ( RES_H / 100 < 1 ? 1 : RES_H / 100);
+	public static final int PAD_START_POS_X = RES_W / 2 - PAD_W / 2;
+	public static final int PAD_START_POS_Y = RES_H - RES_H / 12;
 
 	public static final int BRICK_W = RES_W / 10;
 	public static final int BRICK_H = RES_H / 15;
-	public static final int BRICK_SPACE = BRICK_W / 15;
+	public static final int BRICK_MARGIN = BRICK_W / 15;
 
 	public static final int GAME_SCORE_INC = 5;
 	public static final int GAME_CYCLE_DELAY = 40; // ball speed
@@ -53,10 +53,10 @@ public class Physics {
 
 	private void takeAction(UserKey key) {
 		if (UserKey.RIGHT.equals(key)) {
-			int predicX = state.getPlayerX() + PLAYER_MOVE_OFFSET;
-			int mostLeft = RES_W - PLAYER_PAD_W;
+			int predicX = state.getPapX() + PAD_MOVE_OFFSET;
+			int mostLeft = RES_W - PAD_W;
 
-			state.setPlayerX(predicX >= mostLeft ? mostLeft : predicX);
+			state.setPadX(predicX >= mostLeft ? mostLeft : predicX);
 
 			if (state.isItPaused()) {
 				state.setGameStatus(GameStatus.PLAY);
@@ -64,9 +64,9 @@ public class Physics {
 		}
 
 		if (UserKey.LEFT.equals(key)) {
-			int predicX = state.getPlayerX() - PLAYER_MOVE_OFFSET;
+			int predicX = state.getPapX() - PAD_MOVE_OFFSET;
 
-			state.setPlayerX(predicX < 0 ? 0 : predicX);
+			state.setPadX(predicX < 0 ? 0 : predicX);
 
 			if (state.isItPaused()) {
 				state.setGameStatus(GameStatus.PLAY);
@@ -103,7 +103,7 @@ public class Physics {
 	}
 
 	private boolean isGameWin() {
-		return state.getTotalBricks() <= 0;
+		return state.getBrics().size() <= 0;
 	}
 
 	private boolean isGameOver() {
@@ -112,7 +112,7 @@ public class Physics {
 
 	private void colisions() {
 
-		for (Brick b : state.getMap()) {
+		for (Brick b : state.getBrics()) {
 			if (b.isTouching(state.getBallPosX(), state.getBallPosY(), BALL_R)) {
 
 				state.scoreInc(GAME_SCORE_INC);
@@ -123,13 +123,12 @@ public class Physics {
 					state.ballPosYDirChange();
 				}
 
-				state.getMap().remove(b);
+				state.getBrics().remove(b);
 				break;
 			}
 		}
 
 		if (state.getBallPosX() < 0) {
-			System.out.println(state.getBallPosX() + " / " + state.getBallXdir());
 			state.ballPosXDirChange();
 		}
 		if (state.getBallPosY() < 0) {
@@ -139,9 +138,9 @@ public class Physics {
 			state.ballPosXDirChange();
 		}
 
-		if (state.getBallPosY() + BALL_R >= PLAYER_START_POS_Y) {
-			if (state.getBallPosX() - BALL_R >= state.getPlayerX()) {
-				if (state.getBallPosX() <= (state.getPlayerX() + PLAYER_PAD_W)) {
+		if (state.getBallPosY() + BALL_R >= PAD_START_POS_Y) {
+			if (state.getPapX() <= state.getBallPosX() + BALL_R) {
+				if ((state.getPapX() + PAD_W) >= state.getBallPosX()) {
 					state.ballPosYDirChange();
 				}
 			}
@@ -150,7 +149,6 @@ public class Physics {
 		state.ballPosXInc(state.getBallXdir());
 		state.ballPosYInc(state.getBallYdir());
 		
-		System.out.println(" ? " + state.getBallXdir());
 	}
 
 }
