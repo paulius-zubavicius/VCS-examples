@@ -115,7 +115,7 @@ public class Physics {
 		for (Brick b : state.getBrics()) {
 			if (b.isTouching(state.getBallPosX(), state.getBallPosY(), BALL_R)) {
 
-				state.scoreInc(b.getScore());
+				state.scoreInc(b.getType().getPoints());
 
 				if (state.getBallPosX() + (BALL_R - 1) <= b.getX() || state.getBallPosX() + 1 >= b.getX() + BRICK_W) {
 					state.ballPosXDirChange();

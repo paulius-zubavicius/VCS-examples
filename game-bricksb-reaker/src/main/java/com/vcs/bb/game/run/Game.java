@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,13 +13,15 @@ import javax.swing.Timer;
 
 import com.vcs.bb.game.Physics;
 import com.vcs.bb.game.gui.swing.SwingGUI;
+import com.vcs.bb.game.levels.LevelsLoader;
+import com.vcs.bb.game.model.Level;
+import com.vcs.bb.game.model.Resolution;
 import com.vcs.bb.game.model.State;
 import com.vcs.bb.game.model.UserKey;
 
 /**
  * 
  * <li>2) Kamuoliukas kartais palenda po pad'u</li>
- * <li>4) Kaladeliu isdestymas</li>
  * <li>5) Rezoliucija ir setingus iskelti</li>
  * 
  */
@@ -44,8 +47,11 @@ public class Game {
 	}
 
 	void startGameApp() {
+		
+		LevelsLoader ll = new LevelsLoader();
+		List<Level> levels = ll.loadLevels(Resolution.RES_600x400);
 
-		phs = new Physics(new State(3, 7));
+		phs = new Physics(new State(levels.get(0)));
 		gui = new SwingGUI(phs.getState());
 		gui.addKeyListener(new KeyListener() {
 			@Override

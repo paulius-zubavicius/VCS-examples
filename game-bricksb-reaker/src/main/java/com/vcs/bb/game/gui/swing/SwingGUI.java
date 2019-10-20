@@ -23,6 +23,7 @@ public class SwingGUI extends JPanel {
 
 	public static final int MSG_SCORE_X = MSG_FONT_SIZE_OFFSET;// Physics.RES_W - Physics.RES_W / 4;
 	public static final int MSG_SCORE_Y = Physics.RES_H - Physics.RES_H / 10;
+	public static final int MSG_LEVEL_X = Physics.RES_H / 3;
 
 	public static final int MSG_GAME_X = Physics.RES_W / 2;
 	public static final int MSG_GAME_Y = Physics.RES_H / 2;
@@ -56,6 +57,7 @@ public class SwingGUI extends JPanel {
 		g.setColor(Color.white);
 		g.setFont(new Font("serif", Font.BOLD, MSG_FONT_SIZE_1));
 		g.drawString("Score: " + state.getScore(), MSG_SCORE_X, MSG_SCORE_Y);
+		g.drawString( state.getLevel().getName() , MSG_LEVEL_X, MSG_SCORE_Y);
 
 		// the paddle
 		g.setColor(Color.green);
@@ -88,7 +90,8 @@ public class SwingGUI extends JPanel {
 
 	public void draw(Graphics2D g) {
 		for (Brick b : state.getBrics()) {
-			g.setColor(Color.red);
+			
+			g.setColor(new Color(b.getType().getRGB()));
 			g.fillRect(b.getX(), b.getY(), Physics.BRICK_W, Physics.BRICK_H);
 
 			g.setStroke(new BasicStroke(3));

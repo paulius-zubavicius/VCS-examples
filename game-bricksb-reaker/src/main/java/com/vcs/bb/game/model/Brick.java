@@ -1,16 +1,15 @@
 package com.vcs.bb.game.model;
 
 public class Brick {
-	public static final int BRICK_POINTS = 5;
 
-	private int score = BRICK_POINTS;
+	private BrickType type;
 	private int x;
 	private int y;
 	private int w;
 	private int h;
 
-	public Brick(int x, int y, int w, int h) {
-		super();
+	public Brick(BrickType type, int x, int y, int w, int h) {
+		this.type = type;
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -62,8 +61,14 @@ public class Brick {
 		this.h = h;
 	}
 
-	public int getScore() {
-		return score;
+	public BrickType getType() {
+		return type;
 	}
 
+	public int getR() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	
 }

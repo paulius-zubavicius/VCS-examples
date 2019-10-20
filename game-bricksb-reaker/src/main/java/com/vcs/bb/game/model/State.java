@@ -9,7 +9,7 @@ public class State {
 
 	private int score;
 	private List<Brick> bricks = new ArrayList<>();
-
+	private Level level;
 	private int padX;
 	private double ballposX;
 	private double ballposY;
@@ -18,18 +18,16 @@ public class State {
 	private GameStatus gameStatus;
 	private double speedMs;
 
-	private int col;
-	private int rows;
-
-	public State(int col, int rows) {
-
-		this.col = col;
-		this.rows = rows;
+	public State(Level level) {
+		this.level = level;
 		reset();
 	}
 
 	public void reset() {
-		resetMap();
+
+		bricks.clear();
+		bricks.addAll(level.getBricks());
+
 		score = 0;
 		speedMs = Physics.GAME_CYCLE_DELAY;
 		padX = Physics.PAD_START_POS_X;
@@ -66,19 +64,6 @@ public class State {
 
 	public void setGameStatus(GameStatus gameStatus) {
 		this.gameStatus = gameStatus;
-	}
-
-	private void resetMap() {
-
-		bricks.clear();
-
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < col; j++) {
-				bricks.add(new Brick(10 + i * (Physics.BRICK_W + Physics.BRICK_MARGIN),
-						10 + j * (Physics.BRICK_H + Physics.BRICK_MARGIN), Physics.BRICK_W, Physics.BRICK_H));
-			}
-		}
-
 	}
 
 	public int getScore() {
@@ -136,6 +121,10 @@ public class State {
 	public void scoreInc(int incVal) {
 		this.score += incVal;
 
+	}
+
+	public Level getLevel() {
+		return level;
 	}
 
 }
