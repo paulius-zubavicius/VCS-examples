@@ -20,6 +20,8 @@ import com.vcs.bb.game.model.UserKey;
  * <li>2) Kamuoliukas kartais palenda po pad'u</li>
  * <li>3) Kamuoliukas leidziasi palei siena</li>
  * <li>4) Kaladeliu isdestymas</li>
+ * <li>5) Rezoliucija ir setingus iskelti</li>
+ * <li>6) enteris neveikia</li>
  */
 
 public class Game {
@@ -35,7 +37,7 @@ public class Game {
 	{
 		mappedKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
 		mappedKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
-		mappedKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
+		mappedKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
 		mappedKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
 	}
 

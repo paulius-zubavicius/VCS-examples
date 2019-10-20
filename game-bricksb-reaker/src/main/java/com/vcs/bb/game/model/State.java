@@ -11,8 +11,8 @@ public class State {
 	private List<Brick> bricks = new ArrayList<>();
 
 	private int playerX;
-	private int ballposX;
-	private int ballposY;
+	private double ballposX;
+	private double ballposY;
 	private double ballXdir;
 	private double ballYdir;
 	private GameStatus gameStatus;
@@ -87,11 +87,11 @@ public class State {
 		return playerX;
 	}
 
-	public int getBallposX() {
+	public double getBallPosX() {
 		return ballposX;
 	}
 
-	public int getBallposY() {
+	public double getBallPosY() {
 		return ballposY;
 	}
 

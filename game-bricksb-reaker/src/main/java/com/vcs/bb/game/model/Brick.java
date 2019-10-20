@@ -15,16 +15,16 @@ public class Brick {
 		this.h = h;
 	}
 
-	public boolean isTouching(int bX, int bY, int bW) {
+	public boolean isTouching(double bX, double bY, double bW) {
 		return (isInside(x, x + w, bX, bX + bW) && isInside(y, y + h, bY, bY + bW))
 				|| (isInside(bX, bX + bW, x, x + w) && isInside(bY, bY + bW, y, y + h));
 	}
 
-	private boolean isInside(int tBegin, int tEnd, int rangeBegin, int rangeEnd) {
+	private boolean isInside(double tBegin, double tEnd, double rangeBegin, double rangeEnd) {
 		return isPointInside(tBegin, rangeBegin, rangeEnd) || isPointInside(tEnd, rangeBegin, rangeEnd);
 	}
 
-	private boolean isPointInside(int point, int rangeBegin, int rangeEnd) {
+	private boolean isPointInside(double point, double rangeBegin, double rangeEnd) {
 		return point >= rangeBegin && point <= rangeEnd;
 	}
 

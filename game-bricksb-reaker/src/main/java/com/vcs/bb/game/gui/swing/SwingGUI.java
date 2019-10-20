@@ -63,7 +63,7 @@ public class SwingGUI extends JPanel {
 
 		// ball
 		g.setColor(Color.red);
-		g.fillOval(state.getBallposX(), state.getBallposY(), Physics.BALL_R, Physics.BALL_R);
+		g.fillOval((int)state.getBallPosX(), (int)state.getBallPosY(), Physics.BALL_R, Physics.BALL_R);
 
 		if (state.isItOver())
 			endMessage(g, "Game Over");
@@ -82,7 +82,7 @@ public class SwingGUI extends JPanel {
 				SwingGUI.MSG_GAME_Y + SwingGUI.MSG_FONT_SIZE_3 + SwingGUI.MSG_FONT_SIZE_OFFSET);
 
 		g.setFont(new Font("serif", Font.BOLD, SwingGUI.MSG_FONT_SIZE_1));
-		g.drawString("Press ENTER to Restart", SwingGUI.MSG_GAME_X,
+		g.drawString("Press SPACE to Restart", SwingGUI.MSG_GAME_X,
 				SwingGUI.MSG_GAME_Y + SwingGUI.MSG_FONT_SIZE_3 * 2 + SwingGUI.MSG_FONT_SIZE_OFFSET);
 	}
 

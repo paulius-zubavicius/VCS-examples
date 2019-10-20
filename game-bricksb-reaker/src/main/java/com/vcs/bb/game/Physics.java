@@ -32,7 +32,7 @@ public class Physics {
 	public static final int BRICK_SPACE = BRICK_W / 15;
 
 	public static final int GAME_SCORE_INC = 5;
-	public static final int GAME_CYCLE_DELAY = 5; // ball speed
+	public static final int GAME_CYCLE_DELAY = 40; // ball speed
 
 	private State state;
 
@@ -73,8 +73,8 @@ public class Physics {
 			}
 		}
 
-		if (UserKey.ENTER.equals(key)) {
-			if (state.isItPlay()) {
+		if (UserKey.SPACE.equals(key)) {
+			if (!state.isItPaused()) {
 				state.reset();
 			}
 		}
@@ -107,17 +107,17 @@ public class Physics {
 	}
 
 	private boolean isGameOver() {
-		return state.getBallposY() > RES_H - BALL_R;
+		return state.getBallPosY() > RES_H - BALL_R;
 	}
 
 	private void colisions() {
 
 		for (Brick b : state.getMap()) {
-			if (b.isTouching(state.getBallposX(), state.getBallposY(), BALL_R)) {
+			if (b.isTouching(state.getBallPosX(), state.getBallPosY(), BALL_R)) {
 
 				state.scoreInc(GAME_SCORE_INC);
 
-				if (state.getBallposX() + (BALL_R - 1) <= b.getX() || state.getBallposX() + 1 >= b.getX() + BRICK_W) {
+				if (state.getBallPosX() + (BALL_R - 1) <= b.getX() || state.getBallPosX() + 1 >= b.getX() + BRICK_W) {
 					state.ballPosXDirChange();
 				} else {
 					state.ballPosYDirChange();
@@ -128,26 +128,29 @@ public class Physics {
 			}
 		}
 
-		state.ballPosXInc(state.getBallXdir());
-		state.ballPosYInc(state.getBallYdir());
-
-		if (state.getBallposX() < 0) {
+		if (state.getBallPosX() < 0) {
+			System.out.println(state.getBallPosX() + " / " + state.getBallXdir());
 			state.ballPosXDirChange();
 		}
-		if (state.getBallposY() < 0) {
+		if (state.getBallPosY() < 0) {
 			state.ballPosYDirChange();
 		}
-		if (state.getBallposX() > RES_W - BALL_R) {
+		if (state.getBallPosX() > RES_W - BALL_R) {
 			state.ballPosXDirChange();
 		}
 
-		if (state.getBallposY() + BALL_R >= PLAYER_START_POS_Y) {
-			if (state.getBallposX() - BALL_R >= state.getPlayerX()) {
-				if (state.getBallposX() <= (state.getPlayerX() + PLAYER_PAD_W)) {
+		if (state.getBallPosY() + BALL_R >= PLAYER_START_POS_Y) {
+			if (state.getBallPosX() - BALL_R >= state.getPlayerX()) {
+				if (state.getBallPosX() <= (state.getPlayerX() + PLAYER_PAD_W)) {
 					state.ballPosYDirChange();
 				}
 			}
 		}
+		
+		state.ballPosXInc(state.getBallXdir());
+		state.ballPosYInc(state.getBallYdir());
+		
+		System.out.println(" ? " + state.getBallXdir());
 	}
 
 }
