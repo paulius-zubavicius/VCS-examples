@@ -78,9 +78,7 @@ public class Game {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-
 				phs.getState().setGameStatus(GameStatus.PLAY);
-
 			}
 
 			@Override
@@ -99,13 +97,11 @@ public class Game {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				pressedKeys.add(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
-				phs.onUserKey(pressedKeys);
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
-				phs.onUserKey(pressedKeys);
 			}
 
 			@Override
@@ -115,6 +111,7 @@ public class Game {
 
 		phsTimer = new Timer((int) phs.getState().getSpeedMs(), (e) -> {
 			// Sends keyboard events to simulate
+			phs.onUserKey(pressedKeys);
 			phs.simulation();
 			gui.repaint();
 			guiTimer.restart();
