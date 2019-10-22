@@ -62,9 +62,22 @@ public class SwingGUI extends JPanel {
 		g.drawString("Score: " + state.getScore(), MSG_SCORE_X, MSG_SCORE_Y);
 		g.drawString(state.getLevel().getName(), MSG_LEVEL_X, MSG_SCORE_Y);
 
-		// the paddle
+//		int sectorW = Physics.PAD_W / 7;
 		g.setColor(Color.green);
-		g.fillRect(state.getPadX(), Physics.PAD_START_POS_Y, Physics.PAD_W, Physics.PAD_H);
+		
+//		for (int i = 0; i < 7; i++) {
+//			if(i % 2 == 0) {
+//				g.setColor(Color.green);
+//			} else {
+//				g.setColor(Color.magenta);
+//			}
+//			
+//			g.fillRect(state.getPadX() + sectorW * i, Physics.PAD_START_POS_Y , sectorW, Physics.PAD_H);
+//			
+//		}
+		
+		g.fillRect(state.getPadX(), Physics.PAD_START_POS_Y , Physics.PAD_W, Physics.PAD_H);
+		
 
 		// ball
 		g.setColor(Color.red);

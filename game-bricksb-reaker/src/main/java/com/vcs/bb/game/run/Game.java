@@ -33,7 +33,7 @@ import com.vcs.bb.game.model.UserKey;
 
 public class Game {
 
-	private static final int FPS = 60;
+	private static final int FPS = 120;
 	private static final int FPS_DELAY = 1000 / FPS;
 
 	private Physics phs;
@@ -47,11 +47,9 @@ public class Game {
 	{
 		validPressReleaseKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
 		validPressReleaseKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
-
 		validPressReleaseKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
 		validPressReleaseKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
 		validPressReleaseKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
-
 	}
 
 	void startGameApp() {
