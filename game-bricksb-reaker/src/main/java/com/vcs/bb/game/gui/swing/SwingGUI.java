@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import com.vcs.bb.game.Physics;
+import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.Brick;
 import com.vcs.bb.game.model.State;
 
@@ -63,11 +64,11 @@ public class SwingGUI extends JPanel {
 
 		// the paddle
 		g.setColor(Color.green);
-		g.fillRect(state.getPapX(), Physics.PAD_START_POS_Y, Physics.PAD_W, Physics.PAD_H);
+		g.fillRect(state.getPadX(), Physics.PAD_START_POS_Y, Physics.PAD_W, Physics.PAD_H);
 
 		// ball
 		g.setColor(Color.red);
-		g.fillOval((int) state.getBallPosX(), (int) state.getBallPosY(), Physics.BALL_R, Physics.BALL_R);
+		g.fillOval((int) state.getBall().getBallPosX(), (int) state.getBall().getBallPosY(), Ball.BALL_R, Ball.BALL_R);
 
 		if (state.isItOver())
 			endMessage(g, "Game Over");

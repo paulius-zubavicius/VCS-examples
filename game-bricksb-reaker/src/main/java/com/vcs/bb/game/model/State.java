@@ -11,10 +11,8 @@ public class State {
 	private List<Brick> bricks = new ArrayList<>();
 	private Level level;
 	private int padX;
-	private double ballposX;
-	private double ballposY;
-	private double ballXdir;
-	private double ballYdir;
+
+	private Ball ball;
 	private GameStatus gameStatus;
 	private double speedMs;
 
@@ -27,15 +25,18 @@ public class State {
 
 		bricks.clear();
 		bricks.addAll(level.getBricks());
-
+		ball = new Ball();
 		score = 0;
 		speedMs = Physics.GAME_CYCLE_DELAY * level.getSpeed();
 		padX = Physics.PAD_START_POS_X;
-		ballposX = Physics.BALL_START_POS_X;
-		ballposY = Physics.BALL_START_POS_Y;
-		ballXdir = Physics.BALL_X_START_DIR;
-		ballYdir = Physics.BALL_Y_START_DIR;
+
+//		ballXdir = Physics.BALL_X_START_DIR;
+//		ballYdir = Physics.BALL_Y_START_DIR;
 		gameStatus = GameStatus.PAUSE;
+	}
+
+	public Ball getBall() {
+		return ball;
 	}
 
 	public double getSpeedMs() {
@@ -74,54 +75,18 @@ public class State {
 		return bricks;
 	}
 
-	public int getPapX() {
+	public int getPadX() {
 		return padX;
-	}
-
-	public double getBallPosX() {
-		return ballposX;
-	}
-
-	public double getBallPosY() {
-		return ballposY;
-	}
-
-	public double getBallXdir() {
-		return ballXdir;
-	}
-
-	public double getBallYdir() {
-		return ballYdir;
 	}
 
 	public void setPadX(int playerX) {
 		this.padX = playerX;
 	}
 
-	public void ballPosXInc(double incVal) {
-		this.ballposX += incVal;
-
-	}
-
-	public void setBallPosY(double posY) {
-		this.ballposY = posY;
-
-	}
-
-	public void ballPosYInc(double incVal) {
-		this.ballposY += incVal;
-
-	}
-
-	public void ballPosXDirChange() {
-		this.ballXdir = -this.ballXdir;
-
-	}
-
-	public void ballPosYDirChange() {
-		this.ballYdir = -this.ballYdir;
-
-	}
+//	public void ballPosYDirChange(double coef) {
+//		this.ballYdir = -this.ballYdir * coef;
+//
+//	}
 
 	public void scoreInc(int incVal) {
 		this.score += incVal;

@@ -57,15 +57,10 @@ public class LevelsLoader {
 	}
 
 	private Brick createBrick(BrickType type, int line, int col, Resolution res) {
-
-		
-		
-		
 		int x = Physics.BRICK_MARGIN + col * (Physics.BRICK_W + Physics.BRICK_MARGIN);
 		int y = Physics.BRICK_MARGIN + line * (Physics.BRICK_H + Physics.BRICK_MARGIN);
 
 		return new Brick(type, x, y, Physics.BRICK_W, Physics.BRICK_H);
-
 	}
 
 }

@@ -27,6 +27,8 @@ import com.vcs.bb.game.model.UserKey;
  * 
  * <li>5) Rezoliucija ir setingus iskelti</li>
  * <li>9) Leveliai turi kestis</li>
+ * <li>10) Perpaisyti tik tuos komponentus kurie trigerinti perpaisyti, o ne viska kiekviena karta</li>
+ * <li>11) kampas turi keistis priklausomai nuo kurios pado dalies atsimuse kamuoliukas</li>
  */
 
 public class Game {
@@ -106,6 +108,7 @@ public class Game {
 
 			@Override
 			public void keyTyped(KeyEvent e) {
+				pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
 			}
 		});
 
