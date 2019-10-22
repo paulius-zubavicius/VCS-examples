@@ -27,8 +27,8 @@ import com.vcs.bb.game.model.UserKey;
  * 
  * <li>5) Rezoliucija ir setingus iskelti</li>
  * <li>9) Leveliai turi kestis</li>
- * <li>10) Perpaisyti tik tuos komponentus kurie trigerinti perpaisyti, o ne viska kiekviena karta</li>
- * <li>11) kampas turi keistis priklausomai nuo kurios pado dalies atsimuse kamuoliukas</li>
+ * <li>10) Perpaisyti tik tuos komponentus kurie trigerinti perpaisyti, o ne
+ * viska kiekviena karta</li>
  */
 
 public class Game {
@@ -43,13 +43,15 @@ public class Game {
 
 	private Set<UserKey> pressedKeys = new HashSet<>();
 
-	private Map<Integer, UserKey> mappedKeys = new HashMap<>();
+	private Map<Integer, UserKey> validPressReleaseKeys = new HashMap<>();
 	{
-		mappedKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
-		mappedKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
-		mappedKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
-		mappedKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
-		mappedKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
+		validPressReleaseKeys.put(KeyEvent.VK_RIGHT, UserKey.RIGHT);
+		validPressReleaseKeys.put(KeyEvent.VK_LEFT, UserKey.LEFT);
+
+		validPressReleaseKeys.put(KeyEvent.VK_ENTER, UserKey.ENTER);
+		validPressReleaseKeys.put(KeyEvent.VK_ESCAPE, UserKey.ESC);
+		validPressReleaseKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
+
 	}
 
 	void startGameApp() {
@@ -59,62 +61,64 @@ public class Game {
 
 		phs = new Physics(new State(levels.get(0)));
 		gui = new SwingGUI(phs.getState());
-		gui.addMouseMotionListener(new MouseMotionListener() {
-
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				if (phs.getState().isItPlay()) {
-					phs.getState().setPadX(e.getX() - Physics.PAD_W / 2);
-				}
-			}
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-			}
-		});
-		gui.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				phs.getState().setGameStatus(GameStatus.PLAY);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
+//		gui.addMouseMotionListener(new MouseMotionListener() {
+//
+//			@Override
+//			public void mouseMoved(MouseEvent e) {
+//				if (phs.getState().isItPlay()) {
+//					phs.getState().setPadX(e.getX() - Physics.PAD_W / 2);
+//				}
+//			}
+//
+//			@Override
+//			public void mouseDragged(MouseEvent e) {
+//			}
+//		});
+//		gui.addMouseListener(new MouseListener() {
+//
+//			@Override
+//			public void mouseReleased(MouseEvent e) {
+//			}
+//
+//			@Override
+//			public void mousePressed(MouseEvent e) {
+//				phs.getState().setGameStatus(GameStatus.PLAY);
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//			}
+//
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//			}
+//
+//			@Override
+//			public void mouseClicked(MouseEvent e) {
+//			}
+//		});
 		gui.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				pressedKeys.add(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
+				pressedKeys.add(validPressReleaseKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
+				UserKey uk = validPressReleaseKeys.getOrDefault(e.getKeyCode(), UserKey.ANY);
+				pressedKeys.remove(uk);
+				onUserKey(uk);
 			}
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				pressedKeys.remove(mappedKeys.getOrDefault(e.getKeyCode(), UserKey.ANY));
 			}
 		});
 
 		phsTimer = new Timer((int) phs.getState().getSpeedMs(), (e) -> {
 			// Sends keyboard events to simulate
-			phs.onUserKey(pressedKeys);
+			phs.userInput(pressedKeys.contains(UserKey.LEFT), pressedKeys.contains(UserKey.RIGHT));
+			
 			phs.simulation();
 			gui.repaint();
 			guiTimer.restart();
@@ -136,6 +140,32 @@ public class Game {
 		guiTimer.start();
 
 		obj.setVisible(true);
+	}
+
+	public void onUserKey(UserKey key) {
+
+		if (UserKey.ENTER.equals(key)) {
+			if (!phs.getState().isItPaused()) {
+				phs.getState().reset();
+			}
+		}
+
+		if (UserKey.F1.equals(key)) {
+			throw new RuntimeException();
+		}
+
+		if (UserKey.ESC.equals(key)) {
+			System.exit(0);
+		}
+
+		if (UserKey.SPACE.equals(key)) {
+			if (phs.getState().isItPlay()) {
+				phs.getState().setGameStatus(GameStatus.PAUSE);
+			} else if (phs.getState().isItPaused()) {
+				phs.getState().setGameStatus(GameStatus.PLAY);
+			}
+		}
+
 	}
 
 }
