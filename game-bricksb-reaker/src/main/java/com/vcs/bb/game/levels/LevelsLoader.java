@@ -17,7 +17,7 @@ import com.vcs.bb.game.model.Resolution;
 
 public class LevelsLoader {
 
-	private String[] dataFiles = { "level0.dat", "level1.dat" };
+	private String[] dataFiles = { "level0.dat", "level1.dat", "level2.dat", "level3.dat" };
 
 	public List<Level> loadLevels(Resolution res) {
 

@@ -29,17 +29,22 @@ import com.vcs.bb.game.model.UserKey;
  * <li>9) Leveliai turi kestis</li>
  * <li>10) Perpaisyti tik tuos komponentus kurie trigerinti perpaisyti, o ne
  * viska kiekviena karta</li>
+ * <li>kai kamoliukas per zemai ji dar galima pagauti</li>
  */
 
 public class Game {
 
 	private static final int FPS = 120;
 	private static final int FPS_DELAY = 1000 / FPS;
+	private static final int FPS_ANI_DELAY = 5;
 
 	private Physics phs;
 	private SwingGUI gui;
 	private Timer phsTimer;
 	private Timer guiTimer;
+	private Timer aniTimer;
+
+	private int delayForNextAniFrame = FPS_ANI_DELAY;
 
 	private Set<UserKey> pressedKeys = new HashSet<>();
 
@@ -57,44 +62,9 @@ public class Game {
 		LevelsLoader ll = new LevelsLoader();
 		List<Level> levels = ll.loadLevels(Resolution.RES_600x400);
 
-		phs = new Physics(new State(levels.get(0)));
+		phs = new Physics(new State(levels));
 		gui = new SwingGUI(phs.getState());
-//		gui.addMouseMotionListener(new MouseMotionListener() {
-//
-//			@Override
-//			public void mouseMoved(MouseEvent e) {
-//				if (phs.getState().isItPlay()) {
-//					phs.getState().setPadX(e.getX() - Physics.PAD_W / 2);
-//				}
-//			}
-//
-//			@Override
-//			public void mouseDragged(MouseEvent e) {
-//			}
-//		});
-//		gui.addMouseListener(new MouseListener() {
-//
-//			@Override
-//			public void mouseReleased(MouseEvent e) {
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				phs.getState().setGameStatus(GameStatus.PLAY);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent e) {
-//			}
-//
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//			}
-//		});
+
 		gui.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -116,10 +86,8 @@ public class Game {
 		phsTimer = new Timer((int) phs.getState().getSpeedMs(), (e) -> {
 			// Sends keyboard events to simulate
 			phs.userInput(pressedKeys.contains(UserKey.LEFT), pressedKeys.contains(UserKey.RIGHT));
-			
 			phs.simulation();
-			gui.repaint();
-			guiTimer.restart();
+			phsTimer.restart();
 		});
 
 		guiTimer = new Timer(FPS_DELAY, (e) -> {
@@ -127,8 +95,18 @@ public class Game {
 			guiTimer.restart();
 		});
 
+		// Animation should be independent on game speed and FPS
+		aniTimer = new Timer(FPS_ANI_DELAY, (e) -> {
+
+			if (--delayForNextAniFrame < 1) {
+				gui.animateNextFrame();
+				delayForNextAniFrame = FPS_ANI_DELAY;
+			}
+			aniTimer.restart();
+		});
+
 		JFrame obj = new JFrame();
-		obj.setBounds(10, 10, Physics.RES_W, Physics.RES_H);
+		obj.setBounds(10, 10, Physics.RES_W, Physics.RES_H_FOOTER);
 		obj.setTitle("Brick Breaker");
 		obj.setResizable(false);
 		obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,7 +114,8 @@ public class Game {
 
 		phsTimer.start();
 		guiTimer.start();
-
+		aniTimer.start();
+		
 		obj.setVisible(true);
 	}
 

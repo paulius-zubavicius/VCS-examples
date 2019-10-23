@@ -6,7 +6,7 @@ public class Ball {
 
 	public static final int BALL_START_POS_X = Physics.RES_W / 5;
 	public static final int BALL_START_POS_Y = Physics.RES_H / 2;
-	public static final int BALL_R = Physics.RES_H / 30;
+	public static final int BALL_R = Physics.RES_H / 20;
 	public static final double BALL_SPEED = Physics.RES_H / 600.0;
 
 	private double speed;

@@ -1,10 +1,13 @@
 package com.vcs.bb.game.gui.swing;
 
+import static com.vcs.bb.game.Physics.RES_H;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 
 import javax.swing.JPanel;
 
@@ -12,101 +15,126 @@ import com.vcs.bb.game.Physics;
 import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.Brick;
 import com.vcs.bb.game.model.State;
+import com.vcs.bb.utils.SpriteLoader;
 
 public class SwingGUI extends JPanel {
+
+	private static final String FONT_NAME = "Courier";
 
 	private static final long serialVersionUID = 1L;
 
 	public static final int MSG_FONT_SIZE_OFFSET = Physics.RES_W / 140;
-	public static final int MSG_FONT_SIZE_1 = Physics.RES_W / 35;
-	public static final int MSG_FONT_SIZE_2 = MSG_FONT_SIZE_1 + MSG_FONT_SIZE_OFFSET;
-	public static final int MSG_FONT_SIZE_3 = MSG_FONT_SIZE_2 + MSG_FONT_SIZE_OFFSET;
+	public static final int MSG_FONT_SIZE_1 = 16;
+	public static final int MSG_FONT_SIZE_2 = 20;
+	public static final int MSG_FONT_SIZE_3 = 24;
 
-	public static final int MSG_SCORE_X = MSG_FONT_SIZE_OFFSET;// Physics.RES_W - Physics.RES_W / 4;
-	public static final int MSG_SCORE_Y = Physics.RES_H - Physics.RES_H / 10;
-	public static final int MSG_LEVEL_X = Physics.RES_H / 3;
+	public static final int MSG_COL1 = 20;
+	public static final int MSG_COL2 = 230;
+	public static final int MSG_GAP_Y = 20;
 
-	public static final int MSG_GAME_X = Physics.RES_W / 2;
-	public static final int MSG_GAME_Y = Physics.RES_H / 2;
+	public static final double MILI_SECS_IN_SEC = 1000.0;
 
 	private State state;
+
+	private Image[] ballAnimation = null;
+	private int currentAnimationFrame = 0;
+	private double framesCounter = 0;
+	private long time = 0;
+	private int fps = 0;
 
 	public SwingGUI(State state) {
 		this.state = state;
 
+		ballAnimation = SpriteLoader.loadSpriteCR("fireball.png", 6, 4);
+
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
 
+		time = System.currentTimeMillis();
+	}
+
+	public void animateNextFrame() {
+		currentAnimationFrame++;
+		if (currentAnimationFrame >= ballAnimation.length) {
+			currentAnimationFrame = 0;
+		}
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		// background
-		// FIXME Draw ir changes
-		g.setColor(Color.black);
+
+		counterFPS();
+
+		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Physics.RES_W, Physics.RES_H);
 
-		// draw map
-		// FIXME Draw ir changes
-		draw((Graphics2D) g);
+		g.setColor(Color.DARK_GRAY);
+		g.fillRect(0, Physics.RES_H, Physics.RES_W, Physics.RES_H_FOOTER - Physics.RES_H);
 
-		// borders
-//		g.setColor(Color.yellow);
-//		g.fillRect(0, 0, 3, 592);
-//		g.fillRect(0, 0, 692, 3);
-//		g.fillRect(691, 0, 3, 592);
+		drawBricks((Graphics2D) g);
+		drawStatusBar(g);
 
-		// score\
-		g.setColor(Color.white);
-		g.setFont(new Font("serif", Font.BOLD, MSG_FONT_SIZE_1));
-		g.drawString("Score: " + state.getScore(), MSG_SCORE_X, MSG_SCORE_Y);
-		g.drawString(state.getLevel().getName(), MSG_LEVEL_X, MSG_SCORE_Y);
-
-//		int sectorW = Physics.PAD_W / 7;
 		g.setColor(Color.green);
-		
-//		for (int i = 0; i < 7; i++) {
-//			if(i % 2 == 0) {
-//				g.setColor(Color.green);
-//			} else {
-//				g.setColor(Color.magenta);
-//			}
-//			
-//			g.fillRect(state.getPadX() + sectorW * i, Physics.PAD_START_POS_Y , sectorW, Physics.PAD_H);
-//			
-//		}
-		
-		g.fillRect(state.getPadX(), Physics.PAD_START_POS_Y , Physics.PAD_W, Physics.PAD_H);
-		
+		g.fillRect(state.getPadX(), Physics.PAD_START_POS_Y, Physics.PAD_W, Physics.PAD_H);
 
-		// ball
-		g.setColor(Color.red);
-		g.fillOval((int) state.getBall().getBallPosX(), (int) state.getBall().getBallPosY(), Ball.BALL_R, Ball.BALL_R);
+		drawBall(g);
 
 		if (state.isItOver())
-			endMessage(g, "Game Over");
+			drawMessage(g, "Game Over");
 		if (state.isItWin())
-			endMessage(g, "Victory!");
+			drawMessage(g, "VICTORY !!!");
 		if (state.isItPaused())
-			endMessage(g, "[||] Paused");
-		
+			drawMessage(g, "<Paused>");
+
 		g.dispose();
 
 	}
 
-	private void endMessage(Graphics g, String title) {
-		g.setColor(Color.white);
-		g.setFont(new Font("serif", Font.BOLD, SwingGUI.MSG_FONT_SIZE_3));
-		g.drawString(title, SwingGUI.MSG_GAME_X, SwingGUI.MSG_GAME_Y);
-		g.drawString("Your Score is: " + state.getScore(), SwingGUI.MSG_GAME_X,
-				SwingGUI.MSG_GAME_Y + SwingGUI.MSG_FONT_SIZE_3 + SwingGUI.MSG_FONT_SIZE_OFFSET);
+	private void counterFPS() {
+		long timeDiff = System.currentTimeMillis() - time;
+		if (timeDiff > MILI_SECS_IN_SEC) {
+			fps = (int) (framesCounter * (MILI_SECS_IN_SEC / timeDiff));
+			framesCounter = 0;
+			time = System.currentTimeMillis();
+		}
 
-		g.setFont(new Font("serif", Font.BOLD, SwingGUI.MSG_FONT_SIZE_1));
-		g.drawString("Press SPACE to Restart", SwingGUI.MSG_GAME_X,
-				SwingGUI.MSG_GAME_Y + SwingGUI.MSG_FONT_SIZE_3 * 2 + SwingGUI.MSG_FONT_SIZE_OFFSET);
+		framesCounter++;
+
 	}
 
-	public void draw(Graphics2D g) {
+	private void drawBall(Graphics g) {
+		// ball
+		g.setColor(Color.red);
+		// g.fillOval((int) state.getBall().getBallPosX(), (int)
+		// state.getBall().getBallPosY(), Ball.BALL_R, Ball.BALL_R);
+		g.drawImage(ballAnimation[currentAnimationFrame], (int) state.getBall().getBallPosX() - Ball.BALL_R / 2,
+				(int) state.getBall().getBallPosY() - Ball.BALL_R / 2, Ball.BALL_R * 2, Ball.BALL_R * 2, null);
+
+	}
+
+	private void drawStatusBar(Graphics g) {
+
+		g.setFont(new Font(FONT_NAME, Font.BOLD, MSG_FONT_SIZE_1));
+		g.setColor(Color.YELLOW);
+		g.drawString("[" + state.getLevel().getName() + "]", MSG_COL1, RES_H + MSG_GAP_Y);
+		g.setColor(Color.LIGHT_GRAY);
+		g.drawString("Level : " + (state.getCurrentLevel() + 1) + " / " + state.getLevelsCount(), MSG_COL1,
+				RES_H + MSG_GAP_Y * 2);
+		g.drawString("Score : " + state.getScore(), MSG_COL1, RES_H + MSG_GAP_Y * 3);
+
+		g.drawString("FPS      : " + fps, MSG_COL2, RES_H + MSG_GAP_Y * 2);
+		g.drawString("Slowing  : " + state.getSpeedMs(), MSG_COL2, RES_H + MSG_GAP_Y * 3);
+
+	}
+
+	private void drawMessage(Graphics g, String title) {
+		g.setColor(Color.LIGHT_GRAY);
+		g.setFont(new Font(FONT_NAME, Font.BOLD, SwingGUI.MSG_FONT_SIZE_3));
+		g.drawString(title, state.getPadX(), Physics.PAD_START_POS_Y - 30);
+
+	}
+
+	public void drawBricks(Graphics2D g) {
 		for (Brick b : state.getBrics()) {
 
 			g.setColor(new Color(b.getType().getRGB()));

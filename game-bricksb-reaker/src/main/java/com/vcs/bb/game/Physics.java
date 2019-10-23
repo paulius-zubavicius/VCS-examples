@@ -9,12 +9,13 @@ public class Physics {
 
 	public static final int RES_H = 640;
 	public static final int RES_W = 800;
+	public static final int RES_H_FOOTER = RES_H + 100;
 
-	public static final int PAD_MOVE_OFFSET = RES_W / 100;
+	public static final int PAD_MOVE_OFFSET = RES_W / 200;
 	public static final int PAD_W = RES_W / 7;
 	public static final int PAD_H = (RES_H / 100 < 1 ? 1 : RES_H / 100);
 	public static final int PAD_START_POS_X = RES_W / 2 - PAD_W / 2;
-	public static final int PAD_START_POS_Y = RES_H - RES_H / 6;
+	public static final int PAD_START_POS_Y = RES_H - RES_H / 12;
 	public static final int PAD_SECTIONS = 7;
 
 	public static final int BRICK_W = RES_W / 10;
@@ -110,7 +111,8 @@ public class Physics {
 			state.getBall().bouncedOffVertical();
 		}
 
-		if (state.getBall().getBallPosY() + Ball.BALL_R > PAD_START_POS_Y) {
+		if (state.getBall().getBallPosY() + Ball.BALL_R > PAD_START_POS_Y
+				&& state.getBall().getBallPosY() + Ball.BALL_R < PAD_START_POS_Y + PAD_H) {
 
 			int centerOfBall = (int) (state.getBall().getBallPosX() + Ball.BALL_R / 2.0);
 

@@ -9,29 +9,29 @@ public class State {
 
 	private int score;
 	private List<Brick> bricks = new ArrayList<>();
-	private Level level;
+	private List<Level> levels;
+	private int currentLevel;
 	private int padX;
 
 	private Ball ball;
 	private GameStatus gameStatus;
 	private double speedMs;
 
-	public State(Level level) {
-		this.level = level;
+	public State(List<Level> levels) {
+		this.levels = levels;
 		reset();
 	}
 
 	public void reset() {
 
+		currentLevel = 0;
+
 		bricks.clear();
-		bricks.addAll(level.getBricks());
+		bricks.addAll(levels.get(currentLevel).getBricks());
 		ball = new Ball();
 		score = 0;
-		speedMs = Physics.GAME_CYCLE_DELAY * level.getSpeed();
+		speedMs = Physics.GAME_CYCLE_DELAY * levels.get(currentLevel).getSpeed();
 		padX = Physics.PAD_START_POS_X;
-
-//		ballXdir = Physics.BALL_X_START_DIR;
-//		ballYdir = Physics.BALL_Y_START_DIR;
 		gameStatus = GameStatus.PAUSE;
 	}
 
@@ -83,18 +83,20 @@ public class State {
 		this.padX = playerX;
 	}
 
-//	public void ballPosYDirChange(double coef) {
-//		this.ballYdir = -this.ballYdir * coef;
-//
-//	}
-
 	public void scoreInc(int incVal) {
 		this.score += incVal;
 
 	}
 
 	public Level getLevel() {
-		return level;
+		return levels.get(currentLevel);
 	}
 
+	public int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public int getLevelsCount() {
+		return levels.size();
+	}
 }
