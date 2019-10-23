@@ -2,9 +2,6 @@ package com.vcs.bb.game.run;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -27,9 +24,6 @@ import com.vcs.bb.game.model.UserKey;
  * 
  * <li>5) Rezoliucija ir setingus iskelti</li>
  * <li>9) Leveliai turi kestis</li>
- * <li>10) Perpaisyti tik tuos komponentus kurie trigerinti perpaisyti, o ne
- * viska kiekviena karta</li>
- * <li>kai kamoliukas per zemai ji dar galima pagauti</li>
  */
 
 public class Game {
@@ -37,6 +31,7 @@ public class Game {
 	private static final int FPS = 120;
 	private static final int FPS_DELAY = 1000 / FPS;
 	private static final int FPS_ANI_DELAY = 5;
+	private static final int GAME_SPEED = 4;
 
 	private Physics phs;
 	private SwingGUI gui;
@@ -83,7 +78,7 @@ public class Game {
 			}
 		});
 
-		phsTimer = new Timer((int) phs.getState().getSpeedMs(), (e) -> {
+		phsTimer = new Timer(GAME_SPEED, (e) -> {
 			// Sends keyboard events to simulate
 			phs.userInput(pressedKeys.contains(UserKey.LEFT), pressedKeys.contains(UserKey.RIGHT));
 			phs.simulation();

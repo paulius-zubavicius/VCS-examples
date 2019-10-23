@@ -22,8 +22,6 @@ public class Physics {
 	public static final int BRICK_H = RES_H / 15;
 	public static final int BRICK_MARGIN = BRICK_W / 15;
 
-	public static final double GAME_CYCLE_DELAY = 4.0; // ball speed
-
 	private State state;
 
 	public Physics(State state) {

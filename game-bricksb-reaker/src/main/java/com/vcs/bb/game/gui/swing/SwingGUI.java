@@ -122,8 +122,8 @@ public class SwingGUI extends JPanel {
 				RES_H + MSG_GAP_Y * 2);
 		g.drawString("Score : " + state.getScore(), MSG_COL1, RES_H + MSG_GAP_Y * 3);
 
-		g.drawString("FPS      : " + fps, MSG_COL2, RES_H + MSG_GAP_Y * 2);
-		g.drawString("Slowing  : " + state.getSpeedMs(), MSG_COL2, RES_H + MSG_GAP_Y * 3);
+		g.drawString("FPS    : " + fps, MSG_COL2, RES_H + MSG_GAP_Y * 2);
+		g.drawString("Speed  : " + state.getSpeedMs(), MSG_COL2, RES_H + MSG_GAP_Y * 3);
 
 	}
 

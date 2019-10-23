@@ -7,20 +7,20 @@ public class Ball {
 	public static final int BALL_START_POS_X = Physics.RES_W / 5;
 	public static final int BALL_START_POS_Y = Physics.RES_H / 2;
 	public static final int BALL_R = Physics.RES_H / 20;
-	public static final double BALL_SPEED = Physics.RES_H / 600.0;
+//	public static final double BALL_SPEED = Physics.RES_H / 600.0;
 
 	private double speed;
 	private BallAngle angle;
 	private double ballposX;
 	private double ballposY;
 
-	public Ball(double speed, BallAngle angle) {
-		this.speed = speed;
-		this.angle = angle;
-	}
+//	public Ball(double speed, BallAngle angle) {
+//		this.speed = speed;
+//		this.angle = angle;
+//	}
 
 	public Ball() {
-		this.speed = BALL_SPEED;
+//		this.speed = BALL_SPEED;
 		this.angle = BallAngle._255;
 		this.ballposX = BALL_START_POS_X;
 		this.ballposY = BALL_START_POS_Y;

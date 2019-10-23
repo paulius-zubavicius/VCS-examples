@@ -28,9 +28,13 @@ public class State {
 
 		bricks.clear();
 		bricks.addAll(levels.get(currentLevel).getBricks());
+
+		speedMs = levels.get(currentLevel).getSpeed();
+
 		ball = new Ball();
+		ball.setSpeed(speedMs);
 		score = 0;
-		speedMs = Physics.GAME_CYCLE_DELAY * levels.get(currentLevel).getSpeed();
+
 		padX = Physics.PAD_START_POS_X;
 		gameStatus = GameStatus.PAUSE;
 	}
