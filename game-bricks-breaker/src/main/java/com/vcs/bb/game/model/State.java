@@ -20,17 +20,17 @@ public class State {
 
 	public State(List<Level> levels) {
 		this.levels = levels;
-		reset();
+		resetGame();
 	}
 
-	public void reset() {
+	public void resetGame() {
 
 		currentLevel = 0;
 		gameStatus = GameStatus.PAUSE;
 		resetLevel();
 	}
 
-	private void resetLevel() {
+	public void resetLevel() {
 		bricks.clear();
 		bricks.addAll(levels.get(currentLevel).getBricks());
 
@@ -105,21 +105,12 @@ public class State {
 		return currentLevel;
 	}
 
+	public void setCurrentLevel(int currentLevel) {
+		this.currentLevel = currentLevel;
+	}
+
 	public int getLevelsCount() {
 		return levels.size();
 	}
 
-	public boolean loadNextLevel() {
-		
-		currentLevel++;
-		
-		if (getLevelsCount() == currentLevel) {
-			currentLevel--;
-			return false;
-		}
-
-		resetLevel();
-
-		return true;
-	}
 }

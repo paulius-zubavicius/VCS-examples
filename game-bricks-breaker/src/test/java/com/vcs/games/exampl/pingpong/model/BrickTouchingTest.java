@@ -11,7 +11,6 @@ import com.vcs.bb.game.model.enums.BrickType;
 public class BrickTouchingTest {
 
 	@Test
-
 	public void test() {
 
 		Brick b = new Brick(BrickType.B0, 10, 10, 10, 10);

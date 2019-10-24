@@ -7,6 +7,7 @@ import com.vcs.bb.game.model.enums.GameStatus;
 
 public class Physics {
 
+	//TODO constants move to config
 	public static final int RES_H = 640;
 	public static final int RES_W = 800;
 	public static final int RES_H_FOOTER = RES_H + 100;
@@ -58,37 +59,7 @@ public class Physics {
 		}
 	}
 
-	public void simulation() {
-		if (state.isItPlay()) {
-			colisions();
-
-			if (isGameOver()) {
-				state.setGameStatus(GameStatus.GAME_OVER);
-			}
-
-			if (isLevelWin()) {
-				if (state.loadNextLevel()) {
-					state.setGameStatus(GameStatus.PAUSE);
-				} else {
-					state.setGameStatus(GameStatus.GAME_WIN);
-				}
-			}
-		}
-	}
-
-//	private boolean isGameWin() {
-//		return state.getLevelsCount() - 1 == state.getCurrentLevel();
-//	}
-
-	private boolean isLevelWin() {
-		return state.getBrics().size() <= 0;
-	}
-
-	private boolean isGameOver() {
-		return state.getBall().getBallPosY() > RES_H - Ball.BALL_R;
-	}
-
-	private void colisions() {
+	public void colisions() {
 
 		for (Brick b : state.getBrics()) {
 			if (b.isTouching(state.getBall().getBallPosX(), state.getBall().getBallPosY(), Ball.BALL_R)) {

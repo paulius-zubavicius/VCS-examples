@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import com.vcs.bb.game.gui.swing.SwingGUI;
+import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.State;
 import com.vcs.bb.game.model.enums.GameStatus;
 import com.vcs.bb.game.model.enums.UserKey;
@@ -73,7 +74,7 @@ public class Game {
 		phsTimer = new Timer(GAME_SPEED_MILIS, (e) -> {
 			// Sends keyboard events to simulate
 			phs.userInput(pressedKeys.contains(UserKey.LEFT), pressedKeys.contains(UserKey.RIGHT));
-			phs.simulation();
+			simulation();
 			countForNextAnimationFrame();
 			phsTimer.restart();
 		});
@@ -85,7 +86,7 @@ public class Game {
 
 		phsTimer.start();
 		guiTimer.start();
-		
+
 		JFrame obj = new JFrame();
 		obj.setBounds(10, 10, Physics.RES_W, Physics.RES_H_FOOTER);
 		obj.setTitle("Brick Breaker");
@@ -95,6 +96,43 @@ public class Game {
 		obj.setVisible(true);
 	}
 
+	public void simulation() {
+		if (phs.getState().isItPlay()) {
+			phs.colisions();
+
+			if (isGameOver()) {
+				phs.getState().setGameStatus(GameStatus.GAME_OVER);
+			}
+
+			if (isLevelWin()) {
+				if (loadNextLevel()) {
+					phs.getState().setGameStatus(GameStatus.PAUSE);
+				} else {
+					phs.getState().setGameStatus(GameStatus.GAME_WIN);
+				}
+			}
+		}
+	}
+
+	private boolean isLevelWin() {
+		return phs.getState().getBrics().size() <= 0;
+	}
+
+	private boolean isGameOver() {
+		return phs.getState().getBall().getBallPosY() > Physics.RES_H - Ball.BALL_R;
+	}
+
+	private boolean loadNextLevel() {
+
+		if (phs.getState().getLevelsCount() == phs.getState().getCurrentLevel() + 1) {
+			return false;
+		}
+
+		phs.getState().setCurrentLevel(phs.getState().getCurrentLevel() + 1);
+		phs.getState().resetLevel();
+		return true;
+	}
+
 	private void countForNextAnimationFrame() {
 		if (--waitForNextAniFrameCounter < 1) {
 			gui.animateNextFrame();
@@ -102,11 +140,11 @@ public class Game {
 		}
 	}
 
-	public void onUserKey(UserKey key) {
+	private void onUserKey(UserKey key) {
 
 		if (UserKey.ENTER.equals(key)) {
 			if (!phs.getState().isItPaused()) {
-				phs.getState().reset();
+				phs.getState().resetGame();
 				phs.getState().setGameStatus(GameStatus.PAUSE);
 			}
 		}
