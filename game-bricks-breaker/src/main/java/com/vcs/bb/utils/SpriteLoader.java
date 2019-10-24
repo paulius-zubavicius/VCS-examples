@@ -18,7 +18,7 @@ public class SpriteLoader {
 		}
 	}
 
-	public static Image[] loadSpriteCR(String resourceName, int cols, int rows) {
+	public static Image[] loadSprite(String resourceName, int cols, int rows) {
 
 		BufferedImage img = loadImg(resourceName);
 

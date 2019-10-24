@@ -1,6 +1,5 @@
 package com.vcs.bb.game;
 
-import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.Brick;
 import com.vcs.bb.game.model.State;
 import com.vcs.bb.game.model.enums.GameStatus;
@@ -62,12 +61,12 @@ public class Physics {
 	public void colisions() {
 
 		for (Brick b : state.getBrics()) {
-			if (b.isTouching(state.getBall().getBallPosX(), state.getBall().getBallPosY(), Ball.BALL_R)) {
+			if (b.isTouching(state.getBall().getX(), state.getBall().getY(), state.getBall().getSize())) {
 
 				state.scoreInc(b.getType().getPoints());
 
-				if (state.getBall().getBallPosX() + (Ball.BALL_R - 1) <= b.getX()
-						|| state.getBall().getBallPosX() + 1 >= b.getX() + BRICK_W) {
+				if (state.getBall().getX() + (state.getBall().getSize() - 1) <= b.getX()
+						|| state.getBall().getX() + 1 >= b.getX() + BRICK_W) {
 					state.getBall().bouncedOffVertical();
 				} else {
 					state.getBall().bouncedOffHorizontal();
@@ -78,26 +77,26 @@ public class Physics {
 			}
 		}
 
-		if (state.getBall().getBallPosX() < 0) {
+		if (state.getBall().getX() < 0) {
 			state.getBall().bouncedOffVertical();
 		}
-		if (state.getBall().getBallPosY() < 0) {
+		if (state.getBall().getY() < 0) {
 			state.getBall().bouncedOffHorizontal();
 		}
-		if (state.getBall().getBallPosX() > RES_W - Ball.BALL_R) {
+		if (state.getBall().getX() > RES_W - state.getBall().getSize()) {
 			state.getBall().bouncedOffVertical();
 		}
 
-		if (state.getBall().getBallPosY() + Ball.BALL_R > PAD_START_POS_Y
-				&& state.getBall().getBallPosY() + Ball.BALL_R < PAD_START_POS_Y + PAD_H) {
+		if (state.getBall().getY() + state.getBall().getSize() > PAD_START_POS_Y
+				&& state.getBall().getY() + state.getBall().getSize() < PAD_START_POS_Y + PAD_H) {
 
-			int centerOfBall = (int) (state.getBall().getBallPosX() + Ball.BALL_R / 2.0);
+			int centerOfBall = (int) (state.getBall().getX() + state.getBall().getSize() / 2.0);
 
 			if (state.getPadX() <= centerOfBall) {
 				if ((state.getPadX() + PAD_W) >= centerOfBall) {
 
 					// Bugfix - do not allow follow below Y of pad
-					state.getBall().setBallPosY(PAD_START_POS_Y - Ball.BALL_R);
+					state.getBall().setBallPosY(PAD_START_POS_Y - state.getBall().getSize());
 
 					int sector = calcSector(centerOfBall, state.getPadX(), PAD_W);
 

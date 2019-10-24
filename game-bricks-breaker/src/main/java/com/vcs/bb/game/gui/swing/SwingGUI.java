@@ -7,15 +7,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 
 import javax.swing.JPanel;
 
 import com.vcs.bb.game.Physics;
-import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.Brick;
 import com.vcs.bb.game.model.State;
-import com.vcs.bb.utils.SpriteLoader;
 
 public class SwingGUI extends JPanel {
 
@@ -36,16 +33,12 @@ public class SwingGUI extends JPanel {
 
 	private State state;
 
-	private Image[] ballAnimation = null;
-	private int currentAnimationFrame = 0;
 	private double framesCounter = 0;
 	private long time = 0;
 	private int fps = 0;
 
 	public SwingGUI(State state) {
 		this.state = state;
-
-		ballAnimation = SpriteLoader.loadSpriteCR("fireball.png", 6, 4);
 
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -54,10 +47,7 @@ public class SwingGUI extends JPanel {
 	}
 
 	public void animateNextFrame() {
-		currentAnimationFrame++;
-		if (currentAnimationFrame >= ballAnimation.length) {
-			currentAnimationFrame = 0;
-		}
+		state.getBall().animate();
 	}
 
 	@Override
@@ -103,11 +93,11 @@ public class SwingGUI extends JPanel {
 	}
 
 	private void drawBall(Graphics g) {
-		g.setColor(Color.red);
+		// g.setColor(Color.red);
 		// g.fillOval((int) state.getBall().getBallPosX(), (int)
 		// state.getBall().getBallPosY(), Ball.BALL_R, Ball.BALL_R);
-		g.drawImage(ballAnimation[currentAnimationFrame], (int) state.getBall().getBallPosX() - Ball.BALL_R / 2,
-				(int) state.getBall().getBallPosY() - Ball.BALL_R / 2, Ball.BALL_R * 2, Ball.BALL_R * 2, null);
+		g.drawImage(state.getBall().getImage(), (int) state.getBall().getImgPosX(),
+				(int) state.getBall().getImgPosY(), state.getBall().getImgSize(), state.getBall().getImgSize(), null);
 
 	}
 

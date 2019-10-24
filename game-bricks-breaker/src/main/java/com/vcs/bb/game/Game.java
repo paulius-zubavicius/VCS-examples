@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import com.vcs.bb.game.gui.swing.SwingGUI;
-import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.State;
 import com.vcs.bb.game.model.enums.GameStatus;
 import com.vcs.bb.game.model.enums.UserKey;
@@ -20,14 +19,14 @@ import com.vcs.bb.utils.LevelsLoader;
 /**
  * 
  * <li>5) Rezoliucija ir setingus iskelti</li>
- * <li>9) Leveliai turi kestis</li>
+ * <li>11) mazejant bloku kiekiui pradeda strugling repaint'as</li>
  */
 
 public class Game {
 
 	private static final int FPS = 60;
 	private static final int REPAINT_SPEED_MILIS = 1000 / FPS;
-	private static final int WAIT_CYCLES_FOR_NEXT_ANIM_FRAME = 5;
+	private static final int WAIT_CYCLES_FOR_NEXT_ANIM_FRAME = 8;
 	private static final int GAME_SPEED_MILIS = 4;
 
 	private Physics phs;
@@ -119,7 +118,7 @@ public class Game {
 	}
 
 	private boolean isGameOver() {
-		return phs.getState().getBall().getBallPosY() > Physics.RES_H - Ball.BALL_R;
+		return phs.getState().getBall().getY() > Physics.RES_H - phs.getState().getBall().getSize();
 	}
 
 	private boolean loadNextLevel() {

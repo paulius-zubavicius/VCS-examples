@@ -40,7 +40,8 @@ public class LevelsLoader {
 		Level l = new Level();
 		l.setName(lines.remove(0));
 		l.setSpeed(Double.parseDouble(lines.remove(0)));
-
+		l.setBall(lines.remove(0));
+		
 		loadBricks(lines, l);
 		return l;
 	}

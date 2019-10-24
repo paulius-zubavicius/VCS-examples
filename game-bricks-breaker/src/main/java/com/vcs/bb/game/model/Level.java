@@ -8,6 +8,7 @@ public class Level {
 	private List<Brick> bricks = new ArrayList<>();
 	private double speed;
 	private String name;
+	private String ball;
 
 	public List<Brick> getBricks() {
 		return bricks;
@@ -27,6 +28,14 @@ public class Level {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getBall() {
+		return ball;
+	}
+
+	public void setBall(String ball) {
+		this.ball = ball;
 	}
 
 }

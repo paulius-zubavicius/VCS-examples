@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vcs.bb.game.Physics;
+import com.vcs.bb.game.ball.Ball;
+import com.vcs.bb.game.ball.BallFactory;
+import com.vcs.bb.game.ball.EarthBall;
 import com.vcs.bb.game.model.enums.GameStatus;
 
 public class State {
@@ -26,6 +29,7 @@ public class State {
 	public void resetGame() {
 
 		currentLevel = 0;
+		score = 0;
 		gameStatus = GameStatus.PAUSE;
 		resetLevel();
 	}
@@ -36,12 +40,10 @@ public class State {
 
 		speedMs = levels.get(currentLevel).getSpeed();
 
-		ball = new Ball();
+		ball = BallFactory.createInstance(levels.get(currentLevel).getBall());
 		ball.setSpeed(speedMs);
-		score = 0;
-
+		
 		padX = Physics.PAD_START_POS_X;
-
 	}
 
 	public Ball getBall() {
