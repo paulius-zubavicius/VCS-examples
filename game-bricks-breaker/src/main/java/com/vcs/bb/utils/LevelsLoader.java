@@ -15,7 +15,8 @@ import com.vcs.bb.game.model.enums.BrickType;
 
 public class LevelsLoader {
 
-	private static String[] dataFiles = { "level0.dat", "level1.dat", "level2.dat", "level3.dat", "level4.dat" };
+	private static String[] dataFiles = { "level0.dat", "level1.dat", "level2.dat", "level3.dat", "level4.dat",
+			"level5.dat" };
 
 	public static List<Level> loadLevels() {
 
