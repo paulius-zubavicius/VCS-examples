@@ -80,11 +80,11 @@ public class SwingGUI extends JPanel {
 		drawBall(g);
 
 		if (state.isItOver())
-			drawMessage(g, "Game Over");
+			drawMessage(g, "Upset? <Press ENTER to reset>");
 		if (state.isItWin())
-			drawMessage(g, "VICTORY !!!");
+			drawMessage(g, "Win the game <press ENTER to reset>");
 		if (state.isItPaused())
-			drawMessage(g, "<Paused>");
+			drawMessage(g, "Paused <press SPACE>");
 
 		g.dispose();
 
@@ -103,7 +103,6 @@ public class SwingGUI extends JPanel {
 	}
 
 	private void drawBall(Graphics g) {
-		// ball
 		g.setColor(Color.red);
 		// g.fillOval((int) state.getBall().getBallPosX(), (int)
 		// state.getBall().getBallPosY(), Ball.BALL_R, Ball.BALL_R);

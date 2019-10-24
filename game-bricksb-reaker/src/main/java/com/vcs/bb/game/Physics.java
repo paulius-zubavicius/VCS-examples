@@ -2,8 +2,8 @@ package com.vcs.bb.game;
 
 import com.vcs.bb.game.model.Ball;
 import com.vcs.bb.game.model.Brick;
-import com.vcs.bb.game.model.GameStatus;
 import com.vcs.bb.game.model.State;
+import com.vcs.bb.game.model.enums.GameStatus;
 
 public class Physics {
 
@@ -63,16 +63,24 @@ public class Physics {
 			colisions();
 
 			if (isGameOver()) {
-				state.setGameStatus(GameStatus.OVER);
+				state.setGameStatus(GameStatus.GAME_OVER);
 			}
 
-			if (isGameWin()) {
-				state.setGameStatus(GameStatus.WIN);
+			if (isLevelWin()) {
+				if (state.loadNextLevel()) {
+					state.setGameStatus(GameStatus.PAUSE);
+				} else {
+					state.setGameStatus(GameStatus.GAME_WIN);
+				}
 			}
 		}
 	}
 
-	private boolean isGameWin() {
+//	private boolean isGameWin() {
+//		return state.getLevelsCount() - 1 == state.getCurrentLevel();
+//	}
+
+	private boolean isLevelWin() {
 		return state.getBrics().size() <= 0;
 	}
 

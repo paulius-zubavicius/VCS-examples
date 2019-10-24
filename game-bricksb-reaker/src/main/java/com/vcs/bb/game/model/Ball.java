@@ -1,6 +1,7 @@
 package com.vcs.bb.game.model;
 
 import com.vcs.bb.game.Physics;
+import com.vcs.bb.game.model.enums.BallAngle;
 
 public class Ball {
 

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.vcs.bb.game.model.Brick;
-import com.vcs.bb.game.model.BrickType;
+import com.vcs.bb.game.model.enums.BrickType;
 
 public class BrickTouchingTest {
 

@@ -1,24 +1,20 @@
-package com.vcs.bb.game.run;
+package com.vcs.bb.game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import com.vcs.bb.game.Physics;
 import com.vcs.bb.game.gui.swing.SwingGUI;
-import com.vcs.bb.game.levels.LevelsLoader;
-import com.vcs.bb.game.model.GameStatus;
-import com.vcs.bb.game.model.Level;
-import com.vcs.bb.game.model.Resolution;
 import com.vcs.bb.game.model.State;
-import com.vcs.bb.game.model.UserKey;
+import com.vcs.bb.game.model.enums.GameStatus;
+import com.vcs.bb.game.model.enums.UserKey;
+import com.vcs.bb.utils.LevelsLoader;
 
 /**
  * 
@@ -28,18 +24,17 @@ import com.vcs.bb.game.model.UserKey;
 
 public class Game {
 
-	private static final int FPS = 120;
-	private static final int FPS_DELAY = 1000 / FPS;
-	private static final int FPS_ANI_DELAY = 5;
-	private static final int GAME_SPEED = 4;
+	private static final int FPS = 60;
+	private static final int REPAINT_SPEED_MILIS = 1000 / FPS;
+	private static final int WAIT_CYCLES_FOR_NEXT_ANIM_FRAME = 5;
+	private static final int GAME_SPEED_MILIS = 4;
 
 	private Physics phs;
 	private SwingGUI gui;
 	private Timer phsTimer;
 	private Timer guiTimer;
-	private Timer aniTimer;
 
-	private int delayForNextAniFrame = FPS_ANI_DELAY;
+	private int waitForNextAniFrameCounter = WAIT_CYCLES_FOR_NEXT_ANIM_FRAME;
 
 	private Set<UserKey> pressedKeys = new HashSet<>();
 
@@ -52,12 +47,9 @@ public class Game {
 		validPressReleaseKeys.put(KeyEvent.VK_SPACE, UserKey.SPACE);
 	}
 
-	void startGameApp() {
+	public void startGame() {
 
-		LevelsLoader ll = new LevelsLoader();
-		List<Level> levels = ll.loadLevels(Resolution.RES_600x400);
-
-		phs = new Physics(new State(levels));
+		phs = new Physics(new State(LevelsLoader.loadLevels()));
 		gui = new SwingGUI(phs.getState());
 
 		gui.addKeyListener(new KeyListener() {
@@ -78,40 +70,36 @@ public class Game {
 			}
 		});
 
-		phsTimer = new Timer(GAME_SPEED, (e) -> {
+		phsTimer = new Timer(GAME_SPEED_MILIS, (e) -> {
 			// Sends keyboard events to simulate
 			phs.userInput(pressedKeys.contains(UserKey.LEFT), pressedKeys.contains(UserKey.RIGHT));
 			phs.simulation();
+			countForNextAnimationFrame();
 			phsTimer.restart();
 		});
 
-		guiTimer = new Timer(FPS_DELAY, (e) -> {
+		guiTimer = new Timer(REPAINT_SPEED_MILIS, (e) -> {
 			gui.repaint();
 			guiTimer.restart();
 		});
 
-		// Animation should be independent on game speed and FPS
-		aniTimer = new Timer(FPS_ANI_DELAY, (e) -> {
-
-			if (--delayForNextAniFrame < 1) {
-				gui.animateNextFrame();
-				delayForNextAniFrame = FPS_ANI_DELAY;
-			}
-			aniTimer.restart();
-		});
-
+		phsTimer.start();
+		guiTimer.start();
+		
 		JFrame obj = new JFrame();
 		obj.setBounds(10, 10, Physics.RES_W, Physics.RES_H_FOOTER);
 		obj.setTitle("Brick Breaker");
 		obj.setResizable(false);
 		obj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		obj.add(gui);
-
-		phsTimer.start();
-		guiTimer.start();
-		aniTimer.start();
-		
 		obj.setVisible(true);
+	}
+
+	private void countForNextAnimationFrame() {
+		if (--waitForNextAniFrameCounter < 1) {
+			gui.animateNextFrame();
+			waitForNextAniFrameCounter = WAIT_CYCLES_FOR_NEXT_ANIM_FRAME;
+		}
 	}
 
 	public void onUserKey(UserKey key) {
@@ -119,6 +107,7 @@ public class Game {
 		if (UserKey.ENTER.equals(key)) {
 			if (!phs.getState().isItPaused()) {
 				phs.getState().reset();
+				phs.getState().setGameStatus(GameStatus.PAUSE);
 			}
 		}
 

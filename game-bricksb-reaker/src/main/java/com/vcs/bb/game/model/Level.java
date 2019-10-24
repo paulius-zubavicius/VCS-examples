@@ -13,8 +13,6 @@ public class Level {
 		return bricks;
 	}
 
-
-
 	public double getSpeed() {
 		return speed;
 	}
@@ -30,6 +28,5 @@ public class Level {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 
 }

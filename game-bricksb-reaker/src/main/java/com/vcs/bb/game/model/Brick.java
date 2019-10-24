@@ -1,5 +1,7 @@
 package com.vcs.bb.game.model;
 
+import com.vcs.bb.game.model.enums.BrickType;
+
 public class Brick {
 
 	private BrickType type;

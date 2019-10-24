@@ -1,4 +1,4 @@
-package com.vcs.bb.game.model;
+package com.vcs.bb.game.model.enums;
 
 import java.util.ArrayList;
 import java.util.Arrays;

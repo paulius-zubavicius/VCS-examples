@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vcs.bb.game.Physics;
+import com.vcs.bb.game.model.enums.GameStatus;
 
 public class State {
 
@@ -25,7 +26,11 @@ public class State {
 	public void reset() {
 
 		currentLevel = 0;
+		gameStatus = GameStatus.PAUSE;
+		resetLevel();
+	}
 
+	private void resetLevel() {
 		bricks.clear();
 		bricks.addAll(levels.get(currentLevel).getBricks());
 
@@ -36,7 +41,7 @@ public class State {
 		score = 0;
 
 		padX = Physics.PAD_START_POS_X;
-		gameStatus = GameStatus.PAUSE;
+
 	}
 
 	public Ball getBall() {
@@ -60,11 +65,11 @@ public class State {
 	}
 
 	public boolean isItWin() {
-		return GameStatus.WIN.equals(gameStatus);
+		return GameStatus.GAME_WIN.equals(gameStatus);
 	}
 
 	public boolean isItOver() {
-		return GameStatus.OVER.equals(gameStatus);
+		return GameStatus.GAME_OVER.equals(gameStatus);
 	}
 
 	public void setGameStatus(GameStatus gameStatus) {
@@ -102,5 +107,19 @@ public class State {
 
 	public int getLevelsCount() {
 		return levels.size();
+	}
+
+	public boolean loadNextLevel() {
+		
+		currentLevel++;
+		
+		if (getLevelsCount() == currentLevel) {
+			currentLevel--;
+			return false;
+		}
+
+		resetLevel();
+
+		return true;
 	}
 }
